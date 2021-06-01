@@ -1,0 +1,68 @@
+{
+  "project_info": {
+    "project_number": "873155461927",
+    "project_id": "stores-map-7ec7b",
+    "storage_bucket": "stores-map-7ec7b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:873155461927:android:f28aff31d7ad17ddfb1f02",
+        "android_client_info": {
+          "package_name": "com.example.cs_senior_project"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "873155461927-rb4n7dt4r8srlur3qfqg14te6bt6h00n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAMhCtyC9bb3uLe0Viv3vWLZlBR5c1nzJI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "873155461927-rb4n7dt4r8srlur3qfqg14te6bt6h00n.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:873155461927:android:9018af0e22d19edefb1f02",
+        "android_client_info": {
+          "package_name": "com.example.googlemapstores"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "873155461927-rb4n7dt4r8srlur3qfqg14te6bt6h00n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAMhCtyC9bb3uLe0Viv3vWLZlBR5c1nzJI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "873155461927-rb4n7dt4r8srlur3qfqg14te6bt6h00n.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
