@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 
 
-class Notifications extends StatefulWidget {
+class Store extends StatefulWidget {
   static const routeName = '/notifications';
 
   @override
-  _NotificationsState createState() => _NotificationsState();
+  _StoreState createState() => _StoreState();
 }
 
 
-class _NotificationsState extends State<Notifications> {
+class _StoreState extends State<Store> {
 
   @override
   void initState() {
@@ -20,7 +20,7 @@ class _NotificationsState extends State<Notifications> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Notifications'),
+        title: Text('Store'),
         toolbarHeight: 90,
         flexibleSpace: Container(
           decoration: BoxDecoration(

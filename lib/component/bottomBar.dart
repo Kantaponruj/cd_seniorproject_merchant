@@ -1,8 +1,9 @@
+import 'package:cs_senior_project/screens/order.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 
-import '../screens/home.dart';
-import '../screens/history.dart';
+import '../screens/order.dart';
+import '../screens/store.dart';
 import '../screens/menu.dart';
 import '../screens/notification.dart';
 
@@ -14,32 +15,30 @@ class bottomBar extends StatefulWidget {
 }
 
 class _State extends State<bottomBar> {
-
   int _selectedIndex = 0;
   List<Widget> _pageWidget = <Widget>[
-    Home(),
-    Notifications(),
-    History(),
-    Menu(),
-
-
+    StorePage(),
+    OrderPage(),
+    MenuPage(),
   ];
-  List<BottomNavigationBarItem> _menuBar
-  = <BottomNavigationBarItem>[
+
+  List<BottomNavigationBarItem> _menuBar = <BottomNavigationBarItem>[
     BottomNavigationBarItem(
-      icon: Icon(MaterialIcons.home),
-      title: Text('Home'),
+      icon: Icon(
+        Icons.store_outlined,
+      ),
+      title: Text('Store'),
     ),
     BottomNavigationBarItem(
-      icon: Icon(MaterialIcons.notifications),
-      title: Text('Notification'),
+      icon: Icon(
+  Icons.list_alt_outlined,
+  ),
+      title: Text('Order'),
     ),
     BottomNavigationBarItem(
-      icon: Icon(MaterialIcons.history),
-      title: Text('History'),
-    ),
-    BottomNavigationBarItem(
-      icon: Icon(MaterialIcons.menu),
+      icon: Icon(
+        Icons.restaurant_menu_outlined,
+      ),
       title: Text('Menu'),
     ),
   ];
@@ -64,4 +63,3 @@ class _State extends State<bottomBar> {
     );
   }
 }
-

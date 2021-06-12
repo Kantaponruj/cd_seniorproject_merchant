@@ -16,3 +16,4 @@ getStores(StoreNotifier storeNotifier) async {
 
   storeNotifier.storeList = _storeList;
 }
+

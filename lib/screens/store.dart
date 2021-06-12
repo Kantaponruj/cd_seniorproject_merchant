@@ -1,25 +1,24 @@
-import 'dart:async';
-
 import 'package:cs_senior_project/component/roundAppBar.dart';
-import 'package:cs_senior_project/models/store.dart';
 import 'package:flutter/material.dart';
 
-
-class MenuPage extends StatefulWidget {
-  static const routeName = '/menu';
+class StorePage extends StatefulWidget {
+  static const routeName = '/history';
 
   @override
-  _MenuPageState createState() => _MenuPageState();
+  _StorePageState createState() => _StorePageState();
 }
 
-class _MenuPageState extends State<MenuPage> {
-  List<Widget> _children;
+class _StorePageState extends State<StorePage> {
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
-      appBar: RoundedAppBar(appBarTittle: 'Menu',),
+      appBar: RoundedAppBar(appBarTittle: 'History',),
       body: Center(
         child: Container(
           color: Colors.teal,

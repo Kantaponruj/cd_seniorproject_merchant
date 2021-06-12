@@ -1,13 +1,14 @@
 import 'package:cs_senior_project/main.dart';
-import 'package:cs_senior_project/screens/home.dart';
+import 'package:cs_senior_project/screens/order.dart';
 import 'package:flutter/material.dart';
 
 class RoundedAppBar extends StatefulWidget implements PreferredSizeWidget {
-  RoundedAppBar({Key key,Text title})
+  RoundedAppBar({Key key,this.appBarTittle})
       : preferredSize = Size.fromHeight(80),
         super(key: key);
 
   final Size preferredSize;
+  final String appBarTittle;
 
 
   @override
@@ -20,7 +21,7 @@ class _RoundedAppBarState extends State<RoundedAppBar> {
   Widget build(BuildContext context) => Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        title: Text(Home.title),
+        title: Text(widget.appBarTittle),
         toolbarHeight: 100,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(

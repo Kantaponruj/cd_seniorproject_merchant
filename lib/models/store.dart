@@ -6,6 +6,8 @@ class Store {
   String address;
   String image;
   GeoPoint location;
+  bool isDelivery;
+  bool isPickUp;
 
   Store();
 
@@ -15,5 +17,7 @@ class Store {
     address = data['address'];
     image = data['image'];
     location = data['location'];
+    isDelivery = data['isDelivery'];
+    isPickUp = data['isPickUp'];
   }
 }

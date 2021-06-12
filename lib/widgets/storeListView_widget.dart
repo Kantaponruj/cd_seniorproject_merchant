@@ -1,3 +1,4 @@
+import 'package:cs_senior_project/models/store.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
@@ -15,33 +16,54 @@ class StoreListWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     StoreNotifier storeNotifier = Provider.of<StoreNotifier>(context);
 
-    return SizedBox(
-      height: 200.0,
-      child: ListView.builder(
-        itemBuilder: (BuildContext context, int index) {
-          return ListTile(
-            leading: Image.network(
-              storeNotifier.storeList[index].image != null
-                  ? storeNotifier.storeList[index].image
-                  : 'https://www.testingxperts.com/wp-content/uploads/2019/02/placeholder-img.jpg',
-              width: 100,
-              fit: BoxFit.cover,
-            ),
-            title: Text(storeNotifier.storeList[index].name),
-            subtitle: Text(storeNotifier.storeList[index].address),
-            onTap: () async {
-              final controller = await mapController.future;
-              await controller.animateCamera(CameraUpdate.newCameraPosition(
-                  CameraPosition(
-                      target: LatLng(
-                          storeNotifier.storeList[index].location.latitude,
-                          storeNotifier.storeList[index].location.longitude),
-                      zoom: 18)));
+    final maxSizeOpen = 0.6;
+    final maxSizeClosed = 0.1;
+    final initialSizeOpen = 0.3;
+
+    return DraggableScrollableSheet(
+      initialChildSize: initialSizeOpen,
+      minChildSize: maxSizeClosed,
+      maxChildSize: maxSizeOpen,
+      builder: (context, controller) => ClipRRect(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        child: Container(
+          color: Colors.blue,
+          child: ListView.builder(
+            controller: controller,
+            itemCount: storeNotifier.storeList.length,
+            itemBuilder: (context, index) {
+              final store = storeNotifier.storeList[index];
+              return Column(
+                children: [
+                  SizedBox(
+                    height: 20,
+                  ),
+                  buildStore(store),
+                ],
+              );
             },
-          );
-        },
-        itemCount: storeNotifier.storeList.length,
+          ),
+        ),
       ),
     );
   }
+
+  Widget buildStore(Store store) => ListTile(
+    leading: Image.network(
+      store.image != null
+          ? store.image
+          : 'https://www.testingxperts.com/wp-content/uploads/2019/02/placeholder-img.jpg',
+      width: 100,
+      fit: BoxFit.cover,
+    ),
+
+    title: Text(
+      store.name,
+      style: TextStyle(fontSize: 24),
+    ),
+    subtitle: Text(
+      store.address,
+    ),
+  );
+
 }
