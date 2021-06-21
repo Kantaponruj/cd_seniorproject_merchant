@@ -1,9 +1,7 @@
 import 'dart:async';
 
 import 'package:cs_senior_project/component/roundAppBar.dart';
-import 'package:cs_senior_project/models/store.dart';
 import 'package:flutter/material.dart';
-
 
 class MenuPage extends StatefulWidget {
   static const routeName = '/menu';
@@ -19,7 +17,9 @@ class _MenuPageState extends State<MenuPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
-      appBar: RoundedAppBar(appBarTittle: 'Menu',),
+      appBar: RoundedAppBar(
+        appBarTittle: 'Menu',
+      ),
       body: Center(
         child: Container(
           color: Colors.teal,
