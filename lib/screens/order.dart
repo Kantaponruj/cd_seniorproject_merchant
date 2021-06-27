@@ -1,5 +1,4 @@
 import 'package:cs_senior_project/component/mainAppBar.dart';
-import 'package:cs_senior_project/component/roundAppBar.dart';
 import 'package:cs_senior_project/notifiers/meeting_notifier.dart';
 import 'package:cs_senior_project/screens/orderDetail.dart';
 import 'package:cs_senior_project/services/meeting_service.dart';
@@ -36,14 +35,7 @@ class _OrderPageState extends State<OrderPage> {
           return buildStoreCard(meetingNotifier, index);
         },
         itemCount: meetingNotifier.meetingList.length,
-      )
-          //     Column(
-          //   children: [
-          //     buildStoreCard(),
-          //     buildStoreCard(),
-          //   ],
-          // )
-          ),
+      )),
     );
   }
 
@@ -112,7 +104,9 @@ class _OrderPageState extends State<OrderPage> {
                     Expanded(
                       flex: 5,
                       child: Text(
-                        'ราคา บาท',
+                        'ราคา ' +
+                            meetingNotifier.meetingList[index].totalPrice +
+                            ' บาท',
                         textAlign: TextAlign.right,
                       ),
                     ),

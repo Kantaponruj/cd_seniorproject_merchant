@@ -4,6 +4,7 @@ class MeetingPoint {
   String address;
   String date;
   String time;
+  String totalPrice;
 
   MeetingPoint();
 
@@ -13,5 +14,6 @@ class MeetingPoint {
     address = data['address'];
     date = data['date'];
     time = data['time'];
+    totalPrice = data['totalPrice'];
   }
 }
