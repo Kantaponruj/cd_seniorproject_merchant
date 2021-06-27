@@ -99,13 +99,16 @@ class _OrderPageState extends State<OrderPage> {
                   children: [
                     Expanded(
                       flex: 5,
-                      child: Text('เวลาจัดส่ง เวลาปัจจุบัน'),
+                      child: Text(meetingNotifier.meetingList[index].date +
+                          " " +
+                          meetingNotifier.meetingList[index].time),
                     ),
                     Expanded(
                       flex: 5,
                       child: Text(
                         'ราคา ' +
-                            meetingNotifier.meetingList[index].totalPrice +
+                            meetingNotifier.meetingList[index].totalPrice
+                                .toString() +
                             ' บาท',
                         textAlign: TextAlign.right,
                       ),

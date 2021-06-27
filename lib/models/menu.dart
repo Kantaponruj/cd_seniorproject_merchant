@@ -2,7 +2,7 @@ class Menu {
   String menuId;
   String name;
   String description;
-  String price;
+  int price;
   String image;
 
   Menu();

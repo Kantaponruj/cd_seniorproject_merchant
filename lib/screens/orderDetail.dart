@@ -42,7 +42,10 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                   itemBuilder: (BuildContext context, int index) {
                     return Container(
                         child: Column(children: [
-                      Text(menuNotifier.menuList[index].name),
+                      Text(menuNotifier.menuList[index].name +
+                          "ราคา: " +
+                          menuNotifier.menuList[index].price.toString() +
+                          " บาท"),
                     ]));
                   },
                   itemCount: menuNotifier.menuList.length),

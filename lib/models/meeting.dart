@@ -4,7 +4,7 @@ class MeetingPoint {
   String address;
   String date;
   String time;
-  String totalPrice;
+  int totalPrice;
 
   MeetingPoint();
 
