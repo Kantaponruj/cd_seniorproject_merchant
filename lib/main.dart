@@ -1,4 +1,5 @@
 import 'package:cs_senior_project/notifiers/meeting_notifier.dart';
+import 'package:cs_senior_project/notifiers/menu_notifier.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -9,10 +10,8 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(MultiProvider(providers: [
-    ChangeNotifierProvider(create: (context) => MeetingNotifier())
-    // ChangeNotifierProvider(create: (context) => LocationNotifier()),
-    // ChangeNotifierProvider.value(value: UserNotifier.initialize())
-    // ChangeNotifierProvider(create: (context) => UserNotifier.initialize())
+    ChangeNotifierProvider(create: (context) => MeetingNotifier()),
+    ChangeNotifierProvider(create: (context) => MenuNotifier()),
   ], child: MyApp()));
 }
 

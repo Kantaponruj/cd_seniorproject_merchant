@@ -1,6 +1,7 @@
 import 'package:cs_senior_project/component/mainAppBar.dart';
 import 'package:cs_senior_project/component/roundAppBar.dart';
 import 'package:cs_senior_project/notifiers/meeting_notifier.dart';
+import 'package:cs_senior_project/screens/orderDetail.dart';
 import 'package:cs_senior_project/services/meeting_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -79,7 +80,14 @@ class _OrderPageState extends State<OrderPage> {
                     Expanded(
                       flex: 4,
                       child: InkWell(
-                        onTap: () {},
+                        onTap: () {
+                          meetingNotifier.currentMeeting =
+                              meetingNotifier.meetingList[index];
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (BuildContext context) =>
+                                  OrderDetailPage(meetingNotifier
+                                      .currentMeeting.meetingId)));
+                        },
                         child: Text(
                           'Detailed',
                           style: TextStyle(),
