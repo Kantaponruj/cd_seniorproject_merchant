@@ -1,3 +1,5 @@
+import 'package:cs_senior_project/asset/color.dart';
+import 'package:cs_senior_project/asset/text_style.dart';
 import 'package:cs_senior_project/main.dart';
 import 'package:cs_senior_project/screens/order.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +11,7 @@ class RoundedAppBar extends StatefulWidget implements PreferredSizeWidget {
 
   final Size preferredSize;
   final String appBarTittle;
+  // final String appBarSubTittle;
 
 
   @override
@@ -16,30 +19,37 @@ class RoundedAppBar extends StatefulWidget implements PreferredSizeWidget {
 }
 
 class _RoundedAppBarState extends State<RoundedAppBar> {
-
   @override
-  Widget build(BuildContext context) => Scaffold(
-      extendBodyBehindAppBar: true,
-      appBar: AppBar(
-        title: Text(widget.appBarTittle),
-        toolbarHeight: 100,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(
-            bottom: Radius.circular(30),
-          ),
+  Widget build(BuildContext context) {
+    return ClipRRect(
+        borderRadius: BorderRadius.vertical(
+          bottom: Radius.circular(30),
         ),
-        // flexibleSpace: Container(
-        //   decoration: BoxDecoration(
-        //       gradient: LinearGradient(
-        //         colors: [Color(0xFFF2954E), Color(0xFFFAD161)],
-        //         begin: Alignment.topLeft,
-        //         end: Alignment.bottomRight,
-        //       )),
-        // ),
-        elevation: 10,
-        titleSpacing: 20,
-      )
-  );
+        child: AppBar(
+          iconTheme: IconThemeData(
+            color: CollectionsColors.white, //change your color here
+          ),
+          // leading: IconButton(
+          //   icon: Icon(Icons.arrow_back_ios_outlined, color: CollectionsColors.white),
+          //   onPressed: () => Navigator.of(context).pop(),
+          // ),
+          title: Text(widget.appBarTittle, style: FontCollection.appbarTextStyle,),
+          toolbarHeight: 100,
+          flexibleSpace: Container(
+            decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [Color(0xFFF2954E), Color(0xFFFAD161)],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                )),
+          ),
+          elevation: 10,
+          titleSpacing: 20,
+        )
+    );
+  }elseif(){
+
+  }
   // {
   //   return
   // }

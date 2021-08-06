@@ -1,9 +1,12 @@
+import 'package:cs_senior_project/asset/color.dart';
+import 'package:cs_senior_project/asset/text_style.dart';
 import 'package:cs_senior_project/widgets/button_widget.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class MainAppbar extends StatefulWidget implements PreferredSizeWidget {
   MainAppbar({Key key, this.appBarTitle})
-      : preferredSize = Size.fromHeight(200),
+      : preferredSize = Size.fromHeight(150),
         super(key: key);
 
   final Size preferredSize;
@@ -21,29 +24,64 @@ class _MainAppbarState extends State<MainAppbar> {
       child: Scaffold(
         appBar: AppBar(
           toolbarHeight: 150,
-          title: Text(widget.appBarTitle),
+          backgroundColor: CollectionsColors.white,
+          elevation: 0,
+          title: titleText(),
           actions: [
             IconButton(
               onPressed: () {},
-              icon: Icon(Icons.notifications),
-            )
-          ],
-          flexibleSpace: SizedBox(
-            height: 100,
-            child: ButtonWidget(
-              text: 'ประวัติการขาย',
-              onClicked: () {
-              },
+              icon: Icon(
+                Icons.notifications,
+                color: Colors.black,
+              ),
             ),
-          ),
+            IconButton(
+              onPressed: () {},
+              icon: Icon(
+                Icons.history,
+                color: Colors.black,
+              ),
+            ),
+          ],
+          // flexibleSpace: Container(
+          //   height: 400,
+          //         alignment: Alignment.bottomCenter,
+          //         child: SizedBox(
+          //           // height: 350,
+          //           child: ButtonWidget(
+          //             text: 'ประวัติการขาย',
+          //             onClicked: () {},
+          //           ),
+          //         ),
+          // ),
           bottom: TabBar(
+            indicatorColor: CollectionsColors.orange,
+            indicatorWeight: 3,
+            labelColor: Colors.black,
+            labelStyle: FontCollection.bodyTextStyle,
             tabs: [
-              Tab(text: 'จัดส่ง',),
-              Tab(text: 'รับเอง',),
-              Tab(text: 'นัดหมาย',),
+              Tab(
+                text: 'จัดส่ง',
+              ),
+              Tab(
+                text: 'รับเอง',
+              ),
+              Tab(
+                text: 'นัดหมาย',
+              ),
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget titleText() {
+    return Padding(
+      padding: EdgeInsets.only(left: 10),
+      child: Text(
+        widget.appBarTitle,
+        style: FontCollection.topicTextStyle,
       ),
     );
   }
