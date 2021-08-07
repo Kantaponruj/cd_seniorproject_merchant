@@ -1,9 +1,9 @@
-import 'package:cs_senior_project/asset/color.dart';
-import 'package:cs_senior_project/notifiers/meeting_notifier.dart';
-import 'package:cs_senior_project/notifiers/menu_notifier.dart';
-import 'package:cs_senior_project/screens/address.dart';
-import 'package:cs_senior_project/screens/opening_hours.dart';
-import 'package:cs_senior_project/screens/orderDetail.dart';
+import 'package:cs_senior_project_merchant/asset/color.dart';
+import 'package:cs_senior_project_merchant/notifiers/meeting_notifier.dart';
+import 'package:cs_senior_project_merchant/notifiers/menu_notifier.dart';
+import 'package:cs_senior_project_merchant/screens/address.dart';
+import 'package:cs_senior_project_merchant/screens/opening_hours.dart';
+import 'package:cs_senior_project_merchant/screens/orderDetail.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

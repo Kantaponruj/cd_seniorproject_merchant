@@ -1,6 +1,6 @@
 import 'dart:collection';
 
-import 'package:cs_senior_project/models/meeting.dart';
+import 'package:cs_senior_project_merchant/models/meeting.dart';
 import 'package:flutter/foundation.dart';
 
 class MeetingNotifier with ChangeNotifier {

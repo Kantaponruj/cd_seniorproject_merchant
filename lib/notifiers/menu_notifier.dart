@@ -1,6 +1,6 @@
 import 'dart:collection';
 
-import 'package:cs_senior_project/models/menu.dart';
+import 'package:cs_senior_project_merchant/models/menu.dart';
 import 'package:flutter/material.dart';
 
 class MenuNotifier with ChangeNotifier {

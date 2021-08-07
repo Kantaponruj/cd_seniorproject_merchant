@@ -1,7 +1,7 @@
-import 'package:cs_senior_project/asset/color.dart';
-import 'package:cs_senior_project/asset/text_style.dart';
-import 'package:cs_senior_project/component/roundAppBar.dart';
-import 'package:cs_senior_project/widgets/button_widget.dart';
+import 'package:cs_senior_project_merchant/asset/color.dart';
+import 'package:cs_senior_project_merchant/asset/text_style.dart';
+import 'package:cs_senior_project_merchant/component/roundAppBar.dart';
+import 'package:cs_senior_project_merchant/widgets/button_widget.dart';
 import 'package:flutter/material.dart';
 
 class OpeningHoursPage extends StatefulWidget {

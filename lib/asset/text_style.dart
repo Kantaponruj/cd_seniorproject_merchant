@@ -1,4 +1,4 @@
-import 'package:cs_senior_project/asset/color.dart';
+import 'package:cs_senior_project_merchant/asset/color.dart';
 import 'package:flutter/material.dart';
 
 const smallestSize = 12.0;

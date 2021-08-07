@@ -1,6 +1,6 @@
 import 'dart:collection';
 
-import 'package:cs_senior_project/models/store.dart';
+import 'package:cs_senior_project_merchant/models/store.dart';
 import 'package:flutter/material.dart';
 
 class StoreNotifier with ChangeNotifier {

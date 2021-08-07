@@ -1,7 +1,7 @@
-import 'package:cs_senior_project/asset/color.dart';
-import 'package:cs_senior_project/asset/text_style.dart';
-import 'package:cs_senior_project/main.dart';
-import 'package:cs_senior_project/screens/order.dart';
+import 'package:cs_senior_project_merchant/asset/color.dart';
+import 'package:cs_senior_project_merchant/asset/text_style.dart';
+import 'package:cs_senior_project_merchant/main.dart';
+import 'package:cs_senior_project_merchant/screens/order.dart';
 import 'package:flutter/material.dart';
 
 class RoundedAppBar extends StatefulWidget implements PreferredSizeWidget {

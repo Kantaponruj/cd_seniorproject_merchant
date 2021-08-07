@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:cs_senior_project/models/store.dart';
-import 'package:cs_senior_project/notifiers/storeNotifier.dart';
+import 'package:cs_senior_project_merchant/models/store.dart';
+import 'package:cs_senior_project_merchant/notifiers/storeNotifier.dart';
 
 getStores(StoreNotifier storeNotifier) async {
   QuerySnapshot snapshot =

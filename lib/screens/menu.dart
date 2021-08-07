@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:cs_senior_project/component/roundAppBar.dart';
+import 'package:cs_senior_project_merchant/component/roundAppBar.dart';
 import 'package:flutter/material.dart';
 
 class MenuPage extends StatefulWidget {

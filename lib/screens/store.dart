@@ -1,6 +1,6 @@
-import 'package:cs_senior_project/asset/color.dart';
-import 'package:cs_senior_project/asset/text_style.dart';
-import 'package:cs_senior_project/component/orderCard.dart';
+import 'package:cs_senior_project_merchant/asset/color.dart';
+import 'package:cs_senior_project_merchant/asset/text_style.dart';
+import 'package:cs_senior_project_merchant/component/orderCard.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

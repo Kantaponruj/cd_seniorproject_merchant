@@ -1,4 +1,4 @@
-import 'package:cs_senior_project/asset/text_style.dart';
+import 'package:cs_senior_project_merchant/asset/text_style.dart';
 import 'package:flutter/material.dart';
 
 class OrderCard extends StatelessWidget {

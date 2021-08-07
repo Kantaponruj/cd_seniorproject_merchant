@@ -1,11 +1,11 @@
-import 'package:cs_senior_project/models/store.dart';
+import 'package:cs_senior_project_merchant/models/store.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:provider/provider.dart';
 
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:cs_senior_project/notifiers/storeNotifier.dart';
+import 'package:cs_senior_project_merchant/notifiers/storeNotifier.dart';
 
 class StoreListWidget extends StatelessWidget {
   const StoreListWidget({Key key, @required this.mapController})
