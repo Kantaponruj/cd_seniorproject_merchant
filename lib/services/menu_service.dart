@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:cs_senior_project/asset/constant.dart';
-import 'package:cs_senior_project/models/menu.dart';
-import 'package:cs_senior_project/notifiers/menu_notifier.dart';
+import 'package:cs_senior_project_merchant/asset/constant.dart';
+import 'package:cs_senior_project_merchant/models/menu.dart';
+import 'package:cs_senior_project_merchant/notifiers/menu_notifier.dart';
 
 getMenu(MenuNotifier menuNotifier, String meetingId) async {
   QuerySnapshot snapshot = await firebaseFirestore

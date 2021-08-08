@@ -1,5 +1,8 @@
-import 'package:cs_senior_project/screens/order.dart';
+import 'package:cs_senior_project_merchant/asset/color.dart';
+import 'package:cs_senior_project_merchant/asset/text_style.dart';
+import 'package:cs_senior_project_merchant/screens/order.dart';
 import 'package:flutter/material.dart';
+import 'package:bottom_indicator_bar_fork/bottom_indicator_bar_fork.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 
 import '../screens/order.dart';
@@ -7,41 +10,82 @@ import '../screens/store.dart';
 import '../screens/menu.dart';
 import '../screens/notification.dart';
 
-class bottomBar extends StatefulWidget {
-  static const routeName = '/';
-
+class BottomBar extends StatefulWidget {
   @override
   _State createState() => _State();
 }
 
-class _State extends State<bottomBar> {
-  int _selectedIndex = 0;
+class _State extends State<BottomBar> {
+  int _selectedIndex = 1;
   List<Widget> _pageWidget = <Widget>[
     StorePage(),
     OrderPage(),
     MenuPage(),
   ];
 
-  List<BottomNavigationBarItem> _menuBar = <BottomNavigationBarItem>[
-    BottomNavigationBarItem(
+  List<BottomIndicatorNavigationBarItem> items =
+      <BottomIndicatorNavigationBarItem>[
+    BottomIndicatorNavigationBarItem(
       icon: Icon(
         Icons.store_outlined,
       ),
-      title: Text('Store'),
+      label: 'ร้านค้า',
     ),
-    BottomNavigationBarItem(
+    BottomIndicatorNavigationBarItem(
       icon: Icon(
-  Icons.list_alt_outlined,
-  ),
-      title: Text('Order'),
+        Icons.list_alt_outlined,
+      ),
+      label: 'คำสั่งซื้อ',
     ),
-    BottomNavigationBarItem(
+    BottomIndicatorNavigationBarItem(
       icon: Icon(
         Icons.restaurant_menu_outlined,
       ),
-      title: Text('Menu'),
+      label: 'รายการอาหาร',
     ),
   ];
+
+  // List<BottomNavigationBarItem> _menuBar = <BottomNavigationBarItem>[
+  //   BottomNavigationBarItem(
+  //     icon: Icon(
+  //       Icons.store_outlined,
+  //     ),
+  //     title: Text(
+  //       'ร้านค้า',
+  //       style: TextStyle(
+  //         fontFamily: NotoSansFont,
+  //         fontWeight: FontWeight.w400,
+  //         fontSize: smallestSize,
+  //       ),
+  //     ),
+  //   ),
+  //   BottomNavigationBarItem(
+  //     icon: Icon(
+  //       Icons.list_alt_outlined,
+  //     ),
+  //     title: Text(
+  //       'คำสั่งซื้อ',
+  //       style: TextStyle(
+  //         fontFamily: NotoSansFont,
+  //         fontWeight: FontWeight.w400,
+  //         fontSize: smallestSize,
+  //       ),
+  //     ),
+  //   ),
+  //   BottomNavigationBarItem(
+  //     icon: Icon(
+  //       Icons.restaurant_menu_outlined,
+  //     ),
+  //     title: Text(
+  //       'รายการอาหาร',
+  //       style: TextStyle(
+  //         fontFamily: NotoSansFont,
+  //         fontWeight: FontWeight.w400,
+  //         fontSize: smallestSize,
+  //       ),
+  //     ),
+  //   ),
+  // ];
 
   void _onItemTapped(int index) {
     setState(() {
@@ -53,12 +97,22 @@ class _State extends State<bottomBar> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: _pageWidget.elementAt(_selectedIndex),
-      bottomNavigationBar: BottomNavigationBar(
-        items: _menuBar,
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.orange,
-        unselectedItemColor: Colors.grey,
+      // bottomNavigationBar: BottomNavigationBar(
+      //   items: _menuBar,
+      //   currentIndex: _selectedIndex,
+      //   selectedItemColor: CollectionsColors.orange,
+      //   unselectedItemColor: Colors.grey,
+      //   backgroundColor: Colors.white,
+      //   onTap: _onItemTapped,
+      // ),
+      bottomNavigationBar: BottomIndicatorBar(
         onTap: _onItemTapped,
+        currentIndex: _selectedIndex,
+        items: items,
+        activeColor: CollectionsColors.orange,
+        inactiveColor: Colors.grey,
+        indicatorColor: CollectionsColors.orange,
+
       ),
     );
   }

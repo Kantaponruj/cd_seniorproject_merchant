@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class CollectionColors {
+class CollectionsColors {
 
   static const navy =  Color(0xFF0A5687);
 
@@ -12,9 +12,11 @@ class CollectionColors {
 
   static const green =  Color(0xFF1FC292);
 
-  static const gray = Color(0xFFECECEC);
+  static const grey = Color(0xFFECECEC);
 
-  // static Color navbar() {
-  //   return const Color(0xFFECECEC);
-  // }
+  static const red = Color(0xFFEB5757);
+
+// static Color navbar() {
+//   return const Color(0xFFECECEC);
+// }
 }

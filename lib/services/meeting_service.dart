@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:cs_senior_project/asset/constant.dart';
-import 'package:cs_senior_project/models/meeting.dart';
-import 'package:cs_senior_project/notifiers/meeting_notifier.dart';
+import 'package:cs_senior_project_merchant/asset/constant.dart';
+import 'package:cs_senior_project_merchant/models/meeting.dart';
+import 'package:cs_senior_project_merchant/notifiers/meeting_notifier.dart';
 
 getMeeting(MeetingNotifier meetingNotifier) async {
   QuerySnapshot snapshot =
