@@ -1,6 +1,9 @@
 import 'package:cs_senior_project/component/mainAppBar.dart';
-import 'package:cs_senior_project/component/roundAppBar.dart';
+import 'package:cs_senior_project/notifiers/meeting_notifier.dart';
+import 'package:cs_senior_project/screens/orderDetail.dart';
+import 'package:cs_senior_project/services/meeting_service.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class OrderPage extends StatefulWidget {
   const OrderPage({Key key}) : super(key: key);
@@ -11,22 +14,32 @@ class OrderPage extends StatefulWidget {
 
 class _OrderPageState extends State<OrderPage> {
   @override
+  void initState() {
+    super.initState();
+    MeetingNotifier meetingNotifier =
+        Provider.of<MeetingNotifier>(context, listen: false);
+    getMeeting(meetingNotifier);
+  }
+
+  @override
   Widget build(BuildContext context) {
+    MeetingNotifier meetingNotifier = Provider.of<MeetingNotifier>(context);
+
     return Scaffold(
       appBar: MainAppbar(
         appBarTitle: 'คำสั่งซื้อ',
       ),
       body: Container(
-          child: Column(
-        children: [
-          buildStoreCard(),
-          buildStoreCard(),
-        ],
+          child: ListView.builder(
+        itemBuilder: (BuildContext context, int index) {
+          return buildStoreCard(meetingNotifier, index);
+        },
+        itemCount: meetingNotifier.meetingList.length,
       )),
     );
   }
 
-  Widget buildStoreCard() {
+  Widget buildStoreCard(MeetingNotifier meetingNotifier, int index) {
     return Padding(
       padding: EdgeInsets.all(10),
       child: Card(
@@ -52,14 +65,21 @@ class _OrderPageState extends State<OrderPage> {
                     Expanded(
                       flex: 4,
                       child: Text(
-                        'Name',
+                        meetingNotifier.meetingList[index].customerName,
                         style: TextStyle(),
                       ),
                     ),
                     Expanded(
                       flex: 4,
                       child: InkWell(
-                        onTap: () {},
+                        onTap: () {
+                          meetingNotifier.currentMeeting =
+                              meetingNotifier.meetingList[index];
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (BuildContext context) =>
+                                  OrderDetailPage(meetingNotifier
+                                      .currentMeeting.meetingId)));
+                        },
                         child: Text(
                           'Detailed',
                           style: TextStyle(),
@@ -70,19 +90,26 @@ class _OrderPageState extends State<OrderPage> {
                   ],
                 ),
               ),
-              SizedBox(height: 25,),
+              SizedBox(
+                height: 25,
+              ),
               Container(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Expanded(
                       flex: 5,
-                      child: Text('เวลาจัดส่ง เวลาปัจจุบัน'),
+                      child: Text(meetingNotifier.meetingList[index].date +
+                          " " +
+                          meetingNotifier.meetingList[index].time),
                     ),
                     Expanded(
                       flex: 5,
                       child: Text(
-                        'ราคา บาท',
+                        'ราคา ' +
+                            meetingNotifier.meetingList[index].totalPrice
+                                .toString() +
+                            ' บาท',
                         textAlign: TextAlign.right,
                       ),
                     ),
