@@ -1,6 +1,6 @@
 {
-    "name": "cs_senior_project",
-    "short_name": "cs_senior_project",
+    "name": "cs_senior_project_merchant",
+    "short_name": "cs_senior_project_merchant",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
