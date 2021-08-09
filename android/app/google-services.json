@@ -36,9 +36,9 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:873155461927:android:9018af0e22d19edefb1f02",
+        "mobilesdk_app_id": "1:873155461927:android:9d0c8288fd514c99fb1f02",
         "android_client_info": {
-          "package_name": "com.example.googlemapstores"
+          "package_name": "com.example.cs_senior_project_merchant"
         }
       },
       "oauth_client": [
