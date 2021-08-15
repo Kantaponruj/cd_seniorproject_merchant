@@ -30,64 +30,70 @@ class _OpeningHoursPageState extends State<OpeningHoursPage> {
                 text: 'เพิ่มเวลาทำการ',
                 onClicked: () {
                   showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30),
+                    barrierDismissible: false,
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        content: Container(
+                          width: MediaQuery.of(context).size.width,
+                          // height: 200,
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Container(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  'เลือกวัน',
+                                  style: FontCollection.smallBodyTextStyle,
+                                ),
+                              ),
+                              Container(
+                                margin: EdgeInsets.symmetric(vertical: 10),
+                                child: Wrap(
+                                  spacing: 10.0,
+                                  runSpacing: 5.0,
+                                  children: [
+                                    daySelect(),
+                                  ],
+                                ),
+                              ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                                child: Divider(
+                                  thickness: 2,
+                                ),
+                              ),
+                              Container(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  'เลือกเวลา',
+                                  style: FontCollection.smallBodyTextStyle,
+                                ),
+                              ),
+                              Container(
+                                margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
+                                child: timeSelect('เวลาเปิด', '08.00'),
+                              ),
+                              Container(
+                                margin: EdgeInsets.fromLTRB(0, 15, 0, 20),
+                                child: timeSelect('เวลาปิด', '18.00'),
+                              ),
+                              SmallStadiumButtonWidget(
+                                text: 'บันทึก',
+                                onClicked: () {
+                                  Navigator.pop(context);
+                                },
+                              ),
+                            ],
                           ),
-                          content: Container(
-                            width: MediaQuery.of(context).size.width,
-                            // height: 200,
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Container(
-                                  alignment: Alignment.centerLeft,
-                                  child: Text(
-                                    'เลือกวัน',
-                                    style: FontCollection.smallBodyTextStyle,
-                                  ),
-                                ),
-                                Container(
-                                  margin: EdgeInsets.symmetric(vertical: 10),
-                                  child: Wrap(
-                                    spacing: 10.0,
-                                    runSpacing: 5.0,
-                                    children: [
-                                      daySelect(),
-                                    ],
-                                  ),
-                                ),
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                                  child: Divider(
-                                    thickness: 2,
-                                  ),
-                                ),
-                                Container(
-                                  alignment: Alignment.centerLeft,
-                                  child: Text(
-                                    'เลือกเวลา',
-                                    style: FontCollection.smallBodyTextStyle,
-                                  ),
-                                ),
-                                Container(
-                                  margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
-                                  child: timeSelect('เวลาเปิด', '08.00'),
-                                ),
-                                Container(
-                                  margin: EdgeInsets.fromLTRB(0, 15, 0, 20),
-                                  child: timeSelect('เวลาปิด', '18.00'),
-                                ),
-                                SmallStadiumButtonWidget(
-                                    text: 'บันทึก', onClicked: () {}),
-                              ],
-                            ),
-                          ),
-                        );
-                      });
+                        ),
+                      );
+                    },
+                  );
                 },
               ),
             ],
@@ -188,7 +194,7 @@ class _OpeningHoursPageState extends State<OpeningHoursPage> {
     );
   }
 
-  List<String> _options = [
+  List<String> _days = [
     'วันจันทร์',
     'วันอังคาร',
     'วันพุธ',
@@ -197,24 +203,25 @@ class _OpeningHoursPageState extends State<OpeningHoursPage> {
     'วันเสาร์',
     'วันอาทิตย์'
   ];
-  List<bool> _selected = [false, false, false, false, false, false, false];
+  List<bool> _isSelected = [false, false, false, false, false, false, false];
 
   Widget daySelect() {
     List<Widget> chips = new List();
 
-    for (int i = 0; i < _options.length; i++) {
+    for (int i = 0; i < _days.length; i++) {
       FilterChip filterChip = FilterChip(
-        selected: _selected[i],
+        selected: _isSelected[i],
         label: Text(
-          _options[i],
+          _days[i],
           style: FontCollection.smallBodyTextStyle,
         ),
         pressElevation: 5,
         backgroundColor: CollectionsColors.grey,
         selectedColor: CollectionsColors.yellow,
         onSelected: (bool selected) {
+          // _isSelected[i] = selected;
           setState(() {
-            _selected[i] = selected;
+            _isSelected[i] = selected;
           });
         },
       );
