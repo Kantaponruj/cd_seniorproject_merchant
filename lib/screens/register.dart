@@ -1,106 +1,111 @@
+import 'package:cs_senior_project_merchant/component/bottomBar.dart';
+import 'package:cs_senior_project_merchant/notifiers/store_notifier.dart';
 import 'package:cs_senior_project_merchant/widgets/button_widget.dart';
+import 'package:cs_senior_project_merchant/widgets/loading_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'login.dart';
 
-class Register extends StatefulWidget {
-  const Register({Key key}) : super(key: key);
+class RegisterPage extends StatefulWidget {
+  const RegisterPage({Key key}) : super(key: key);
 
   @override
-  _RegisterState createState() => _RegisterState();
+  _RegisterPageState createState() => _RegisterPageState();
 }
 
-class _RegisterState extends State<Register> {
+class _RegisterPageState extends State<RegisterPage> {
+  final formKey = GlobalKey<ScaffoldState>();
+
+  String password = '';
+
+  void login(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) {
+          return LoginPage();
+        },
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    final formKey = GlobalKey<ScaffoldState>();
+    StoreNotifier storeNotifier = Provider.of<StoreNotifier>(context);
 
-    void login(BuildContext context) {
-      Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (_) {
-            return LoginPage();
-          },
-        ),
-      );
-    }
-
-    @override
-    Widget build(BuildContext context) {
-      return SafeArea(
-        child: Scaffold(
-          key: formKey,
-          body: SingleChildScrollView(
-            child: Form(
-              autovalidateMode: AutovalidateMode.onUserInteraction,
-              child: Padding(
-                padding: EdgeInsets.all(16),
-                child: Column(
-                  children: [
-                    SizedBox(
-                      height: 100,
-                    ),
-                    Text('Register'),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    buildUsername(),
-                    const SizedBox(
-                      height: 30,
-                    ),
-                    buildEmail(),
-                    const SizedBox(
-                      height: 30,
-                    ),
-                    buildPassword(),
-                    const SizedBox(
-                      height: 30,
-                    ),
-                    buildConfirmPassword(),
-                    const SizedBox(
-                      height: 30,
-                    ),
-                    buildSubmit(),
-                    const SizedBox(
-                      height: 15,
-                    ),
-                    TextButton(
-                      onPressed: () {},
-                      style: TextButton.styleFrom(
-                        primary: Colors.black,
+    return Scaffold(
+      key: formKey,
+      body: storeNotifier.status == Status.Authenticating
+          ? LoadingWidget()
+          : SingleChildScrollView(
+              child: Form(
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                child: Padding(
+                  padding: EdgeInsets.all(16),
+                  child: Column(
+                    children: [
+                      SizedBox(
+                        height: 100,
                       ),
-                      child: Text(
-                        'ลืมรหัสผ่าน',
-                        style: TextStyle(),
+                      Text('Register'),
+                      SizedBox(
+                        height: 20,
                       ),
-                    ),
-                    const SizedBox(
-                      height: 15,
-                    ),
-                    Divider(
-                      thickness: 2,
-                    ),
-                    const SizedBox(
-                      height: 30,
-                    ),
-                    InkWell(
-                      onTap: () => login(context),
-                      child: Text(
-                        'เข้าสู่ระบบ',
-                        style: TextStyle(),
+                      buildUsername(storeNotifier),
+                      const SizedBox(
+                        height: 30,
                       ),
-                    ),
-                  ],
+                      buildEmail(storeNotifier),
+                      const SizedBox(
+                        height: 30,
+                      ),
+                      buildPassword(storeNotifier),
+                      const SizedBox(
+                        height: 30,
+                      ),
+                      buildConfirmPassword(storeNotifier),
+                      const SizedBox(
+                        height: 30,
+                      ),
+                      buildSubmit(storeNotifier),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      TextButton(
+                        onPressed: () {},
+                        style: TextButton.styleFrom(
+                          primary: Colors.black,
+                        ),
+                        child: Text(
+                          'ลืมรหัสผ่าน',
+                          style: TextStyle(),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      Divider(
+                        thickness: 2,
+                      ),
+                      const SizedBox(
+                        height: 30,
+                      ),
+                      InkWell(
+                        onTap: () => login(context),
+                        child: Text(
+                          'เข้าสู่ระบบ',
+                          style: TextStyle(),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-        ),
-      );
-    }
+    );
   }
 
-  Widget buildUsername() {
+  Widget buildUsername(StoreNotifier storeNotifier) {
     return TextFormField(
       decoration: InputDecoration(
         labelText: 'ชื่อผู้ใช้',
@@ -109,6 +114,7 @@ class _RegisterState extends State<Register> {
             OutlineInputBorder(borderSide: BorderSide(color: Colors.red)),
         errorStyle: TextStyle(color: Colors.red),
       ),
+      controller: storeNotifier.displayName,
       keyboardType: TextInputType.text,
       validator: (value) {
         if (value.length < 4) {
@@ -122,7 +128,7 @@ class _RegisterState extends State<Register> {
     );
   }
 
-  Widget buildEmail() {
+  Widget buildEmail(StoreNotifier storeNotifier) {
     return TextFormField(
       decoration: InputDecoration(
         labelText: 'อีเมล',
@@ -131,6 +137,7 @@ class _RegisterState extends State<Register> {
             OutlineInputBorder(borderSide: BorderSide(color: Colors.red)),
         errorStyle: TextStyle(color: Colors.red),
       ),
+      controller: storeNotifier.email,
       keyboardType: TextInputType.emailAddress,
       validator: (value) {
         final pattern = r'(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-]+$)';
@@ -148,7 +155,7 @@ class _RegisterState extends State<Register> {
     );
   }
 
-  Widget buildPassword() {
+  Widget buildPassword(StoreNotifier storeNotifier) {
     return TextFormField(
       decoration: InputDecoration(
         labelText: 'รหัสผ่าน',
@@ -157,6 +164,7 @@ class _RegisterState extends State<Register> {
             OutlineInputBorder(borderSide: BorderSide(color: Colors.red)),
         errorStyle: TextStyle(color: Colors.red),
       ),
+      controller: storeNotifier.password,
       validator: (value) {
         if (value.length < 8) {
           return 'รหัสผ่านห้ามมีความยาวน้อยกว่า 8 ';
@@ -169,7 +177,7 @@ class _RegisterState extends State<Register> {
     );
   }
 
-  Widget buildConfirmPassword() {
+  Widget buildConfirmPassword(StoreNotifier storeNotifier) {
     return TextFormField(
       decoration: InputDecoration(
         labelText: 'ยืนยันรหัสผ่าน',
@@ -178,15 +186,35 @@ class _RegisterState extends State<Register> {
             OutlineInputBorder(borderSide: BorderSide(color: Colors.red)),
         errorStyle: TextStyle(color: Colors.red),
       ),
-      validator: (value) {},
+      controller: storeNotifier.confirmPassword,
+      validator: (value) {
+        if (value != storeNotifier.password.text) {
+          return 'รหัสผ่านไม่ตรงกัน';
+        } else {
+          return null;
+        }
+      },
+      onSaved: (value) => setState(() => password = value),
       obscureText: true,
     );
   }
 
-  Widget buildSubmit() {
+  Widget buildSubmit(StoreNotifier storeNotifier) {
     return ButtonWidget(
       text: 'ลงทะเบียน',
-      onClicked: () async {},
+      onClicked: () async {
+        if (!await storeNotifier.signUp()) {
+          ScaffoldMessenger.of(context)
+              .showSnackBar(const SnackBar(content: Text("Register failed")));
+          return;
+        }
+        storeNotifier.clearController();
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => BottomBar()),
+            (route) => false);
+        FocusScope.of(context).unfocus();
+      },
     );
   }
 }
