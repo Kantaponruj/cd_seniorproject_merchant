@@ -1,18 +1,30 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cs_senior_project_merchant/asset/constant.dart';
 import 'package:cs_senior_project_merchant/models/store.dart';
-import 'package:cs_senior_project_merchant/notifiers/storeNotifier.dart';
 
-getStores(StoreNotifier storeNotifier) async {
-  QuerySnapshot snapshot =
-  await FirebaseFirestore.instance.collection('stores').get();
+class StoreService {
+  String collection = "stores";
 
-  List<Store> _storeList = [];
+  void createUser({
+    String storeId,
+    String email,
+  }) {
+    firebaseFirestore.collection(collection).doc(storeId).set({
+      'storeId': storeId,
+      'email': email,
+    });
+  }
 
-  snapshot.docs.forEach((document) {
-    Store store = Store.fromMap(document.data());
-    _storeList.add(store);
-  });
+  void updateUserData(Map<String, dynamic> value) {
+    firebaseFirestore
+        .collection(collection)
+        .doc(value['storeId'])
+        .update(value);
+  }
 
-  storeNotifier.storeList = _storeList;
+  Future<Store> getUserById(String storeId) => firebaseFirestore
+      .collection(collection)
+      .doc(storeId)
+      .get()
+      .then((doc) => Store.fromSnapshot(doc));
 }
-
