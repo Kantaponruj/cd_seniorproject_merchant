@@ -9,7 +9,6 @@ class Store {
   bool isDelivery;
   bool isPickUp;
   String email;
-  List openingHours = [];
 
   Store();
 
@@ -33,6 +32,5 @@ class Store {
     isDelivery = snapshot.data()['isDelivery'];
     isPickUp = snapshot.data()['isPickUp'];
     email = snapshot.data()['email'];
-    openingHours = snapshot.data()['openingHours'];
   }
 }
