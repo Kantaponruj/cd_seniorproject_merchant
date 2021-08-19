@@ -12,11 +12,6 @@ class DateTimeNotifier with ChangeNotifier {
 
   DateTime get dateTime => _dateTime;
 
-  set dateTimeShow(DateTime dateTime) {
-    _dateTime = dateTime;
-    notifyListeners();
-  }
-
   set dateTimeList(List<DateTime> dateTimeList) {
     _dateTimeList = dateTimeList;
     notifyListeners();

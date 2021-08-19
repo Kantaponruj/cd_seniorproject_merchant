@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cs_senior_project_merchant/asset/constant.dart';
+import 'package:cs_senior_project_merchant/models/dateTime.dart';
 import 'package:cs_senior_project_merchant/models/store.dart';
 
 class StoreService {
@@ -27,4 +28,20 @@ class StoreService {
       .doc(storeId)
       .get()
       .then((doc) => Store.fromSnapshot(doc));
+}
+
+addDateAndTime(
+  DateTime dateTime,
+  String storeId,
+  Function onSaveDateTime,
+) async {
+  CollectionReference storeRef = firebaseFirestore
+      .collection('stores')
+      .doc(storeId)
+      .collection('openingHours');
+
+  DocumentReference documentRef = await storeRef.add(dateTime.toMap());
+  await documentRef.set(dateTime.toMap(), SetOptions(merge: true));
+
+  onSaveDateTime(dateTime);
 }

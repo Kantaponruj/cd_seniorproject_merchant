@@ -1,8 +1,13 @@
 import 'package:cs_senior_project_merchant/asset/color.dart';
 import 'package:cs_senior_project_merchant/asset/text_style.dart';
 import 'package:cs_senior_project_merchant/component/roundAppBar.dart';
+import 'package:cs_senior_project_merchant/models/dateTime.dart';
+import 'package:cs_senior_project_merchant/notifiers/dateTime_notifier.dart';
+import 'package:cs_senior_project_merchant/notifiers/store_notifier.dart';
+import 'package:cs_senior_project_merchant/services/store_service.dart';
 import 'package:cs_senior_project_merchant/widgets/button_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class OpeningHoursPage extends StatefulWidget {
   const OpeningHoursPage({Key key}) : super(key: key);
@@ -12,6 +17,37 @@ class OpeningHoursPage extends StatefulWidget {
 }
 
 class _OpeningHoursPageState extends State<OpeningHoursPage> {
+  DateTime _selectedDateTime;
+  List<String> _dates = [];
+
+  // Mock up data
+  String _openTime = '10.00';
+  String _closeTime = '18.00';
+
+  _onSaveDateTime(DateTime dateTime) {
+    DateTimeNotifier dateTimeNotifier =
+        Provider.of<DateTimeNotifier>(context, listen: false);
+    dateTimeNotifier.addDateTime(dateTime);
+    Navigator.pop(context);
+  }
+
+  _handleSaveDateTime() {
+    StoreNotifier storeNotifier = Provider.of(context, listen: false);
+
+    _selectedDateTime.openTime = _openTime;
+    _selectedDateTime.closeTime = _closeTime;
+    _selectedDateTime.dates = _dates;
+
+    addDateAndTime(
+        _selectedDateTime, storeNotifier.store.storeId, _onSaveDateTime);
+  }
+
+  @override
+  void initState() {
+    _selectedDateTime = DateTime();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -85,7 +121,7 @@ class _OpeningHoursPageState extends State<OpeningHoursPage> {
                               SmallStadiumButtonWidget(
                                 text: 'บันทึก',
                                 onClicked: () {
-                                  Navigator.pop(context);
+                                  _handleSaveDateTime();
                                 },
                               ),
                             ],
@@ -219,9 +255,9 @@ class _OpeningHoursPageState extends State<OpeningHoursPage> {
         backgroundColor: CollectionsColors.grey,
         selectedColor: CollectionsColors.yellow,
         onSelected: (bool selected) {
-          // _isSelected[i] = selected;
           setState(() {
             _isSelected[i] = selected;
+            _dates.add(_days[i]);
           });
         },
       );

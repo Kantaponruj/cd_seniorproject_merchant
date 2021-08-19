@@ -11,7 +11,7 @@ class DateTime {
     dates = data['dates'];
   }
 
-  // Map<String, dynamic> toMap() {
-  //   return {'openTime': openTime, 'closeTime': closeTime, 'date': dates};
-  // }
+  Map<String, dynamic> toMap() {
+    return {'openTime': openTime, 'closeTime': closeTime, 'date': dates};
+  }
 }
