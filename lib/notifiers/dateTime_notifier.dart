@@ -17,8 +17,8 @@ class DateTimeNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  addDateTime(DateTime dateTime) {
-    _dateTimeList.insert(0, dateTime);
+  addDateTime(DateTime dateTime, int index) {
+    _dateTimeList.insert(index, dateTime);
     notifyListeners();
   }
 }
