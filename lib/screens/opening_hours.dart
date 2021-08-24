@@ -147,50 +147,65 @@ class _OpeningHoursPageState extends State<OpeningHoursPage> {
     );
   }
 
+  List<String> _days = [
+    'วันจันทร์',
+    'วันอังคาร',
+    'วันพุธ',
+    'วันพฤหัสบดี',
+    'วันศุกร์',
+    'วันเสาร์',
+    'วันอาทิตย์'
+  ];
+  List<bool> _isSelected = [false, false, false, false, false, false, false];
+
   Widget buildCard(String topicText) {
     DateTimeNotifier dateTimeNotifier = Provider.of<DateTimeNotifier>(context);
 
-    List daysFromDB = [];
+    List daysArr = [];
+    int textCase;
 
     showDateTime(int index, DateTime dateTime) {
       if (dateTime.dates.length >= 2) {
-        daysFromDB = [];
+        daysArr = [];
         for (int i = 0; i < dateTime.dates.length - 1; i++) {
-          if (dateTime.dates[i] < dateTime.dates[i + 1]) {
-            daysFromDB.add(_days[dateTime.dates[i]]);
-            daysFromDB.add(_days[dateTime.dates[dateTime.dates.length - 1]]);
+          if ((dateTime.dates[i].isOdd && dateTime.dates[i + 1].isEven) ||
+              (dateTime.dates[i].isEven && dateTime.dates[i + 1].isOdd)) {
+            daysArr.add(_days[dateTime.dates[i]]);
+            textCase = 1;
+          } else {
+            daysArr.add(_days[dateTime.dates[i]]);
+            textCase = 2;
           }
-          // else {
-          //   daysFromDB
-          //       .add(_days[dateTimeNotifier.dateTimeList[index].dates[i]]);
-          // }
         }
-      } else {
-        daysFromDB = [];
-        daysFromDB.add(_days[dateTime.dates[0]]);
-      }
 
-      return Container(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Container(
-              child: Text(
-                daysFromDB.length >= 2
-                    ? daysFromDB[0] + " - " + daysFromDB[daysFromDB.length - 1]
-                    : daysFromDB[0],
-                style: FontCollection.bodyTextStyle,
-              ),
-            ),
-            Container(
-              child: Text(
-                dateTime.openTime + " - " + dateTime.closeTime,
-                style: FontCollection.bodyTextStyle,
-              ),
-            ),
-          ],
-        ),
-      );
+        daysArr.add(_days[dateTime.dates[dateTime.dates.length - 1]]);
+
+        return Container(
+          child: textCase == 1
+              ? Text(
+                  daysArr[0] + " - " + daysArr[daysArr.length - 1],
+                  style: FontCollection.bodyTextStyle,
+                )
+              : Row(
+                  children: daysArr
+                      .map(
+                        (day) =>
+                            Text("$day ", style: FontCollection.bodyTextStyle),
+                      )
+                      .toList(),
+                ),
+        );
+      } else {
+        daysArr = [];
+        daysArr.add(_days[dateTime.dates[0]]);
+
+        return Container(
+          child: Text(
+            daysArr[0],
+            style: FontCollection.bodyTextStyle,
+          ),
+        );
+      }
     }
 
     return Card(
@@ -216,8 +231,22 @@ class _OpeningHoursPageState extends State<OpeningHoursPage> {
               shrinkWrap: true,
               itemCount: dateTimeNotifier.dateTimeList.length,
               itemBuilder: (context, index) {
-                return showDateTime(
-                    index, dateTimeNotifier.dateTimeList[index]);
+                return Container(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      showDateTime(index, dateTimeNotifier.dateTimeList[index]),
+                      Container(
+                        child: Text(
+                          dateTimeNotifier.dateTimeList[index].openTime +
+                              " - " +
+                              dateTimeNotifier.dateTimeList[index].closeTime,
+                          style: FontCollection.bodyTextStyle,
+                        ),
+                      ),
+                    ],
+                  ),
+                );
               },
             )
           ],
@@ -269,17 +298,6 @@ class _OpeningHoursPageState extends State<OpeningHoursPage> {
       ),
     );
   }
-
-  List<String> _days = [
-    'วันจันทร์',
-    'วันอังคาร',
-    'วันพุธ',
-    'วันพฤหัสบดี',
-    'วันศุกร์',
-    'วันเสาร์',
-    'วันอาทิตย์'
-  ];
-  List<bool> _isSelected = [false, false, false, false, false, false, false];
 
   Widget daySelect() {
     List<Widget> chips = [];
