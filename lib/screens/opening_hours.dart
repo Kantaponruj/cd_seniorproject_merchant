@@ -24,21 +24,6 @@ class _OpeningHoursPageState extends State<OpeningHoursPage> {
   String _openTime = '10.00';
   String _closeTime = '18.00';
 
-  _onSaveDateTime(DateTime dateTime) {
-    DateTimeNotifier dateTimeNotifier =
-        Provider.of<DateTimeNotifier>(context, listen: false);
-    dateTimeNotifier.addDateTime(dateTime);
-    Navigator.pop(context);
-  }
-
-  _handleSaveDateTime(String storeId) {
-    _selectedDateTime.openTime = _openTime;
-    _selectedDateTime.closeTime = _closeTime;
-    _selectedDateTime.dates = _dates;
-
-    addDateAndTime(_selectedDateTime, storeId, _onSaveDateTime);
-  }
-
   @override
   void initState() {
     DateTimeNotifier dateTimeNotifier =
@@ -49,6 +34,22 @@ class _OpeningHoursPageState extends State<OpeningHoursPage> {
 
     getDateAndTime(dateTimeNotifier, storeNotifier.store.storeId);
     super.initState();
+  }
+
+  _onSaveDateTime(DateTime dateTime) {
+    DateTimeNotifier dateTimeNotifier =
+        Provider.of<DateTimeNotifier>(context, listen: false);
+    dateTimeNotifier.addDateTime(
+        dateTime, dateTimeNotifier.dateTimeList.length);
+    Navigator.pop(context);
+  }
+
+  _handleSaveDateTime(String storeId) {
+    _selectedDateTime.openTime = _openTime;
+    _selectedDateTime.closeTime = _closeTime;
+    _selectedDateTime.dates = _dates;
+
+    addDateAndTime(_selectedDateTime, storeId, _onSaveDateTime);
   }
 
   @override
@@ -151,61 +152,44 @@ class _OpeningHoursPageState extends State<OpeningHoursPage> {
 
     List daysFromDB = [];
 
-    showDateTime(int index, int length) {
-      if (length >= 2) {
+    showDateTime(int index, DateTime dateTime) {
+      if (dateTime.dates.length >= 2) {
         daysFromDB = [];
-        for (int i = 0; i < length - 1; i++) {
-          if (dateTimeNotifier.dateTimeList[index].dates[i] <
-              dateTimeNotifier.dateTimeList[index].dates[i + 1]) {
-            daysFromDB
-                .add(_days[dateTimeNotifier.dateTimeList[index].dates[i]]);
+        for (int i = 0; i < dateTime.dates.length - 1; i++) {
+          if (dateTime.dates[i] < dateTime.dates[i + 1]) {
+            daysFromDB.add(_days[dateTime.dates[i]]);
+            daysFromDB.add(_days[dateTime.dates[dateTime.dates.length - 1]]);
           }
+          // else {
+          //   daysFromDB
+          //       .add(_days[dateTimeNotifier.dateTimeList[index].dates[i]]);
+          // }
         }
       } else {
         daysFromDB = [];
-        daysFromDB.add(_days[dateTimeNotifier.dateTimeList[index].dates[0]]);
+        daysFromDB.add(_days[dateTime.dates[0]]);
       }
 
-      print(daysFromDB);
-
       return Container(
-        child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(daysFromDB.length >= 2
-                  ? daysFromDB[0] + ' - ' + daysFromDB[daysFromDB.length - 1]
-                  : daysFromDB[0])
-            ]
-            //   dateTimeNotifier.dateTimeList[index].dates.map((date) {
-            // return Text(
-            //     dateTimeNotifier.dateTimeList[index].dates[1].toString());
-            // if (dateTimeNotifier.dateTimeList[index].dates.length >= 2) {
-            //   for (int i = 0;
-            //       i <= dateTimeNotifier.dateTimeList[index].dates.length;
-            //       i++) {
-            //     if (date / 2 != 0) {
-            //       return Card(
-            //         color: Colors.black54,
-            //         child: Center(
-            //             child: Text(
-            //                 dateTimeNotifier.dateTimeList[index].dates[0]
-            //                         .toString() +
-            //                     " - ",
-            //                 style: TextStyle(color: Colors.white))),
-            //       );
-            //     } else {
-            //       return Card(
-            //         color: Colors.black54,
-            //         child: Center(
-            //             child: Text(date.toString(),
-            //                 style: TextStyle(color: Colors.white))),
-            //       );
-            //     }
-            //   }
-            // } else {
-            //   return Text("null");
-            // }
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Container(
+              child: Text(
+                daysFromDB.length >= 2
+                    ? daysFromDB[0] + " - " + daysFromDB[daysFromDB.length - 1]
+                    : daysFromDB[0],
+                style: FontCollection.bodyTextStyle,
+              ),
             ),
+            Container(
+              child: Text(
+                dateTime.openTime + " - " + dateTime.closeTime,
+                style: FontCollection.bodyTextStyle,
+              ),
+            ),
+          ],
+        ),
       );
     }
 
@@ -229,50 +213,13 @@ class _OpeningHoursPageState extends State<OpeningHoursPage> {
               child: Divider(),
             ),
             ListView.builder(
-                shrinkWrap: true,
-                itemCount: dateTimeNotifier.dateTimeList.length,
-                itemBuilder: (context, index) {
-                  return showDateTime(
-                      index, dateTimeNotifier.dateTimeList[index].dates.length);
-                })
-
-            // ListView.builder(
-            //   shrinkWrap: true,
-            //   itemCount: dateTimeNotifier.dateTimeList.length,
-            //   itemBuilder: (context, index) {
-            //     return showDateTime(
-            //         index, dateTimeNotifier.dateTimeList[index].dates.length);
-            //   Container(
-            // child: Row(
-            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //   children: dateTimeNotifier.dateTimeList[index].dates
-            //       .map((date) => Card(
-            //             color: Colors.black54,
-            //             child: Center(
-            //                 child: Text(date.toString(),
-            //                     style: TextStyle(color: Colors.white))),
-            //           ))
-            //       .toList(),
-            // [
-            //   Container(
-            //     child: Text(
-            //         dateTimeNotifier.dateTimeList[index].dates
-            //             .map((date) => date).toList(),
-            //         style: FontCollection.bodyTextStyle),
-            //   ),
-            //   Container(
-            //     child: Text(
-            //       dateTimeNotifier.dateTimeList[index].openTime +
-            //           ' - ' +
-            //           dateTimeNotifier.dateTimeList[index].closeTime,
-            //       style: FontCollection.bodyTextStyle,
-            //     ),
-            //   ),
-            // ],
-            //   ),
-            // );
-            // },
-            // ),
+              shrinkWrap: true,
+              itemCount: dateTimeNotifier.dateTimeList.length,
+              itemBuilder: (context, index) {
+                return showDateTime(
+                    index, dateTimeNotifier.dateTimeList[index]);
+              },
+            )
           ],
         ),
       ),
