@@ -41,7 +41,7 @@ void main() async {
       routes: {
         // '/': (context) => BottomBar(),
         '/address': (context) => AddressPage(),
-        '/openingHours': (context) => OpeningHoursPage(),
+        // '/openingHours': (context) => OpeningHoursPage(),
       },
     ),
   ));

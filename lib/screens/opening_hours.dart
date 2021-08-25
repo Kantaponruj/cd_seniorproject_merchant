@@ -3,14 +3,14 @@ import 'package:cs_senior_project_merchant/asset/text_style.dart';
 import 'package:cs_senior_project_merchant/component/roundAppBar.dart';
 import 'package:cs_senior_project_merchant/models/dateTime.dart';
 import 'package:cs_senior_project_merchant/notifiers/dateTime_notifier.dart';
-import 'package:cs_senior_project_merchant/notifiers/store_notifier.dart';
 import 'package:cs_senior_project_merchant/services/store_service.dart';
 import 'package:cs_senior_project_merchant/widgets/button_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class OpeningHoursPage extends StatefulWidget {
-  const OpeningHoursPage({Key key}) : super(key: key);
+  const OpeningHoursPage({Key key, @required this.storeId}) : super(key: key);
+  final String storeId;
 
   @override
   _OpeningHoursPageState createState() => _OpeningHoursPageState();
@@ -28,11 +28,10 @@ class _OpeningHoursPageState extends State<OpeningHoursPage> {
   void initState() {
     DateTimeNotifier dateTimeNotifier =
         Provider.of<DateTimeNotifier>(context, listen: false);
-    StoreNotifier storeNotifier = Provider.of(context, listen: false);
 
     _selectedDateTime = DateTime();
 
-    getDateAndTime(dateTimeNotifier, storeNotifier.store.storeId);
+    getDateAndTime(dateTimeNotifier, widget.storeId);
     super.initState();
   }
 
@@ -54,8 +53,6 @@ class _OpeningHoursPageState extends State<OpeningHoursPage> {
 
   @override
   Widget build(BuildContext context) {
-    StoreNotifier storeNotifier = Provider.of(context);
-
     return SafeArea(
       child: Scaffold(
           appBar: RoundedAppBar(
@@ -128,8 +125,7 @@ class _OpeningHoursPageState extends State<OpeningHoursPage> {
                                   SmallStadiumButtonWidget(
                                     text: 'บันทึก',
                                     onClicked: () {
-                                      _handleSaveDateTime(
-                                          storeNotifier.store.storeId);
+                                      _handleSaveDateTime(widget.storeId);
                                     },
                                   ),
                                 ],
