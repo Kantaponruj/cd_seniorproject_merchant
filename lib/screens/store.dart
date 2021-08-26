@@ -1,7 +1,6 @@
 import 'package:cs_senior_project_merchant/asset/color.dart';
 import 'package:cs_senior_project_merchant/asset/text_style.dart';
 import 'package:cs_senior_project_merchant/component/storeCard.dart';
-import 'package:cs_senior_project_merchant/models/store.dart';
 import 'package:cs_senior_project_merchant/notifiers/dateTime_notifier.dart';
 import 'package:cs_senior_project_merchant/notifiers/store_notifier.dart';
 import 'package:cs_senior_project_merchant/screens/opening_hours.dart';
@@ -115,12 +114,19 @@ class _StorePageState extends State<StorePage> {
                         borderRadius: BorderRadius.vertical(
                           bottom: Radius.circular(20),
                         ),
-                        child: Image.asset(
-                          'assets/images/shop_test.jpg',
-                          fit: BoxFit.cover,
-                          width: double.infinity,
-                          height: double.infinity,
-                        ),
+                        child: storeNotifier.store.image.isNotEmpty
+                            ? Image.network(
+                                storeNotifier.store.image,
+                                fit: BoxFit.cover,
+                                width: double.infinity,
+                                height: double.infinity,
+                              )
+                            : Image.asset(
+                                'assets/images/shop_test.jpg',
+                                fit: BoxFit.cover,
+                                width: double.infinity,
+                                height: double.infinity,
+                              ),
                       ),
                     ),
                     Positioned(
