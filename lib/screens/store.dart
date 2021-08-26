@@ -257,7 +257,8 @@ class _StorePageState extends State<StorePage> {
                                         children: [
                                           ListView.builder(
                                             shrinkWrap: true,
-                                            itemCount: 2,
+                                            itemCount: dateTimeNotifier
+                                                .dateTimeList.length,
                                             itemBuilder: (context, index) {
                                               return Container(
                                                 child: Row(
