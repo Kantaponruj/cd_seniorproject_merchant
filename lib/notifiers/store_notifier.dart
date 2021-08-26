@@ -100,7 +100,7 @@ class StoreNotifier with ChangeNotifier {
   }
 
   updateUserData(Map<String, dynamic> data) async {
-    _storeService.updateUserData(data);
+    _storeService.updateUserData(user.uid, data);
   }
 
   _onStateChange(User firebaseUser) async {

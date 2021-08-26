@@ -20,7 +20,8 @@ class StorePage extends StatefulWidget {
 }
 
 class _StorePageState extends State<StorePage> {
-  Store _store;
+  bool _deliveryStatus;
+  bool _storeStatus;
 
   @override
   void initState() {
@@ -30,9 +31,9 @@ class _StorePageState extends State<StorePage> {
         Provider.of<DateTimeNotifier>(context, listen: false);
     getDateAndTime(dateTimeNotifier, storeNotifier.store.storeId);
 
-    if (storeNotifier.reloadUserModel() != null) {
-      storeNotifier.reloadUserModel();
-    } else {}
+    _deliveryStatus = storeNotifier.store.deliveryStatus;
+    _storeStatus = storeNotifier.store.storeStatus;
+
     super.initState();
   }
 
@@ -197,10 +198,32 @@ class _StorePageState extends State<StorePage> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  switchCard('สถานะการส่ง',
-                                      storeNotifier.store.deliveryStatus),
-                                  // switchCard('สถานะร้านค้า',
-                                  //     storeNotifier.store.storeStatus),
+                                  switchCard(
+                                    'สถานะการส่ง',
+                                    (val) {
+                                      setState(
+                                        () {
+                                          _deliveryStatus = val;
+                                          storeNotifier.updateUserData(
+                                              {"deliveryStatus": val});
+                                        },
+                                      );
+                                    },
+                                    _deliveryStatus,
+                                  ),
+                                  switchCard(
+                                    'สถานะร้านค้า',
+                                    (val) {
+                                      setState(
+                                        () {
+                                          _storeStatus = val;
+                                          storeNotifier.updateUserData(
+                                              {"storeStatus": val});
+                                        },
+                                      );
+                                    },
+                                    _storeStatus,
+                                  )
                                 ],
                               ),
                             ),
@@ -331,8 +354,6 @@ class _StorePageState extends State<StorePage> {
                     ),
                   ],
                 ),
-
-                // SearchWidget(),
               ],
             ),
           ),
@@ -341,7 +362,7 @@ class _StorePageState extends State<StorePage> {
     );
   }
 
-  Widget switchCard(String headerText, bool status) {
+  Widget switchCard(String headerText, Function handleToggle, bool status) {
     return Container(
       child: Card(
         shape: RoundedRectangleBorder(
@@ -361,50 +382,24 @@ class _StorePageState extends State<StorePage> {
               ),
               SizedBox(
                 width: 100,
-                child: buildSwitch(status),
+                child: FlutterSwitch(
+                  width: 100,
+                  showOnOff: true,
+                  activeTextColor: CollectionsColors.white,
+                  activeColor: CollectionsColors.orange,
+                  inactiveTextColor: CollectionsColors.white,
+                  activeText: 'เปิด',
+                  inactiveText: 'ปิด',
+                  activeTextFontWeight: FontWeight.w400,
+                  inactiveTextFontWeight: FontWeight.w400,
+                  value: status,
+                  onToggle: handleToggle,
+                ),
               ),
             ],
           ),
         ),
       ),
-    );
-  }
-
-  // bool value = false;
-
-  // Widget buildIOSSwitch() => Transform.scale(
-  //       scale: 1.1,
-  //       child: CupertinoSwitch(
-  //         activeColor: CollectionsColors.orange,
-  //         value: value,
-  //         onChanged: (value) => setState(() => this.value = value),
-  //       ),
-  //     );
-
-  Widget buildSwitch(bool status) {
-    StoreNotifier storeNotifier = Provider.of<StoreNotifier>(context);
-
-    return FlutterSwitch(
-      width: 100,
-      showOnOff: true,
-      activeTextColor: CollectionsColors.white,
-      activeColor: CollectionsColors.orange,
-      inactiveTextColor: CollectionsColors.white,
-      activeText: 'เปิด',
-      inactiveText: 'ปิด',
-      activeTextFontWeight: FontWeight.w400,
-      inactiveTextFontWeight: FontWeight.w400,
-      value: status,
-      onToggle: (val) {
-        setState(
-          () {
-            status = val;
-            print(status);
-            _deliveryStatus.deliveryStatus = val;
-            storeNotifier.updateUserData(_deliveryStatus);
-          },
-        );
-      },
     );
   }
 }

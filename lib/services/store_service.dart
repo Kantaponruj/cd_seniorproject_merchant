@@ -14,14 +14,13 @@ class StoreService {
     firebaseFirestore.collection(collection).doc(storeId).set({
       'storeId': storeId,
       'email': email,
+      'deliveryStatus': false,
+      'storeStatus': false
     });
   }
 
-  void updateUserData(Map<String, dynamic> value) {
-    firebaseFirestore
-        .collection(collection)
-        .doc(value['storeId'])
-        .update(value);
+  void updateUserData(String storeId, Map<String, dynamic> value) {
+    firebaseFirestore.collection(collection).doc(storeId).update(value);
   }
 
   Future<Store> getUserById(String storeId) => firebaseFirestore
