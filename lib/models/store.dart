@@ -12,6 +12,9 @@ class Store {
   String kindOfFood;
   bool deliveryStatus;
   bool storeStatus;
+  String selectedAddressName;
+  String selectedAddress;
+  GeoPoint selectedLocation;
 
   Store();
 
@@ -27,5 +30,8 @@ class Store {
     kindOfFood = snapshot.data()['kindOfFood'];
     deliveryStatus = snapshot.data()['deliveryStatus'];
     storeStatus = snapshot.data()['storeStatus'];
+    selectedAddressName = snapshot.data()['selectedAddressName'];
+    selectedAddress = snapshot.data()['selectedAddress'];
+    selectedLocation = snapshot.data()['selectedLocation'];
   }
 }

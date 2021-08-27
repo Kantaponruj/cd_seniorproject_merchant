@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cs_senior_project_merchant/asset/constant.dart';
+import 'package:cs_senior_project_merchant/models/address.dart';
 import 'package:cs_senior_project_merchant/models/dateTime.dart';
 import 'package:cs_senior_project_merchant/models/store.dart';
+import 'package:cs_senior_project_merchant/notifiers/address_notifier.dart';
 import 'package:cs_senior_project_merchant/notifiers/dateTime_notifier.dart';
 
 class StoreService {
@@ -61,4 +63,21 @@ getDateAndTime(DateTimeNotifier dateTimeNotifier, String storeId) async {
   });
 
   dateTimeNotifier.dateTimeList = _dateTimeList;
+}
+
+getAddress(AddressNotifier addressNotifier, String storeId) async {
+  QuerySnapshot snapshot = await firebaseFirestore
+      .collection('stores')
+      .doc(storeId)
+      .collection('address')
+      .get();
+
+  List<Address> _addressList = [];
+
+  snapshot.docs.forEach((document) {
+    Address address = Address.fromMap(document.data());
+    _addressList.add(address);
+  });
+
+  addressNotifier.addressList = _addressList;
 }

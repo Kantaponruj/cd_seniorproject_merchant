@@ -1,9 +1,14 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cs_senior_project_merchant/asset/text_style.dart';
 import 'package:cs_senior_project_merchant/component/roundAppBar.dart';
+import 'package:cs_senior_project_merchant/notifiers/address_notifier.dart';
+import 'package:cs_senior_project_merchant/services/store_service.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class AddressPage extends StatefulWidget {
-  const AddressPage({Key key}) : super(key: key);
+  AddressPage({Key key, this.storeId}) : super(key: key);
+  final String storeId;
 
   @override
   _AddressPageState createState() => _AddressPageState();
@@ -11,32 +16,27 @@ class AddressPage extends StatefulWidget {
 
 class _AddressPageState extends State<AddressPage> {
   @override
+  void initState() {
+    AddressNotifier addressNotifier =
+        Provider.of<AddressNotifier>(context, listen: false);
+    getAddress(addressNotifier, widget.storeId);
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    AddressNotifier addressNotifier = Provider.of<AddressNotifier>(context);
+
     return SafeArea(
       child: Scaffold(
         appBar: RoundedAppBar(
-          appBarTittle: 'เลือกที่อยู่',
+          appBarTittle: 'ที่อยู่ของคุณ',
         ),
         body: Container(
-          margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
           alignment: Alignment.center,
           child: Column(
             children: [
-              Container(
-                margin: EdgeInsets.fromLTRB(0, 20, 0, 20),
-                width: MediaQuery.of(context).size.width,
-                height: 50,
-                child: ElevatedButton(
-                  onPressed: () {},
-                  style: ElevatedButton.styleFrom(
-                      shape: StadiumBorder(),
-                      primary: Theme.of(context).buttonColor),
-                  child: Text(
-                    'เลือกบนแผนที่',
-                    style: FontCollection.buttonTextStyle,
-                  ),
-                ),
-              ),
               GestureDetector(
                 onTap: () {},
                 child: Card(
@@ -44,45 +44,25 @@ class _AddressPageState extends State<AddressPage> {
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Container(
-                    margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                    child: Column(
-                      children: [
-                        Container(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Container(
-                                child: Text(
-                                  'ที่อยู่ของคุณ',
-                                  style: FontCollection.topicTextStyle,
-                                ),
-                              ),
-                              Container(
-                                child: Text(
-                                  'เพิ่มเติม',
-                                  style: FontCollection.topicTextStyle,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        //Mock up data
-                        Container(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            'บ้าน',
+                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                    child: ListView.separated(
+                      shrinkWrap: true,
+                      itemCount: addressNotifier.addressList.length,
+                      itemBuilder: (BuildContext context, index) {
+                        return ListTile(
+                          title: Text(
+                            addressNotifier.addressList[index].addressName,
                             style: FontCollection.bodyTextStyle,
                           ),
-                        ),
-                        Container(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            '55/176 พฤกษาวิลเลจ 2 ถ.รังสิต ...',
-                            style: FontCollection.bodyTextStyle,
+                          subtitle: AutoSizeText(
+                            addressNotifier.addressList[index].address,
+                            maxLines: 2,
                           ),
-                        ),
-                        //TODO listview
-                      ],
+                        );
+                      },
+                      separatorBuilder: (BuildContext context, int index) {
+                        return Divider();
+                      },
                     ),
                   ),
                 ),

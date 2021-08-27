@@ -3,6 +3,7 @@ import 'package:cs_senior_project_merchant/asset/text_style.dart';
 import 'package:cs_senior_project_merchant/component/storeCard.dart';
 import 'package:cs_senior_project_merchant/notifiers/dateTime_notifier.dart';
 import 'package:cs_senior_project_merchant/notifiers/store_notifier.dart';
+import 'package:cs_senior_project_merchant/screens/address.dart';
 import 'package:cs_senior_project_merchant/screens/opening_hours.dart';
 import 'package:cs_senior_project_merchant/services/store_service.dart';
 import 'package:cs_senior_project_merchant/models/dateTime.dart';
@@ -326,7 +327,12 @@ class _StorePageState extends State<StorePage> {
                             ),
                             storeCard(
                               () {
-                                Navigator.of(context).pushNamed('/address');
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => AddressPage(
+                                            storeId:
+                                                storeNotifier.store.storeId)));
                               },
                               'สถานที่ขาย',
                               Center(
@@ -337,7 +343,8 @@ class _StorePageState extends State<StorePage> {
                                       Container(
                                         alignment: Alignment.centerLeft,
                                         child: Text(
-                                          'ตลาดทุ่งครุ',
+                                          storeNotifier
+                                              .store.selectedAddressName,
                                           style:
                                               FontCollection.bodyBoldTextStyle,
                                         ),
@@ -345,7 +352,7 @@ class _StorePageState extends State<StorePage> {
                                       Container(
                                         alignment: Alignment.centerLeft,
                                         child: Text(
-                                          'ตลาดทุ่งครุ ประชาอุทิศ 61 ถนนประชาอุทิศ แขวงทุ่งครุ เขตทุ่งครุ 10140',
+                                          storeNotifier.store.selectedAddress,
                                           style: FontCollection.bodyTextStyle,
                                         ),
                                       ),

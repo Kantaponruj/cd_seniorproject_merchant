@@ -1,13 +1,11 @@
 import 'package:cs_senior_project_merchant/asset/color.dart';
 import 'package:cs_senior_project_merchant/asset/constant.dart';
+import 'package:cs_senior_project_merchant/notifiers/address_notifier.dart';
 import 'package:cs_senior_project_merchant/notifiers/dateTime_notifier.dart';
 import 'package:cs_senior_project_merchant/notifiers/meeting_notifier.dart';
 import 'package:cs_senior_project_merchant/notifiers/menu_notifier.dart';
 import 'package:cs_senior_project_merchant/notifiers/store_notifier.dart';
-import 'package:cs_senior_project_merchant/screens/address.dart';
 import 'package:cs_senior_project_merchant/screens/login.dart';
-import 'package:cs_senior_project_merchant/screens/opening_hours.dart';
-import 'package:cs_senior_project_merchant/screens/orderDetail.dart';
 import 'package:cs_senior_project_merchant/widgets/loading_widget.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -25,6 +23,7 @@ void main() async {
       ChangeNotifierProvider(create: (context) => MeetingNotifier()),
       ChangeNotifierProvider(create: (context) => MenuNotifier()),
       ChangeNotifierProvider(create: (context) => DateTimeNotifier()),
+      ChangeNotifierProvider(create: (context) => AddressNotifier())
     ],
     child: MaterialApp(
       theme: ThemeData(
@@ -32,15 +31,13 @@ void main() async {
         backgroundColor: Colors.white,
         primaryColor: CollectionsColors.orange,
         buttonColor: CollectionsColors.yellow,
-        // iconTheme: IconThemeData(
-        //   color: CollectionsColors.orange
-        // ),
+        // iconTheme: IconThemeData(color: CollectionsColors.orange),
       ),
       // initialRoute: '/',
       home: MyApp(),
       routes: {
         // '/': (context) => BottomBar(),
-        '/address': (context) => AddressPage(),
+        // '/address': (context) => AddressPage(),
         // '/openingHours': (context) => OpeningHoursPage(),
       },
     ),
@@ -48,8 +45,6 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  // static final String title = 'Home';
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     StoreNotifier storeNotifier = Provider.of<StoreNotifier>(context);
