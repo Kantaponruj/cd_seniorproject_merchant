@@ -3,7 +3,7 @@ import 'package:cs_senior_project_merchant/asset/constant.dart';
 import 'package:cs_senior_project_merchant/models/meeting.dart';
 import 'package:cs_senior_project_merchant/notifiers/meeting_notifier.dart';
 
-getMeeting(MeetingNotifier meetingNotifier) async {
+Future<void> getMeeting(MeetingNotifier meetingNotifier) async {
   QuerySnapshot snapshot =
       await firebaseFirestore.collection('meeting-point').get();
 

@@ -48,7 +48,8 @@ addDateAndTime(
   onSaveDateTime(dateTime);
 }
 
-getDateAndTime(DateTimeNotifier dateTimeNotifier, String storeId) async {
+Future<void> getDateAndTime(
+    DateTimeNotifier dateTimeNotifier, String storeId) async {
   QuerySnapshot snapshot = await firebaseFirestore
       .collection('stores')
       .doc(storeId)
@@ -65,7 +66,7 @@ getDateAndTime(DateTimeNotifier dateTimeNotifier, String storeId) async {
   dateTimeNotifier.dateTimeList = _dateTimeList;
 }
 
-getAddress(AddressNotifier addressNotifier, String storeId) async {
+Future<void> getAddress(AddressNotifier addressNotifier, String storeId) async {
   QuerySnapshot snapshot = await firebaseFirestore
       .collection('stores')
       .doc(storeId)

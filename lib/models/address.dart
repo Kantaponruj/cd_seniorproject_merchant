@@ -6,6 +6,8 @@ class Address {
   String addressDetail;
   GeoPoint geoPoint;
 
+  Address();
+
   Address.fromMap(Map<String, dynamic> data) {
     address = data['address'];
     addressName = data['addressName'];
