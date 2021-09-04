@@ -2,8 +2,7 @@ import 'package:cs_senior_project_merchant/asset/color.dart';
 import 'package:cs_senior_project_merchant/asset/constant.dart';
 import 'package:cs_senior_project_merchant/notifiers/address_notifier.dart';
 import 'package:cs_senior_project_merchant/notifiers/dateTime_notifier.dart';
-import 'package:cs_senior_project_merchant/notifiers/meeting_notifier.dart';
-import 'package:cs_senior_project_merchant/notifiers/menu_notifier.dart';
+import 'package:cs_senior_project_merchant/notifiers/order_notifier.dart';
 import 'package:cs_senior_project_merchant/notifiers/store_notifier.dart';
 import 'package:cs_senior_project_merchant/screens/login.dart';
 import 'package:cs_senior_project_merchant/widgets/loading_widget.dart';
@@ -20,8 +19,7 @@ void main() async {
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider.value(value: StoreNotifier.initialize()),
-      ChangeNotifierProvider(create: (context) => MeetingNotifier()),
-      ChangeNotifierProvider(create: (context) => MenuNotifier()),
+      ChangeNotifierProvider(create: (context) => OrderNotifier()),
       ChangeNotifierProvider(create: (context) => DateTimeNotifier()),
       ChangeNotifierProvider(create: (context) => AddressNotifier())
     ],
