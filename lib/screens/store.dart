@@ -79,12 +79,10 @@ class _StorePageState extends State<StorePage> {
                   style: FontCollection.bodyTextStyle,
                 )
               : Row(
-                  children: daysArr
-                      .map(
-                        (day) =>
-                            Text("$day ", style: FontCollection.bodyTextStyle),
-                      )
-                      .toList(),
+                  children: [
+                    Text(daysArr.join(', '),
+                        style: FontCollection.bodyTextStyle)
+                  ],
                 ),
         );
       } else {
