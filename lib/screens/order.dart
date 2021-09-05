@@ -1,9 +1,10 @@
 import 'package:cs_senior_project_merchant/asset/color.dart';
 import 'package:cs_senior_project_merchant/asset/text_style.dart';
 import 'package:cs_senior_project_merchant/component/mainAppBar.dart';
-import 'package:cs_senior_project_merchant/notifiers/meeting_notifier.dart';
+import 'package:cs_senior_project_merchant/notifiers/order_notifier.dart';
+import 'package:cs_senior_project_merchant/notifiers/store_notifier.dart';
 import 'package:cs_senior_project_merchant/screens/orderDetail.dart';
-import 'package:cs_senior_project_merchant/services/meeting_service.dart';
+import 'package:cs_senior_project_merchant/services/order_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -17,15 +18,17 @@ class OrderPage extends StatefulWidget {
 class _OrderPageState extends State<OrderPage> {
   @override
   void initState() {
+    StoreNotifier storeNotifier =
+        Provider.of<StoreNotifier>(context, listen: false);
+    OrderNotifier orderNotifier =
+        Provider.of<OrderNotifier>(context, listen: false);
+    getOrderDelivery(orderNotifier, storeNotifier.store.storeId);
     super.initState();
-    MeetingNotifier meetingNotifier =
-        Provider.of<MeetingNotifier>(context, listen: false);
-    getMeeting(meetingNotifier);
   }
 
   @override
   Widget build(BuildContext context) {
-    MeetingNotifier meetingNotifier = Provider.of<MeetingNotifier>(context);
+    OrderNotifier orderNotifier = Provider.of<OrderNotifier>(context);
 
     return SafeArea(
       child: Scaffold(
@@ -35,23 +38,28 @@ class _OrderPageState extends State<OrderPage> {
         ),
         body: ListView.builder(
           itemBuilder: (BuildContext context, int index) {
-            return buildStoreCard(meetingNotifier, index);
+            return buildStoreCard(orderNotifier, index);
           },
-          itemCount: meetingNotifier.meetingList.length,
+          itemCount: orderNotifier.orderList.length,
         ),
       ),
     );
   }
 
-  Widget buildStoreCard(MeetingNotifier meetingNotifier, int index) {
+  Widget buildStoreCard(OrderNotifier orderNotifier, int index) {
+    StoreNotifier storeNotifier = Provider.of<StoreNotifier>(context);
+
     return Padding(
       padding: EdgeInsets.fromLTRB(10, 10, 10, 5),
       child: GestureDetector(
         onTap: () {
-          meetingNotifier.currentMeeting = meetingNotifier.meetingList[index];
-          Navigator.of(context).push(MaterialPageRoute(
+          orderNotifier.currentOrder = orderNotifier.orderList[index];
+          Navigator.of(context).push(
+            MaterialPageRoute(
               builder: (BuildContext context) =>
-                  OrderDetailPage(meetingNotifier.currentMeeting.meetingId)));
+                  OrderDetailPage(storeNotifier.store.storeId),
+            ),
+          );
         },
         child: Card(
           shape: RoundedRectangleBorder(
@@ -75,7 +83,7 @@ class _OrderPageState extends State<OrderPage> {
                             backgroundColor: CollectionsColors.grey,
                             radius: 35.0,
                             child: Text(
-                              meetingNotifier.meetingList[index].customerName[0]
+                              orderNotifier.orderList[index].customerName[0]
                                   .toUpperCase(),
                               style: FontCollection.descriptionTextStyle,
                               textAlign: TextAlign.left,
@@ -86,7 +94,7 @@ class _OrderPageState extends State<OrderPage> {
                       Expanded(
                         flex: 5,
                         child: Text(
-                          meetingNotifier.meetingList[index].customerName,
+                          orderNotifier.orderList[index].customerName,
                           style: FontCollection.bodyTextStyle,
                         ),
                       ),
@@ -118,7 +126,7 @@ class _OrderPageState extends State<OrderPage> {
                           children: [
                             Container(
                               child: Text(
-                                meetingNotifier.meetingList[index].date,
+                                orderNotifier.orderList[index].dateOrdered,
                                 textAlign: TextAlign.left,
                                 style: FontCollection.bodyTextStyle,
                               ),
@@ -126,7 +134,7 @@ class _OrderPageState extends State<OrderPage> {
                             Container(
                               margin: EdgeInsets.only(left: 20),
                               child: Text(
-                                meetingNotifier.meetingList[index].time,
+                                orderNotifier.orderList[index].timeOrdered,
                                 textAlign: TextAlign.left,
                                 style: FontCollection.bodyTextStyle,
                               ),
@@ -140,8 +148,7 @@ class _OrderPageState extends State<OrderPage> {
                           alignment: Alignment.centerRight,
                           margin: EdgeInsets.only(right: 10),
                           child: Text(
-                            meetingNotifier.meetingList[index].totalPrice
-                                .toString(),
+                            orderNotifier.orderList[index].netPrice,
                             style: TextStyle(
                               fontFamily: NotoSansFont,
                               fontWeight: FontWeight.w700,
