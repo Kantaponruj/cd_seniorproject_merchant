@@ -11,6 +11,7 @@ Future<void> getOrderDelivery(
       .collection('stores')
       .doc(storeId)
       .collection('delivery-orders')
+      .orderBy('timeOrdered')
       .get();
 
   List<OrderDetail> _orderList = [];
