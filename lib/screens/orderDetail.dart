@@ -11,9 +11,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class OrderDetailPage extends StatefulWidget {
-  OrderDetailPage(this.storeId);
+  OrderDetailPage(this.storeId, this.order);
 
   final String storeId;
+  final order;
 
   @override
   _OrderDetailPageState createState() => _OrderDetailPageState();
@@ -27,7 +28,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
     getOrderMenu(
       orderNotifier,
       widget.storeId,
-      orderNotifier.currentOrder.orderId,
+      widget.order['orderId'],
     );
     super.initState();
   }
@@ -68,8 +69,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                                 backgroundColor: CollectionsColors.yellow,
                                 radius: 35.0,
                                 child: Text(
-                                  orderNotifier.currentOrder.customerName[0]
-                                      .toUpperCase(),
+                                  widget.order['customerName'][0].toString(),
                                   style: FontCollection.descriptionTextStyle,
                                   textAlign: TextAlign.left,
                                 ),
@@ -79,7 +79,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                           Expanded(
                             flex: 8,
                             child: Text(
-                              orderNotifier.currentOrder.customerName,
+                              widget.order['customerName'],
                               style: FontCollection.bodyTextStyle,
                               textAlign: TextAlign.left,
                             ),
@@ -115,7 +115,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                         Expanded(
                           flex: 7,
                           child: Text(
-                            orderNotifier.currentOrder.dateOrdered,
+                            widget.order['dateOrdered'],
                             style: FontCollection.bodyTextStyle,
                             textAlign: TextAlign.left,
                           ),
@@ -123,7 +123,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                         Expanded(
                           flex: 5,
                           child: Text(
-                            '${orderNotifier.currentOrder.timeOrdered} น.',
+                            '${widget.order['timeOrdered']} น.',
                             style: FontCollection.bodyTextStyle,
                             textAlign: TextAlign.right,
                           ),
@@ -141,7 +141,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                         Expanded(
                           flex: 10,
                           child: Text(
-                            orderNotifier.currentOrder.address,
+                            widget.order['address'],
                             style: FontCollection.bodyTextStyle,
                           ),
                         ),
@@ -190,8 +190,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                                 child: Container(
                                   alignment: Alignment.centerRight,
                                   child: Text(
-                                    orderNotifier.currentOrder.netPrice
-                                        .toString(),
+                                    widget.order['netPrice'].toString(),
                                     style: FontCollection.bodyTextStyle,
                                   ),
                                 ),

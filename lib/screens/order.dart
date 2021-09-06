@@ -3,11 +3,8 @@ import 'package:cs_senior_project_merchant/asset/color.dart';
 import 'package:cs_senior_project_merchant/asset/constant.dart';
 import 'package:cs_senior_project_merchant/asset/text_style.dart';
 import 'package:cs_senior_project_merchant/component/mainAppBar.dart';
-import 'package:cs_senior_project_merchant/models/order.dart';
-import 'package:cs_senior_project_merchant/notifiers/order_notifier.dart';
 import 'package:cs_senior_project_merchant/notifiers/store_notifier.dart';
 import 'package:cs_senior_project_merchant/screens/orderDetail.dart';
-import 'package:cs_senior_project_merchant/services/order_service.dart';
 import 'package:cs_senior_project_merchant/widgets/loading_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -20,21 +17,9 @@ class OrderPage extends StatefulWidget {
 }
 
 class _OrderPageState extends State<OrderPage> {
-  // @override
-  // void initState() {
-  //   StoreNotifier storeNotifier =
-  //       Provider.of<StoreNotifier>(context, listen: false);
-  //   OrderNotifier orderNotifier =
-  //       Provider.of<OrderNotifier>(context, listen: false);
-  //   getOrderDelivery(orderNotifier, storeNotifier.store.storeId);
-  //   super.initState();
-  // }
-
   @override
   Widget build(BuildContext context) {
     StoreNotifier storeNotifier = Provider.of<StoreNotifier>(context);
-    OrderNotifier orderNotifier = Provider.of<OrderNotifier>(context);
-    // final order = Provider.of<List<OrderDetail>>(context);
 
     return SafeArea(
       child: Scaffold(
@@ -56,140 +41,8 @@ class _OrderPageState extends State<OrderPage> {
               }
 
               return ListView(
-                children: snapshot.data.docs.map((data) {
-                  return Padding(
-                    padding: EdgeInsets.fromLTRB(10, 10, 10, 5),
-                    child: GestureDetector(
-                      onTap: () {
-                        // orderNotifier.currentOrder = snapshot.data;
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (BuildContext context) =>
-                                OrderDetailPage(storeNotifier.store.storeId),
-                          ),
-                        );
-                      },
-                      child: Card(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: Container(
-                          padding: EdgeInsets.all(20),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                child: Row(
-                                  children: [
-                                    Expanded(
-                                      flex: 2,
-                                      child: Container(
-                                        height: 40,
-                                        width: 40,
-                                        alignment: Alignment.centerLeft,
-                                        child: CircleAvatar(
-                                          backgroundColor:
-                                              CollectionsColors.grey,
-                                          radius: 35.0,
-                                          child: Text(
-                                            data['customerName'][0].toString(),
-                                            style: FontCollection
-                                                .descriptionTextStyle,
-                                            textAlign: TextAlign.left,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    Expanded(
-                                      flex: 5,
-                                      child: Text(
-                                        data['customerName'],
-                                        style: FontCollection.bodyTextStyle,
-                                      ),
-                                    ),
-                                    Expanded(
-                                      flex: 4,
-                                      child: InkWell(
-                                        onTap: () {},
-                                        child: Text(
-                                          'รายละเอียด',
-                                          style: FontCollection
-                                              .descriptionTextStyle,
-                                          textAlign: TextAlign.right,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              SizedBox(
-                                height: 40,
-                              ),
-                              Container(
-                                // padding: ,
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    Expanded(
-                                      flex: 7,
-                                      child: Row(
-                                        children: [
-                                          Container(
-                                            child: Text(
-                                              data['dateOrdered'],
-                                              textAlign: TextAlign.left,
-                                              style:
-                                                  FontCollection.bodyTextStyle,
-                                            ),
-                                          ),
-                                          Container(
-                                            margin: EdgeInsets.only(left: 20),
-                                            child: Text(
-                                              data['timeOrdered'],
-                                              textAlign: TextAlign.left,
-                                              style:
-                                                  FontCollection.bodyTextStyle,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    Expanded(
-                                      flex: 4,
-                                      child: Container(
-                                        alignment: Alignment.centerRight,
-                                        margin: EdgeInsets.only(right: 10),
-                                        child: Text(
-                                          data['netPrice'],
-                                          style: TextStyle(
-                                            fontFamily: NotoSansFont,
-                                            fontWeight: FontWeight.w700,
-                                            fontSize: bigSize,
-                                            color: CollectionsColors.red,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    Expanded(
-                                      flex: 1,
-                                      child: Container(
-                                        alignment: Alignment.bottomRight,
-                                        child: Text(
-                                          ' บาท',
-                                          style: FontCollection.bodyTextStyle,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  );
+                children: snapshot.data.docs.map((order) {
+                  return buildStoreCard(order, storeNotifier.store.storeId);
                 }).toList(),
               );
             }),
@@ -197,19 +50,16 @@ class _OrderPageState extends State<OrderPage> {
     );
   }
 
-  Widget buildStoreCard(final order) {
-    StoreNotifier storeNotifier = Provider.of<StoreNotifier>(context);
-    OrderNotifier orderNotifier = Provider.of<OrderNotifier>(context);
-
+  Widget buildStoreCard(final order, String storeId) {
     return Padding(
       padding: EdgeInsets.fromLTRB(10, 10, 10, 5),
       child: GestureDetector(
         onTap: () {
-          orderNotifier.currentOrder = order;
+          // orderNotifier.currentOrder = order;
           Navigator.of(context).push(
             MaterialPageRoute(
               builder: (BuildContext context) =>
-                  OrderDetailPage(storeNotifier.store.storeId),
+                  OrderDetailPage(storeId, order),
             ),
           );
         },
@@ -235,7 +85,7 @@ class _OrderPageState extends State<OrderPage> {
                             backgroundColor: CollectionsColors.grey,
                             radius: 35.0,
                             child: Text(
-                              order.customerName[0].toUpperCase(),
+                              order['customerName'][0].toUpperCase(),
                               style: FontCollection.descriptionTextStyle,
                               textAlign: TextAlign.left,
                             ),
@@ -245,7 +95,7 @@ class _OrderPageState extends State<OrderPage> {
                       Expanded(
                         flex: 5,
                         child: Text(
-                          order.customerName,
+                          order['customerName'],
                           style: FontCollection.bodyTextStyle,
                         ),
                       ),
@@ -277,7 +127,7 @@ class _OrderPageState extends State<OrderPage> {
                           children: [
                             Container(
                               child: Text(
-                                order.dateOrdered,
+                                order['dateOrdered'],
                                 textAlign: TextAlign.left,
                                 style: FontCollection.bodyTextStyle,
                               ),
@@ -285,7 +135,7 @@ class _OrderPageState extends State<OrderPage> {
                             Container(
                               margin: EdgeInsets.only(left: 20),
                               child: Text(
-                                order.timeOrdered,
+                                order['timeOrdered'],
                                 textAlign: TextAlign.left,
                                 style: FontCollection.bodyTextStyle,
                               ),
@@ -299,7 +149,7 @@ class _OrderPageState extends State<OrderPage> {
                           alignment: Alignment.centerRight,
                           margin: EdgeInsets.only(right: 10),
                           child: Text(
-                            order.netPrice,
+                            order['netPrice'],
                             style: TextStyle(
                               fontFamily: NotoSansFont,
                               fontWeight: FontWeight.w700,
