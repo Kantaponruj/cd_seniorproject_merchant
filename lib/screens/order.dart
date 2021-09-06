@@ -20,28 +20,29 @@ class OrderPage extends StatefulWidget {
 }
 
 class _OrderPageState extends State<OrderPage> {
-  @override
-  void initState() {
-    // StoreNotifier storeNotifier =
-    //     Provider.of<StoreNotifier>(context, listen: false);
-    // OrderNotifier orderNotifier =
-    //     Provider.of<OrderNotifier>(context, listen: false);
-    // getOrderDelivery(orderNotifier, storeNotifier.store.storeId);
-    super.initState();
-  }
+  // @override
+  // void initState() {
+  //   StoreNotifier storeNotifier =
+  //       Provider.of<StoreNotifier>(context, listen: false);
+  //   OrderNotifier orderNotifier =
+  //       Provider.of<OrderNotifier>(context, listen: false);
+  //   getOrderDelivery(orderNotifier, storeNotifier.store.storeId);
+  //   super.initState();
+  // }
 
   @override
   Widget build(BuildContext context) {
     StoreNotifier storeNotifier = Provider.of<StoreNotifier>(context);
-    // OrderNotifier orderNotifier = Provider.of<OrderNotifier>(context);
+    OrderNotifier orderNotifier = Provider.of<OrderNotifier>(context);
+    // final order = Provider.of<List<OrderDetail>>(context);
 
     return SafeArea(
       child: Scaffold(
-          backgroundColor: CollectionsColors.grey,
-          appBar: MainAppbar(
-            appBarTitle: 'คำสั่งซื้อ',
-          ),
-          body: StreamBuilder(
+        backgroundColor: CollectionsColors.grey,
+        appBar: MainAppbar(
+          appBarTitle: 'คำสั่งซื้อ',
+        ),
+        body: StreamBuilder(
             stream: firebaseFirestore
                 .collection('stores')
                 .doc(storeNotifier.store.storeId)
@@ -60,7 +61,7 @@ class _OrderPageState extends State<OrderPage> {
                     padding: EdgeInsets.fromLTRB(10, 10, 10, 5),
                     child: GestureDetector(
                       onTap: () {
-                        // orderNotifier.currentOrder = orderNotifier.orderList[index];
+                        // orderNotifier.currentOrder = snapshot.data;
                         Navigator.of(context).push(
                           MaterialPageRoute(
                             builder: (BuildContext context) =>
@@ -190,148 +191,144 @@ class _OrderPageState extends State<OrderPage> {
                     ),
                   );
                 }).toList(),
-                // itemBuilder: (BuildContext context, int index) {
-                //   return buildStoreCard(snapshot.data, index);
-                // },
-                // itemCount: orderNotifier.orderList.length,
               );
-            },
-          )),
+            }),
+      ),
     );
   }
 
-  // Widget buildStoreCard(OrderNotifier orderNotifier, int index) {
-  //   StoreNotifier storeNotifier = Provider.of<StoreNotifier>(context);
+  Widget buildStoreCard(final order) {
+    StoreNotifier storeNotifier = Provider.of<StoreNotifier>(context);
+    OrderNotifier orderNotifier = Provider.of<OrderNotifier>(context);
 
-  //   return Padding(
-  //     padding: EdgeInsets.fromLTRB(10, 10, 10, 5),
-  //     child: GestureDetector(
-  //       onTap: () {
-  //         orderNotifier.currentOrder = orderNotifier.orderList[index];
-  //         Navigator.of(context).push(
-  //           MaterialPageRoute(
-  //             builder: (BuildContext context) =>
-  //                 OrderDetailPage(storeNotifier.store.storeId),
-  //           ),
-  //         );
-  //       },
-  //       child: Card(
-  //         shape: RoundedRectangleBorder(
-  //           borderRadius: BorderRadius.circular(20),
-  //         ),
-  //         child: Container(
-  //           padding: EdgeInsets.all(20),
-  //           child: Column(
-  //             crossAxisAlignment: CrossAxisAlignment.start,
-  //             children: [
-  //               Container(
-  //                 child: Row(
-  //                   children: [
-  //                     Expanded(
-  //                       flex: 2,
-  //                       child: Container(
-  //                         height: 40,
-  //                         width: 40,
-  //                         alignment: Alignment.centerLeft,
-  //                         child: CircleAvatar(
-  //                           backgroundColor: CollectionsColors.grey,
-  //                           radius: 35.0,
-  //                           child: Text(
-  //                             orderNotifier.orderList[index].customerName[0]
-  //                                 .toUpperCase(),
-  //                             style: FontCollection.descriptionTextStyle,
-  //                             textAlign: TextAlign.left,
-  //                           ),
-  //                         ),
-  //                       ),
-  //                     ),
-  //                     Expanded(
-  //                       flex: 5,
-  //                       child: Text(
-  //                         orderNotifier.orderList[index].customerName,
-  //                         style: FontCollection.bodyTextStyle,
-  //                       ),
-  //                     ),
-  //                     Expanded(
-  //                       flex: 4,
-  //                       child: InkWell(
-  //                         onTap: () {},
-  //                         child: Text(
-  //                           'รายละเอียด',
-  //                           style: FontCollection.descriptionTextStyle,
-  //                           textAlign: TextAlign.right,
-  //                         ),
-  //                       ),
-  //                     ),
-  //                   ],
-  //                 ),
-  //               ),
-  //               SizedBox(
-  //                 height: 40,
-  //               ),
-  //               Container(
-  //                 // padding: ,
-  //                 child: Row(
-  //                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-  //                   children: [
-  //                     Expanded(
-  //                       flex: 7,
-  //                       child: Row(
-  //                         children: [
-  //                           Container(
-  //                             child: Text(
-  //                               orderNotifier.orderList[index].dateOrdered,
-  //                               textAlign: TextAlign.left,
-  //                               style: FontCollection.bodyTextStyle,
-  //                             ),
-  //                           ),
-  //                           Container(
-  //                             margin: EdgeInsets.only(left: 20),
-  //                             child: Text(
-  //                               orderNotifier.orderList[index].timeOrdered,
-  //                               textAlign: TextAlign.left,
-  //                               style: FontCollection.bodyTextStyle,
-  //                             ),
-  //                           ),
-  //                         ],
-  //                       ),
-  //                     ),
-  //                     Expanded(
-  //                       flex: 4,
-  //                       child: Container(
-  //                         alignment: Alignment.centerRight,
-  //                         margin: EdgeInsets.only(right: 10),
-  //                         child: Text(
-  //                           orderNotifier.orderList[index].netPrice,
-  //                           style: TextStyle(
-  //                             fontFamily: NotoSansFont,
-  //                             fontWeight: FontWeight.w700,
-  //                             fontSize: bigSize,
-  //                             color: CollectionsColors.red,
-  //                           ),
-  //                         ),
-  //                       ),
-  //                     ),
-  //                     Expanded(
-  //                       flex: 1,
-  //                       child: Container(
-  //                         alignment: Alignment.bottomRight,
-  //                         child: Text(
-  //                           ' บาท',
-  //                           style: FontCollection.bodyTextStyle,
-  //                         ),
-  //                       ),
-  //                     ),
-  //                   ],
-  //                 ),
-  //               ),
-  //             ],
-  //           ),
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
+    return Padding(
+      padding: EdgeInsets.fromLTRB(10, 10, 10, 5),
+      child: GestureDetector(
+        onTap: () {
+          orderNotifier.currentOrder = order;
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (BuildContext context) =>
+                  OrderDetailPage(storeNotifier.store.storeId),
+            ),
+          );
+        },
+        child: Card(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Container(
+            padding: EdgeInsets.all(20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  child: Row(
+                    children: [
+                      Expanded(
+                        flex: 2,
+                        child: Container(
+                          height: 40,
+                          width: 40,
+                          alignment: Alignment.centerLeft,
+                          child: CircleAvatar(
+                            backgroundColor: CollectionsColors.grey,
+                            radius: 35.0,
+                            child: Text(
+                              order.customerName[0].toUpperCase(),
+                              style: FontCollection.descriptionTextStyle,
+                              textAlign: TextAlign.left,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        flex: 5,
+                        child: Text(
+                          order.customerName,
+                          style: FontCollection.bodyTextStyle,
+                        ),
+                      ),
+                      Expanded(
+                        flex: 4,
+                        child: InkWell(
+                          onTap: () {},
+                          child: Text(
+                            'รายละเอียด',
+                            style: FontCollection.descriptionTextStyle,
+                            textAlign: TextAlign.right,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: 40,
+                ),
+                Container(
+                  // padding: ,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Expanded(
+                        flex: 7,
+                        child: Row(
+                          children: [
+                            Container(
+                              child: Text(
+                                order.dateOrdered,
+                                textAlign: TextAlign.left,
+                                style: FontCollection.bodyTextStyle,
+                              ),
+                            ),
+                            Container(
+                              margin: EdgeInsets.only(left: 20),
+                              child: Text(
+                                order.timeOrdered,
+                                textAlign: TextAlign.left,
+                                style: FontCollection.bodyTextStyle,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Expanded(
+                        flex: 4,
+                        child: Container(
+                          alignment: Alignment.centerRight,
+                          margin: EdgeInsets.only(right: 10),
+                          child: Text(
+                            order.netPrice,
+                            style: TextStyle(
+                              fontFamily: NotoSansFont,
+                              fontWeight: FontWeight.w700,
+                              fontSize: bigSize,
+                              color: CollectionsColors.red,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: Container(
+                          alignment: Alignment.bottomRight,
+                          child: Text(
+                            ' บาท',
+                            style: FontCollection.bodyTextStyle,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 
   Widget priceText(String text) {
     return Container(
