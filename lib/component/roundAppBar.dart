@@ -27,7 +27,7 @@ class _RoundedAppBarState extends State<RoundedAppBar> {
         ),
         child: AppBar(
           iconTheme: IconThemeData(
-            color: CollectionsColors.white, //change your color here
+            color: Colors.black, //change your color here
           ),
           // leading: IconButton(
           //   icon: Icon(Icons.arrow_back_ios_outlined, color: CollectionsColors.white),

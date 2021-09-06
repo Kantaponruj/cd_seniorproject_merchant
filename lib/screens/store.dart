@@ -3,10 +3,11 @@ import 'package:cs_senior_project_merchant/asset/text_style.dart';
 import 'package:cs_senior_project_merchant/component/storeCard.dart';
 import 'package:cs_senior_project_merchant/notifiers/dateTime_notifier.dart';
 import 'package:cs_senior_project_merchant/notifiers/store_notifier.dart';
-import 'package:cs_senior_project_merchant/screens/address.dart';
-import 'package:cs_senior_project_merchant/screens/opening_hours.dart';
+import 'package:cs_senior_project_merchant/screens/store/address.dart';
+import 'package:cs_senior_project_merchant/screens/store/opening_hours.dart';
 import 'package:cs_senior_project_merchant/services/store_service.dart';
 import 'package:cs_senior_project_merchant/models/dateTime.dart';
+import 'package:cs_senior_project_merchant/widgets/button_widget.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -153,21 +154,18 @@ class _StorePageState extends State<StorePage> {
                                       child: Row(
                                         children: [
                                           Expanded(
-                                              flex: 10,
+                                              flex: 9,
                                               child: Text(storeNotifier
-                                                  .store.storeName)),
+                                                  .store.storeName, style: FontCollection.topicBoldTextStyle,),),
                                           Expanded(
-                                            flex: 2,
-                                            child: Container(
-                                              alignment: Alignment.centerRight,
-                                              child: Text('แก้ไข'),
-                                            ),
+                                            flex: 3,
+                                            child: EditButton(editText: 'แก้ไขข้อมูล',onClicked: () {},),
                                           ),
                                         ],
                                       ),
                                     ),
                                     Container(
-                                      alignment: Alignment.centerLeft,
+                                      alignment: Alignment.topLeft,
                                       child:
                                           Text(storeNotifier.store.kindOfFood),
                                     ),
@@ -233,9 +231,9 @@ class _StorePageState extends State<StorePage> {
                               ),
                             ),
                             storeCard(
-                              () {},
-                              'รายละเอียดร้านค้า',
-                              Center(
+                              onClicked: () {},
+                              headerText: 'รายละเอียดร้านค้า',
+                              child: Center(
                                 child: Container(
                                   padding: EdgeInsets.all(20),
                                   child: Text(
@@ -246,7 +244,7 @@ class _StorePageState extends State<StorePage> {
                               ),
                             ),
                             storeCard(
-                              () {
+                              onClicked: () {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
@@ -254,18 +252,22 @@ class _StorePageState extends State<StorePage> {
                                             storeId:
                                                 storeNotifier.store.storeId)));
                               },
-                              'เวลาทำการ',
-                              dateTimeNotifier.dateTimeList.isNotEmpty
+                              headerText: 'เวลาทำการ',
+                              child: dateTimeNotifier.dateTimeList.isNotEmpty
                                   ? Container(
                                       padding: EdgeInsets.all(20),
                                       child: Column(
                                         children: [
                                           ListView.builder(
+                                            physics:
+                                                NeverScrollableScrollPhysics(),
                                             shrinkWrap: true,
                                             itemCount: dateTimeNotifier
                                                 .dateTimeList.length,
                                             itemBuilder: (context, index) {
                                               return Container(
+                                                padding:
+                                                    EdgeInsets.only(bottom: 10),
                                                 child: Row(
                                                   mainAxisAlignment:
                                                       MainAxisAlignment
@@ -310,9 +312,9 @@ class _StorePageState extends State<StorePage> {
                                     ),
                             ),
                             storeCard(
-                              () {},
-                              'รูปแบบการจัดส่ง',
-                              Center(
+                              onClicked: () {},
+                              headerText: 'รูปแบบการจัดส่ง',
+                              child: Center(
                                 child: Container(
                                   padding: EdgeInsets.all(20),
                                   child: Text(
@@ -322,9 +324,10 @@ class _StorePageState extends State<StorePage> {
                                   ),
                                 ),
                               ),
+                              canEdit: false,
                             ),
                             storeCard(
-                              () {
+                              onClicked: () {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
@@ -332,8 +335,8 @@ class _StorePageState extends State<StorePage> {
                                             storeId:
                                                 storeNotifier.store.storeId)));
                               },
-                              'สถานที่ขาย',
-                              Center(
+                              headerText: 'สถานที่ขาย',
+                              child: Center(
                                 child: Container(
                                   padding: EdgeInsets.all(20),
                                   child: Column(

@@ -29,6 +29,7 @@ void main() async {
         backgroundColor: Colors.white,
         primaryColor: CollectionsColors.orange,
         buttonColor: CollectionsColors.yellow,
+        scaffoldBackgroundColor: CollectionsColors.grey,
         // iconTheme: IconThemeData(color: CollectionsColors.orange),
       ),
       // initialRoute: '/',

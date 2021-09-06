@@ -222,10 +222,12 @@ class _OpeningHoursPageState extends State<OpeningHoursPage> {
               child: Divider(),
             ),
             ListView.builder(
+              physics: NeverScrollableScrollPhysics(),
               shrinkWrap: true,
               itemCount: dateTimeNotifier.dateTimeList.length,
               itemBuilder: (context, index) {
                 return Container(
+                  padding: EdgeInsets.only(bottom: 10),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [

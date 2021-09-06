@@ -55,7 +55,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Container(
-                      padding: EdgeInsets.all(15),
+                      padding: EdgeInsets.all(20),
                       child: Row(
                         children: [
                           Expanded(
@@ -107,7 +107,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                   ),
                 ),
                 OrderCard(
-                  headerText: 'เวลาการนัดหมาย',
+                  headerText: 'เวลาการสั่งซื้อ',
                   child: Container(
                     padding: EdgeInsets.all(20),
                     child: Row(
@@ -139,20 +139,21 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                     child: Row(
                       children: [
                         Expanded(
-                          flex: 10,
                           child: Text(
                             orderNotifier.currentOrder.address,
                             style: FontCollection.bodyTextStyle,
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
                           ),
                         ),
-                        Expanded(
-                          flex: 2,
-                          child: Text(
-                            'แก้ไข',
-                            style: FontCollection.smallBodyTextStyle,
-                            textAlign: TextAlign.right,
-                          ),
-                        ),
+                        // Expanded(
+                        //   flex: 2,
+                        //   child: Text(
+                        //     'แก้ไข',
+                        //     style: FontCollection.smallBodyTextStyle,
+                        //     textAlign: TextAlign.right,
+                        //   ),
+                        // ),
                       ],
                     ),
                   ),
@@ -166,6 +167,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                       children: [
                         Container(
                           child: ListView.builder(
+                            physics: NeverScrollableScrollPhysics(),
                             shrinkWrap: true,
                             itemCount: orderNotifier.orderMenuList.length,
                             itemBuilder: (context, index) {

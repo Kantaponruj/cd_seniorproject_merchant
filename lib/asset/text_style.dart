@@ -17,11 +17,18 @@ class FontCollection {
     color: Colors.black,
   );
 
+  static const topicBoldTextStyle = TextStyle(
+    fontFamily: NotoSansFont,
+    fontWeight: FontWeight.w700,
+    fontSize:  bigSize,
+    color: Colors.black,
+  );
+
   static const  appbarTextStyle = TextStyle(
     fontFamily: NotoSansFont,
     fontWeight: FontWeight.w400,
     fontSize: bigSize,
-    color: Colors.white,
+    color: Colors.black,
   );
 
   static const orderDetailHeaderTextStyle = TextStyle(
@@ -64,5 +71,21 @@ class FontCollection {
     fontWeight: FontWeight.w400,
     fontSize: bigSize,
     color: Colors.black,
+  );
+
+  static const underlineButtonTextStyle = TextStyle(
+    fontFamily: NotoSansFont,
+    fontWeight: FontWeight.w400,
+    fontSize: regularSize,
+    color: Colors.black,
+    decoration: TextDecoration.underline,
+  );
+
+  static const underlineSmallButtonTextStyle = TextStyle(
+    fontFamily: NotoSansFont,
+    fontWeight: FontWeight.w400,
+    fontSize: smallestSize,
+    color: Colors.black,
+    decoration: TextDecoration.underline,
   );
 }

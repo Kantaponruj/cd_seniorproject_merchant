@@ -97,3 +97,21 @@ class SmallStadiumButtonWidget extends StatelessWidget {
     );
   }
 }
+
+class EditButton extends StatelessWidget {
+  EditButton({Key key, @required this.onClicked, @required this.editText}) : super(key: key);
+
+  final VoidCallback onClicked;
+  final String editText;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+      onPressed: onClicked,
+      child: Text(
+        editText,
+        style: FontCollection.underlineButtonTextStyle,
+      ),
+    );
+  }
+}

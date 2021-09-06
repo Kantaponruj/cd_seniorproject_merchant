@@ -8,7 +8,7 @@ import 'package:flutter_icons/flutter_icons.dart';
 import '../screens/order.dart';
 import '../screens/store.dart';
 import '../screens/menu.dart';
-import '../screens/notification.dart';
+import '../screens/order/notification.dart';
 
 class BottomBar extends StatefulWidget {
   @override
