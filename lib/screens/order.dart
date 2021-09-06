@@ -22,18 +22,18 @@ class OrderPage extends StatefulWidget {
 class _OrderPageState extends State<OrderPage> {
   @override
   void initState() {
-    StoreNotifier storeNotifier =
-        Provider.of<StoreNotifier>(context, listen: false);
-    OrderNotifier orderNotifier =
-        Provider.of<OrderNotifier>(context, listen: false);
-    getOrderDelivery(orderNotifier, storeNotifier.store.storeId);
+    // StoreNotifier storeNotifier =
+    //     Provider.of<StoreNotifier>(context, listen: false);
+    // OrderNotifier orderNotifier =
+    //     Provider.of<OrderNotifier>(context, listen: false);
+    // getOrderDelivery(orderNotifier, storeNotifier.store.storeId);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     StoreNotifier storeNotifier = Provider.of<StoreNotifier>(context);
-    OrderNotifier orderNotifier = Provider.of<OrderNotifier>(context);
+    // OrderNotifier orderNotifier = Provider.of<OrderNotifier>(context);
 
     return SafeArea(
       child: Scaffold(
