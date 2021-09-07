@@ -3,6 +3,7 @@ import 'package:cs_senior_project_merchant/asset/color.dart';
 import 'package:cs_senior_project_merchant/asset/constant.dart';
 import 'package:cs_senior_project_merchant/asset/text_style.dart';
 import 'package:cs_senior_project_merchant/component/mainAppBar.dart';
+import 'package:cs_senior_project_merchant/notifiers/location_notifier.dart';
 import 'package:cs_senior_project_merchant/notifiers/store_notifier.dart';
 import 'package:cs_senior_project_merchant/screens/orderDetail.dart';
 import 'package:cs_senior_project_merchant/widgets/loading_widget.dart';
@@ -18,8 +19,36 @@ class OrderPage extends StatefulWidget {
 
 class _OrderPageState extends State<OrderPage> {
   @override
+  void initState() {
+    LocationNotifier locationNotifier =
+        Provider.of<LocationNotifier>(context, listen: false);
+    locationNotifier.initialization();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     StoreNotifier storeNotifier = Provider.of<StoreNotifier>(context);
+    LocationNotifier locationNotifier = Provider.of<LocationNotifier>(context);
+
+    // if (locationNotifier.currentPosition != null) {
+    //   Future.delayed(Duration(seconds: 5), () {
+    //     storeNotifier.updateUserData({
+    //       "realtimeLocation": GeoPoint(
+    //           locationNotifier.currentPosition.latitude,
+    //           locationNotifier.currentPosition.longitude)
+    //     });
+    //     print('latitude: ${locationNotifier.currentPosition.latitude}');
+    //   });
+    // }
+
+    Future.delayed(Duration(seconds: 3), () {
+      storeNotifier.updateUserData({
+        "realtimeLocation": GeoPoint(locationNotifier.currentPosition.latitude,
+            locationNotifier.currentPosition.longitude)
+      });
+      print(locationNotifier.currentPosition.latitude);
+    });
 
     return SafeArea(
       child: Scaffold(
