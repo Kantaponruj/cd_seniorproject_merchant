@@ -9,7 +9,6 @@ import 'package:cs_senior_project_merchant/screens/orderDetail.dart';
 import 'package:cs_senior_project_merchant/services/store_service.dart';
 import 'package:cs_senior_project_merchant/widgets/loading_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
 
 class OrderPage extends StatefulWidget {
@@ -23,38 +22,32 @@ class _OrderPageState extends State<OrderPage> {
   @override
   void initState() {
     LocationNotifier locationNotifier =
-    Provider.of<LocationNotifier>(context, listen: false);
+        Provider.of<LocationNotifier>(context, listen: false);
     locationNotifier.initialization();
-    StoreNotifier storeNotifier =
-    Provider.of<StoreNotifier>(context, listen: false);
-    updateLocation(locationNotifier, storeNotifier);
+
     super.initState();
   }
 
-  Future<void> start() async {
-    LocationNotifier locationNotifier =
-    Provider.of<LocationNotifier>(context, listen: false);
-    StoreNotifier storeNotifier =
-    Provider.of<StoreNotifier>(context, listen: false);
-    updateLocation(locationNotifier, storeNotifier);
-  }
+  // Future<void> updateLocation(LocationNotifier locationNotifier) async {
+  //   StoreNotifier storeNotifier =
+  //       Provider.of<StoreNotifier>(context, listen: false);
 
-  Future<void> updateLocation(LocationNotifier locationNotifier, StoreNotifier storeNotifier) async {
-    locationNotifier.initialization();
-    storeNotifier.updateUserData({
-      "realtimeLocation": GeoPoint(
-        locationNotifier.currentPosition.latitude,
-        locationNotifier.currentPosition.longitude,
-      )
-    });
-    print(locationNotifier.currentPosition.latitude);
-    print(locationNotifier.currentPosition.longitude);
-    if (storeNotifier.store.storeStatus == true) {
-      Future.delayed(Duration(seconds: 3), () {
-        updateLocation(locationNotifier, storeNotifier);
-      });
-    }
-  }
+  //   locationNotifier.initialization();
+  //   storeNotifier.updateUserData({
+  //     "realtimeLocation": GeoPoint(
+  //       locationNotifier.currentPosition.latitude,
+  //       locationNotifier.currentPosition.longitude,
+  //     )
+  //   });
+  //   print(locationNotifier.currentPosition.latitude);
+  //   print(locationNotifier.currentPosition.longitude);
+
+  //   if (storeNotifier.store.storeStatus == true) {
+  //     Future.delayed(Duration(seconds: 3), () {
+  //       updateLocation(locationNotifier);
+  //     });
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -78,6 +71,10 @@ class _OrderPageState extends State<OrderPage> {
                 (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
               if (!snapshot.hasData) {
                 return LoadingWidget();
+              }
+
+              if (locationNotifier.initialPosition != null) {
+                updateLocation(locationNotifier, storeNotifier);
               }
 
               return ListView(

@@ -7,6 +7,7 @@ import 'package:cs_senior_project_merchant/notifiers/address_notifier.dart';
 import 'package:cs_senior_project_merchant/notifiers/dateTime_notifier.dart';
 import 'package:cs_senior_project_merchant/notifiers/location_notifier.dart';
 import 'package:cs_senior_project_merchant/notifiers/store_notifier.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
 
 class StoreService {
@@ -86,4 +87,25 @@ Future<void> getAddress(AddressNotifier addressNotifier, String storeId) async {
   addressNotifier.addressList = _addressList;
 }
 
+Future<void> updateLocation(
+    LocationNotifier locationNotifier, StoreNotifier storeNotifier) async {
+  locationNotifier.initialization();
+  firebaseFirestore
+      .collection('stores')
+      .doc(storeNotifier.store.storeId)
+      .update({
+    "realtimeLocation": GeoPoint(
+      locationNotifier.currentPosition.latitude,
+      locationNotifier.currentPosition.longitude,
+    )
+  });
+  print(
+    'notifier: ${locationNotifier.currentPosition.latitude} ${locationNotifier.currentPosition.longitude}',
+  );
 
+  if (storeNotifier.store.storeStatus == true) {
+    Future.delayed(Duration(seconds: 3), () {
+      updateLocation(locationNotifier, storeNotifier);
+    });
+  }
+}
