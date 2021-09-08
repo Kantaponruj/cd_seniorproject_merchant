@@ -23,7 +23,30 @@ class _OrderPageState extends State<OrderPage> {
     LocationNotifier locationNotifier =
         Provider.of<LocationNotifier>(context, listen: false);
     locationNotifier.initialization();
+
+    // Future.delayed(Duration(seconds: 3), () {
+    //   print('latitude ${locationNotifier.currentPosition.latitude}');
+    // });
+    // updateLocation(locationNotifier);
     super.initState();
+  }
+
+  Future<void> updateLocation(LocationNotifier locationNotifier) async {
+    StoreNotifier storeNotifier =
+        Provider.of<StoreNotifier>(context, listen: false);
+
+    if (storeNotifier.store.storeStatus == true) {
+      Future.delayed(Duration(seconds: 3), () {
+        storeNotifier.updateUserData({
+          "realtimeLocation": GeoPoint(
+            locationNotifier.currentPosition.latitude,
+            locationNotifier.currentPosition.longitude,
+          )
+        });
+        updateLocation(locationNotifier);
+        print(locationNotifier.currentPosition.latitude);
+      });
+    }
   }
 
   @override
@@ -31,24 +54,33 @@ class _OrderPageState extends State<OrderPage> {
     StoreNotifier storeNotifier = Provider.of<StoreNotifier>(context);
     LocationNotifier locationNotifier = Provider.of<LocationNotifier>(context);
 
-    // if (locationNotifier.currentPosition != null) {
-    //   Future.delayed(Duration(seconds: 5), () {
+    updateLocation(locationNotifier);
+
+    // if (storeNotifier.store.storeStatus) {
+    //   Future.delayed(Duration(seconds: 3), () {
     //     storeNotifier.updateUserData({
     //       "realtimeLocation": GeoPoint(
-    //           locationNotifier.currentPosition.latitude,
-    //           locationNotifier.currentPosition.longitude)
+    //         locationNotifier.currentPosition.latitude ?? 0,
+    //         locationNotifier.currentPosition.longitude ?? 0,
+    //       )
     //     });
     //     print('latitude: ${locationNotifier.currentPosition.latitude}');
     //   });
     // }
 
-    Future.delayed(Duration(seconds: 3), () {
-      storeNotifier.updateUserData({
-        "realtimeLocation": GeoPoint(locationNotifier.currentPosition.latitude,
-            locationNotifier.currentPosition.longitude)
-      });
-      print(locationNotifier.currentPosition.latitude);
-    });
+    // Future<void> updateLocation() async {
+    //   if (!storeNotifier.store.storeStatus) {
+    //     Future.delayed(Duration(seconds: 1), () {
+    //       storeNotifier.updateUserData({
+    //         "realtimeLocation": GeoPoint(
+    //           locationNotifier.currentPosition.latitude,
+    //           locationNotifier.currentPosition.longitude,
+    //         )
+    //       });
+    //       print(locationNotifier.currentPosition.latitude);
+    //     });
+    //   }
+    // }
 
     return SafeArea(
       child: Scaffold(
