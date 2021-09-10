@@ -6,7 +6,6 @@ import 'package:cs_senior_project_merchant/notifiers/location_notifier.dart';
 import 'package:cs_senior_project_merchant/notifiers/order_notifier.dart';
 import 'package:cs_senior_project_merchant/notifiers/store_notifier.dart';
 import 'package:cs_senior_project_merchant/screens/login.dart';
-import 'package:cs_senior_project_merchant/services/store_service.dart';
 import 'package:cs_senior_project_merchant/widgets/loading_widget.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -53,7 +52,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
   @override
   void initState() {
     super.initState();
@@ -69,9 +67,9 @@ class _MyAppState extends State<MyApp> {
         if (snapshot.hasError) {
           return Scaffold(
               body: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [Text("Something went wrong")],
-              ));
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [Text("Something went wrong")],
+          ));
         }
 
         if (snapshot.connectionState == ConnectionState.done) {
@@ -98,4 +96,3 @@ class _MyAppState extends State<MyApp> {
     );
   }
 }
-
