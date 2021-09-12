@@ -10,6 +10,7 @@ import 'package:cs_senior_project_merchant/screens/orderDetail.dart';
 import 'package:cs_senior_project_merchant/services/store_service.dart';
 import 'package:cs_senior_project_merchant/widgets/loading_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
 
 class OrderPage extends StatefulWidget {
@@ -25,30 +26,34 @@ class _OrderPageState extends State<OrderPage> {
     LocationNotifier locationNotifier =
         Provider.of<LocationNotifier>(context, listen: false);
     locationNotifier.initialization();
+
+    updateLocation();
     super.initState();
   }
 
-  // _updateUserLocation() {
-  //   StoreNotifier store = Provider.of<StoreNotifier>(context, listen: false);
-  //   LocationNotifier location =
-  //       Provider.of<LocationNotifier>(context, listen: false);
+  Future<void> updateLocation() async {
+    StoreNotifier store = Provider.of<StoreNotifier>(context, listen: false);
 
-  //   store.updateUserData({
-  //     "realtimeLocation": GeoPoint(
-  //       location.currentPosition.latitude,
-  //       location.currentPosition.longitude,
-  //     )
-  //   });
-  //   print(
-  //     '${location.currentPosition.latitude} ${location.currentPosition.longitude}',
-  //   );
+    Position _currentPosition = await Geolocator.getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.high,
+    );
 
-  //   if (store.store.storeStatus) {
-  //     Future.delayed(Duration(seconds: 3), () {
-  //       _updateUserLocation();
-  //     });
-  //   }
-  // }
+    firebaseFirestore.collection('stores').doc(store.store.storeId).update({
+      "realtimeLocation": GeoPoint(
+        _currentPosition.latitude,
+        _currentPosition.longitude,
+      )
+    });
+    print(
+      '${_currentPosition.latitude} ${_currentPosition.longitude}',
+    );
+
+    if (store.store.storeStatus == true) {
+      Future.delayed(Duration(seconds: 3), () {
+        updateLocation();
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +61,7 @@ class _OrderPageState extends State<OrderPage> {
     LocationNotifier locationNotifier = Provider.of<LocationNotifier>(context);
 
     // if (locationNotifier.initialPosition != null) {
-    updateLocation(storeNotifier);
+    // updateLocation(storeNotifier);
     // }
 
     return SafeArea(
