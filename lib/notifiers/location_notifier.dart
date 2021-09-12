@@ -51,10 +51,10 @@ class LocationNotifier with ChangeNotifier {
           'Location permissions are permanently denied, we cannot request permissions.');
     }
 
-    return await _getUserLocation();
+    return await getUserLocation();
   }
 
-  _getUserLocation() async {
+  getUserLocation() async {
     _currentPosition = await Geolocator.getCurrentPosition(
       desiredAccuracy: LocationAccuracy.high,
       // forceAndroidLocationManager: true

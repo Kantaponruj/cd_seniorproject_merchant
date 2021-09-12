@@ -57,7 +57,6 @@ class _OrderPageState extends State<OrderPage> {
 
     if (locationNotifier.initialPosition != null) {
       updateLocation(locationNotifier, storeNotifier);
-      // _updateUserLocation();
     }
 
     return SafeArea(

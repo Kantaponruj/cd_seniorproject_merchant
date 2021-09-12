@@ -89,7 +89,7 @@ Future<void> getAddress(AddressNotifier addressNotifier, String storeId) async {
 
 Future<void> updateLocation(
     LocationNotifier location, StoreNotifier store) async {
-  location.initialization();
+  location.getUserLocation();
   firebaseFirestore.collection('stores').doc(store.store.storeId).update({
     "realtimeLocation": GeoPoint(
       location.currentPosition.latitude,
