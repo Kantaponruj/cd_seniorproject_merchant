@@ -55,9 +55,9 @@ class _OrderPageState extends State<OrderPage> {
     StoreNotifier storeNotifier = Provider.of<StoreNotifier>(context);
     LocationNotifier locationNotifier = Provider.of<LocationNotifier>(context);
 
-    if (locationNotifier.initialPosition != null) {
-      updateLocation(locationNotifier, storeNotifier);
-    }
+    // if (locationNotifier.initialPosition != null) {
+    updateLocation(storeNotifier);
+    // }
 
     return SafeArea(
       child: Scaffold(

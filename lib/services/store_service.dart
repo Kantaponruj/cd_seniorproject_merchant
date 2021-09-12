@@ -87,22 +87,24 @@ Future<void> getAddress(AddressNotifier addressNotifier, String storeId) async {
   addressNotifier.addressList = _addressList;
 }
 
-Future<void> updateLocation(
-    LocationNotifier location, StoreNotifier store) async {
-  location.getUserLocation();
+Future<void> updateLocation(StoreNotifier store) async {
+  Position _currentPosition = await Geolocator.getCurrentPosition(
+    desiredAccuracy: LocationAccuracy.high,
+  );
+
   firebaseFirestore.collection('stores').doc(store.store.storeId).update({
     "realtimeLocation": GeoPoint(
-      location.currentPosition.latitude,
-      location.currentPosition.longitude,
+      _currentPosition.latitude,
+      _currentPosition.longitude,
     )
   });
   print(
-    '${location.currentPosition.latitude} ${location.currentPosition.longitude}',
+    '${_currentPosition.latitude} ${_currentPosition.longitude}',
   );
 
   if (store.store.storeStatus == true) {
     Future.delayed(Duration(seconds: 3), () {
-      updateLocation(location, store);
+      updateLocation(store);
     });
   }
 }
