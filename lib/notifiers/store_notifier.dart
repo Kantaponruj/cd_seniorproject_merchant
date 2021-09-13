@@ -65,7 +65,7 @@ class StoreNotifier with ChangeNotifier {
           .then((result) async {
         SharedPreferences prefs = await SharedPreferences.getInstance();
         // String _deviceToken = await fcm.getToken();
-        await prefs.setString("uid", result.user.uid);
+        await prefs.setString("storeId", result.user.uid);
         _storeService.createUser(
           storeId: result.user.uid,
           email: email.text.trim(),
