@@ -33,7 +33,7 @@ class _RoundedAppBarState extends State<RoundedAppBar> {
           //   icon: Icon(Icons.arrow_back_ios_outlined, color: CollectionsColors.white),
           //   onPressed: () => Navigator.of(context).pop(),
           // ),
-          title: Text(widget.appBarTittle, style: FontCollection.appbarTextStyle,),
+          title: Text(widget.appBarTittle, style: FontCollection.topicBoldTextStyle,),
           toolbarHeight: 100,
           flexibleSpace: Container(
             decoration: BoxDecoration(

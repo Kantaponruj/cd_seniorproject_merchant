@@ -81,7 +81,7 @@ class _MainAppbarState extends State<MainAppbar> {
       padding: EdgeInsets.only(left: 10),
       child: Text(
         widget.appBarTitle,
-        style: FontCollection.topicTextStyle,
+        style: FontCollection.topicBoldTextStyle,
       ),
     );
   }

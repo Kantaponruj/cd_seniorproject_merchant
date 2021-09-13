@@ -28,18 +28,21 @@ class _State extends State<BottomBar> {
     BottomIndicatorNavigationBarItem(
       icon: Icon(
         Icons.store_outlined,
+        color: CollectionsColors.orange,
       ),
       label: 'ร้านค้า',
     ),
     BottomIndicatorNavigationBarItem(
       icon: Icon(
         Icons.list_alt_outlined,
+        color: CollectionsColors.orange,
       ),
       label: 'คำสั่งซื้อ',
     ),
     BottomIndicatorNavigationBarItem(
       icon: Icon(
         Icons.restaurant_menu_outlined,
+        color: CollectionsColors.orange,
       ),
       label: 'รายการอาหาร',
     ),
@@ -112,7 +115,6 @@ class _State extends State<BottomBar> {
         activeColor: CollectionsColors.orange,
         inactiveColor: Colors.grey,
         indicatorColor: CollectionsColors.orange,
-
       ),
     );
   }
