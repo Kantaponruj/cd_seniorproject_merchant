@@ -21,6 +21,10 @@ class OrderPage extends StatefulWidget {
 class _OrderPageState extends State<OrderPage> {
   @override
   void initState() {
+    StoreNotifier storeNotifier =
+        Provider.of<StoreNotifier>(context, listen: false);
+    storeNotifier.reloadUserModel();
+
     LocationNotifier locationNotifier =
         Provider.of<LocationNotifier>(context, listen: false);
     locationNotifier.initialization();
@@ -36,17 +40,18 @@ class _OrderPageState extends State<OrderPage> {
       desiredAccuracy: LocationAccuracy.high,
     );
 
-    firebaseFirestore.collection('stores').doc(store.store.storeId).update({
-      "realtimeLocation": GeoPoint(
-        _currentPosition.latitude,
-        _currentPosition.longitude,
-      )
-    });
-    print(
-      '${_currentPosition.latitude} ${_currentPosition.longitude}',
-    );
-
     if (store.store.storeStatus == true) {
+      store.updateUserData({
+        "realtimeLocation": GeoPoint(
+          _currentPosition.latitude,
+          _currentPosition.longitude,
+        ),
+      });
+
+      print(
+        '${_currentPosition.latitude} ${_currentPosition.longitude}',
+      );
+
       Future.delayed(Duration(seconds: 3), () {
         updateLocation();
       });
