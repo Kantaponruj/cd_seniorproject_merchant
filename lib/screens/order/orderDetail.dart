@@ -1,4 +1,5 @@
 import 'package:cs_senior_project_merchant/asset/color.dart';
+import 'package:cs_senior_project_merchant/asset/constant.dart';
 import 'package:cs_senior_project_merchant/asset/text_style.dart';
 import 'package:cs_senior_project_merchant/component/orderCard.dart';
 import 'package:cs_senior_project_merchant/component/roundAppBar.dart';
@@ -214,11 +215,34 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                     ),
                   ),
                 ),
+                Container(
+                  margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
+                  child: TextButton(
+                    onPressed: () {},
+                    child: Text(
+                      'ยกเลิกคำสั่งซื้อ',
+                      style: FontCollection.underlineButtonTextStyle,
+                    ),
+                  ),
+                ),
+
+                ///End Column
               ],
             ),
           ),
         ),
-        bottomNavigationBar: BottomOrder(),
+        bottomNavigationBar: BottomOrder(
+          confirmButton: () {
+            setState(() {
+              isConfirmed = false;
+            });
+          },
+          deliveryStatus: () {
+            setState(() {
+              isConfirmed = true;
+            });
+          },
+        ),
       ),
     );
   }

@@ -53,94 +53,108 @@ class _OpeningHoursPageState extends State<OpeningHoursPage> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-          appBar: RoundedAppBar(
-            appBarTittle: 'เวลาทำการ',
-          ),
-          body: SingleChildScrollView(
-            child: Container(
-              margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-              child: Column(
-                children: [
-                  Container(
-                    child: buildCard('เวลาเปิดทำการ'),
-                  ),
-                  StadiumButtonWidget(
-                    text: 'เพิ่มเวลาทำการ',
-                    onClicked: () {
-                      showDialog(
-                        barrierDismissible: false,
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(30),
+    return Scaffold(
+        appBar: RoundedAppBar(
+          appBarTittle: 'เวลาทำการ',
+        ),
+        body: SingleChildScrollView(
+          child: Container(
+            margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+            child: Column(
+              children: [
+                Container(
+                  child: buildCard('เวลาเปิดทำการ'),
+                ),
+                StadiumButtonWidget(
+                  text: 'เพิ่มเวลาทำการ',
+                  onClicked: () {
+                    showDialog(
+                      barrierDismissible: false,
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                          content: Container(
+                            width: MediaQuery.of(context).size.width,
+                            // height: 200,
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Container(
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(
+                                    'เลือกวัน',
+                                    style: FontCollection.smallBodyTextStyle,
+                                  ),
+                                ),
+                                Container(
+                                  margin: EdgeInsets.symmetric(vertical: 10),
+                                  child: Wrap(
+                                    spacing: 10.0,
+                                    runSpacing: 5.0,
+                                    children: [
+                                      daySelect(),
+                                    ],
+                                  ),
+                                ),
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                                  child: Divider(
+                                    thickness: 2,
+                                  ),
+                                ),
+                                Container(
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(
+                                    'เลือกเวลา',
+                                    style: FontCollection.smallBodyTextStyle,
+                                  ),
+                                ),
+                                Container(
+                                  margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
+                                  child: timeSelect('เวลาเปิด', '08.00'),
+                                ),
+                                Container(
+                                  margin: EdgeInsets.fromLTRB(0, 15, 0, 20),
+                                  child: timeSelect('เวลาปิด', '18.00'),
+                                ),
+                                Container(
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Container(
+                                        alignment: Alignment.bottomLeft,
+                                        child: EditButton(
+                                          editText: 'ยกเลิก',
+                                          onClicked: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                        ),
+                                      ),
+                                      SmallStadiumButtonWidget(
+                                        text: 'บันทึก',
+                                        onClicked: () {
+                                          _handleSaveDateTime(widget.storeId);
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
                             ),
-                            content: Container(
-                              width: MediaQuery.of(context).size.width,
-                              // height: 200,
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Container(
-                                    alignment: Alignment.centerLeft,
-                                    child: Text(
-                                      'เลือกวัน',
-                                      style: FontCollection.smallBodyTextStyle,
-                                    ),
-                                  ),
-                                  Container(
-                                    margin: EdgeInsets.symmetric(vertical: 10),
-                                    child: Wrap(
-                                      spacing: 10.0,
-                                      runSpacing: 5.0,
-                                      children: [
-                                        daySelect(),
-                                      ],
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding:
-                                        const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                                    child: Divider(
-                                      thickness: 2,
-                                    ),
-                                  ),
-                                  Container(
-                                    alignment: Alignment.centerLeft,
-                                    child: Text(
-                                      'เลือกเวลา',
-                                      style: FontCollection.smallBodyTextStyle,
-                                    ),
-                                  ),
-                                  Container(
-                                    margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
-                                    child: timeSelect('เวลาเปิด', '08.00'),
-                                  ),
-                                  Container(
-                                    margin: EdgeInsets.fromLTRB(0, 15, 0, 20),
-                                    child: timeSelect('เวลาปิด', '18.00'),
-                                  ),
-                                  SmallStadiumButtonWidget(
-                                    text: 'บันทึก',
-                                    onClicked: () {
-                                      _handleSaveDateTime(widget.storeId);
-                                    },
-                                  ),
-                                ],
-                              ),
-                            ),
-                          );
-                        },
-                      );
-                    },
-                  ),
-                ],
-              ),
+                          ),
+                        );
+                      },
+                    );
+                  },
+                ),
+              ],
             ),
-          )),
-    );
+          ),
+        ));
   }
 
   List<String> _days = [

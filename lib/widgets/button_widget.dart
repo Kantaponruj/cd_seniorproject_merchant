@@ -69,10 +69,12 @@ class StadiumButtonWidget extends StatelessWidget {
 class SmallStadiumButtonWidget extends StatelessWidget {
   final String text;
   final VoidCallback onClicked;
+  final Color color;
 
   const SmallStadiumButtonWidget({
     @required this.text,
     @required this.onClicked,
+    this.color,
     Key key,
   }) : super(key: key);
 
@@ -80,14 +82,14 @@ class SmallStadiumButtonWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Container(
-        margin: EdgeInsets.fromLTRB(0, 20, 0, 20),
-        width: MediaQuery.of(context).size.width / 1.8,
-        height: 30,
+        margin: EdgeInsets.fromLTRB(0, 20, 0, 10),
+        padding: EdgeInsets.symmetric(vertical: 10,horizontal: 40),
+        height: 60,
         child: ElevatedButton(
           onPressed: onClicked,
           style: ElevatedButton.styleFrom(
               shape: StadiumBorder(),
-              primary: Theme.of(context).buttonColor),
+              primary: (color == null) ? Theme.of(context).buttonColor : color),
           child: Text(
             text,
             style: FontCollection.smallBodyTextStyle,

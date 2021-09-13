@@ -147,13 +147,10 @@ class _OrderPageState extends State<OrderPage> {
                       ),
                       Expanded(
                         flex: 4,
-                        child: InkWell(
-                          onTap: () {},
-                          child: Text(
-                            'รายละเอียด',
-                            style: FontCollection.descriptionTextStyle,
-                            textAlign: TextAlign.right,
-                          ),
+                        child: Text(
+                          'รายละเอียด',
+                          style: FontCollection.underlineButtonTextStyle,
+                          textAlign: TextAlign.right,
                         ),
                       ),
                     ],
