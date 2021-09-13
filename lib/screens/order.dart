@@ -5,7 +5,7 @@ import 'package:cs_senior_project_merchant/asset/text_style.dart';
 import 'package:cs_senior_project_merchant/component/mainAppBar.dart';
 import 'package:cs_senior_project_merchant/notifiers/location_notifier.dart';
 import 'package:cs_senior_project_merchant/notifiers/store_notifier.dart';
-import 'package:cs_senior_project_merchant/screens/orderDetail.dart';
+import 'package:cs_senior_project_merchant/screens/order/orderDetail.dart';
 import 'package:cs_senior_project_merchant/widgets/loading_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
