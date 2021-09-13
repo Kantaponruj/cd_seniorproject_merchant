@@ -43,6 +43,10 @@ dependencies:
   geocoding: ^2.0.0
   #flutter_polyline_points: ^1.0.0
 
+  #launch phone call
+  url_launcher: ^6.0.10
+  flutter_phone_direct_caller: ^2.0.0
+
   bottom_indicator_bar_fork: ^1.0.2
   flutter_switch: ^0.3.2
   auto_size_text: ^2.1.0

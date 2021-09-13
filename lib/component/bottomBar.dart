@@ -17,6 +17,7 @@ class BottomBar extends StatefulWidget {
 
 class _State extends State<BottomBar> {
   int _selectedIndex = 1;
+  int selectedIndex = 1;
   List<Widget> _pageWidget = <Widget>[
     StorePage(),
     OrderPage(),
@@ -28,21 +29,18 @@ class _State extends State<BottomBar> {
     BottomIndicatorNavigationBarItem(
       icon: Icon(
         Icons.store_outlined,
-        color: CollectionsColors.orange,
       ),
       label: 'ร้านค้า',
     ),
     BottomIndicatorNavigationBarItem(
       icon: Icon(
         Icons.list_alt_outlined,
-        color: CollectionsColors.orange,
       ),
       label: 'คำสั่งซื้อ',
     ),
     BottomIndicatorNavigationBarItem(
       icon: Icon(
         Icons.restaurant_menu_outlined,
-        color: CollectionsColors.orange,
       ),
       label: 'รายการอาหาร',
     ),
@@ -93,6 +91,7 @@ class _State extends State<BottomBar> {
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
+      selectedIndex = _selectedIndex;
     });
   }
 
