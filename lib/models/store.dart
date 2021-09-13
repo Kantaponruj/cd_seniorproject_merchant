@@ -15,6 +15,7 @@ class Store {
   String selectedAddressName;
   String selectedAddress;
   GeoPoint selectedLocation;
+  GeoPoint realtimeLocation;
 
   Store();
 
@@ -33,5 +34,6 @@ class Store {
     selectedAddressName = snapshot.data()['selectedAddressName'];
     selectedAddress = snapshot.data()['selectedAddress'];
     selectedLocation = snapshot.data()['selectedLocation'];
+    realtimeLocation = snapshot.data()['realtimeLocation'];
   }
 }

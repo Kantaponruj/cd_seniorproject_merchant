@@ -2,6 +2,7 @@ import 'package:cs_senior_project_merchant/asset/color.dart';
 import 'package:cs_senior_project_merchant/asset/constant.dart';
 import 'package:cs_senior_project_merchant/notifiers/address_notifier.dart';
 import 'package:cs_senior_project_merchant/notifiers/dateTime_notifier.dart';
+import 'package:cs_senior_project_merchant/notifiers/location_notifier.dart';
 import 'package:cs_senior_project_merchant/notifiers/order_notifier.dart';
 import 'package:cs_senior_project_merchant/notifiers/store_notifier.dart';
 import 'package:cs_senior_project_merchant/screens/login.dart';
@@ -21,7 +22,8 @@ void main() async {
       ChangeNotifierProvider.value(value: StoreNotifier.initialize()),
       ChangeNotifierProvider(create: (context) => OrderNotifier()),
       ChangeNotifierProvider(create: (context) => DateTimeNotifier()),
-      ChangeNotifierProvider(create: (context) => AddressNotifier())
+      ChangeNotifierProvider(create: (context) => AddressNotifier()),
+      ChangeNotifierProvider(create: (context) => LocationNotifier())
     ],
     child: MaterialApp(
       theme: ThemeData(
@@ -43,7 +45,19 @@ void main() async {
   ));
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  MyApp({Key key}) : super(key: key);
+
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     StoreNotifier storeNotifier = Provider.of<StoreNotifier>(context);

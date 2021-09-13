@@ -1,11 +1,14 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cs_senior_project_merchant/asset/color.dart';
+import 'package:cs_senior_project_merchant/asset/constant.dart';
 import 'package:cs_senior_project_merchant/asset/text_style.dart';
 import 'package:cs_senior_project_merchant/component/mainAppBar.dart';
-import 'package:cs_senior_project_merchant/notifiers/order_notifier.dart';
+import 'package:cs_senior_project_merchant/notifiers/location_notifier.dart';
 import 'package:cs_senior_project_merchant/notifiers/store_notifier.dart';
-import 'package:cs_senior_project_merchant/screens/order/orderDetail.dart';
-import 'package:cs_senior_project_merchant/services/order_service.dart';
+import 'package:cs_senior_project_merchant/screens/orderDetail.dart';
+import 'package:cs_senior_project_merchant/widgets/loading_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
 
 class OrderPage extends StatefulWidget {
@@ -20,15 +23,44 @@ class _OrderPageState extends State<OrderPage> {
   void initState() {
     StoreNotifier storeNotifier =
         Provider.of<StoreNotifier>(context, listen: false);
-    OrderNotifier orderNotifier =
-        Provider.of<OrderNotifier>(context, listen: false);
-    getOrderDelivery(orderNotifier, storeNotifier.store.storeId);
+    storeNotifier.reloadUserModel();
+
+    LocationNotifier locationNotifier =
+        Provider.of<LocationNotifier>(context, listen: false);
+    locationNotifier.initialization();
+
+    updateLocation();
     super.initState();
+  }
+
+  Future<void> updateLocation() async {
+    StoreNotifier store = Provider.of<StoreNotifier>(context, listen: false);
+
+    Position _currentPosition = await Geolocator.getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.high,
+    );
+
+    if (store.store.storeStatus == true) {
+      store.updateUserData({
+        "realtimeLocation": GeoPoint(
+          _currentPosition.latitude,
+          _currentPosition.longitude,
+        ),
+      });
+
+      print(
+        '${_currentPosition.latitude} ${_currentPosition.longitude}',
+      );
+
+      Future.delayed(Duration(seconds: 3), () {
+        updateLocation();
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    OrderNotifier orderNotifier = Provider.of<OrderNotifier>(context);
+    StoreNotifier storeNotifier = Provider.of<StoreNotifier>(context);
 
     return SafeArea(
       child: Scaffold(
@@ -36,28 +68,39 @@ class _OrderPageState extends State<OrderPage> {
         appBar: MainAppbar(
           appBarTitle: 'คำสั่งซื้อ',
         ),
-        body: ListView.builder(
-          itemBuilder: (BuildContext context, int index) {
-            return buildStoreCard(orderNotifier, index);
-          },
-          itemCount: orderNotifier.orderList.length,
-        ),
+        body: StreamBuilder(
+            stream: firebaseFirestore
+                .collection('stores')
+                .doc(storeNotifier.store.storeId)
+                .collection('delivery-orders')
+                .orderBy('timeOrdered')
+                .snapshots(),
+            builder:
+                (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+              if (!snapshot.hasData) {
+                return LoadingWidget();
+              }
+
+              return ListView(
+                children: snapshot.data.docs.map((order) {
+                  return buildStoreCard(order, storeNotifier.store.storeId);
+                }).toList(),
+              );
+            }),
       ),
     );
   }
 
-  Widget buildStoreCard(OrderNotifier orderNotifier, int index) {
-    StoreNotifier storeNotifier = Provider.of<StoreNotifier>(context);
-
+  Widget buildStoreCard(final order, String storeId) {
     return Padding(
       padding: EdgeInsets.fromLTRB(10, 10, 10, 5),
       child: GestureDetector(
         onTap: () {
-          orderNotifier.currentOrder = orderNotifier.orderList[index];
+          // orderNotifier.currentOrder = order;
           Navigator.of(context).push(
             MaterialPageRoute(
               builder: (BuildContext context) =>
-                  OrderDetailPage(storeNotifier.store.storeId),
+                  OrderDetailPage(storeId, order),
             ),
           );
         },
@@ -83,8 +126,7 @@ class _OrderPageState extends State<OrderPage> {
                             backgroundColor: CollectionsColors.grey,
                             radius: 35.0,
                             child: Text(
-                              orderNotifier.orderList[index].customerName[0]
-                                  .toUpperCase(),
+                              order['customerName'][0].toUpperCase(),
                               style: FontCollection.descriptionTextStyle,
                               textAlign: TextAlign.left,
                             ),
@@ -94,7 +136,7 @@ class _OrderPageState extends State<OrderPage> {
                       Expanded(
                         flex: 5,
                         child: Text(
-                          orderNotifier.orderList[index].customerName,
+                          order['customerName'],
                           style: FontCollection.bodyTextStyle,
                         ),
                       ),
@@ -126,7 +168,7 @@ class _OrderPageState extends State<OrderPage> {
                           children: [
                             Container(
                               child: Text(
-                                orderNotifier.orderList[index].dateOrdered,
+                                order['dateOrdered'],
                                 textAlign: TextAlign.left,
                                 style: FontCollection.bodyTextStyle,
                               ),
@@ -134,7 +176,7 @@ class _OrderPageState extends State<OrderPage> {
                             Container(
                               margin: EdgeInsets.only(left: 20),
                               child: Text(
-                                orderNotifier.orderList[index].timeOrdered,
+                                order['timeOrdered'],
                                 textAlign: TextAlign.left,
                                 style: FontCollection.bodyTextStyle,
                               ),
@@ -148,7 +190,7 @@ class _OrderPageState extends State<OrderPage> {
                           alignment: Alignment.centerRight,
                           margin: EdgeInsets.only(right: 10),
                           child: Text(
-                            orderNotifier.orderList[index].netPrice,
+                            order['netPrice'],
                             style: TextStyle(
                               fontFamily: NotoSansFont,
                               fontWeight: FontWeight.w700,
