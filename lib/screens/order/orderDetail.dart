@@ -10,7 +10,6 @@ import 'package:cs_senior_project_merchant/widgets/bottomOrder_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 
 class OrderDetailPage extends StatefulWidget {
@@ -39,7 +38,6 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
   @override
   Widget build(BuildContext context) {
     OrderNotifier orderNotifier = Provider.of<OrderNotifier>(context);
-    final number = '+66939529954';
 
     return Scaffold(
       // extendBodyBehindAppBar: true,
@@ -101,9 +99,10 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                               ),
                               shape: CircleBorder(),
                               onPressed: () async {
-                                const number = '0939529954';
+                                String number = widget.order['phone'];
                                 // launch('tel://$number');
-                                await FlutterPhoneDirectCaller.callNumber(number);
+                                await FlutterPhoneDirectCaller.callNumber(
+                                    number);
                               },
                             ),
                           ),

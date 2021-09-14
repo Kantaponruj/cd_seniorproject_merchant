@@ -5,10 +5,6 @@ import 'package:cs_senior_project_merchant/models/dateTime.dart';
 import 'package:cs_senior_project_merchant/models/store.dart';
 import 'package:cs_senior_project_merchant/notifiers/address_notifier.dart';
 import 'package:cs_senior_project_merchant/notifiers/dateTime_notifier.dart';
-import 'package:cs_senior_project_merchant/notifiers/location_notifier.dart';
-import 'package:cs_senior_project_merchant/notifiers/store_notifier.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:provider/provider.dart';
 
 class StoreService {
   String collection = "stores";
