@@ -13,4 +13,9 @@ class AddressNotifier with ChangeNotifier {
     _addressList = addressList;
     notifyListeners();
   }
+
+  addAddress(Address address) {
+    _addressList.insert(0, address);
+    notifyListeners();
+  }
 }

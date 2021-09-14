@@ -83,6 +83,16 @@ Future<void> getAddress(AddressNotifier addressNotifier, String storeId) async {
   addressNotifier.addressList = _addressList;
 }
 
+saveAddress(Address address, String storeId, Function addAddress) async {
+  CollectionReference addressRef =
+      firebaseFirestore.collection('stores').doc(storeId).collection('address');
+
+  DocumentReference documentRef = await addressRef.add(address.toMap());
+  await documentRef.set(address.toMap(), SetOptions(merge: true));
+
+  addAddress(address);
+}
+
 // Future<void> updateLocation(StoreNotifier store) async {
 //   Position _currentPosition = await Geolocator.getCurrentPosition(
 //     desiredAccuracy: LocationAccuracy.high,

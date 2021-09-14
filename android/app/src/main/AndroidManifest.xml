@@ -5,6 +5,8 @@
    <application
         android:label="cs_senior_project_merchant"
         android:icon="@mipmap/ic_launcher">
+        <meta-data android:name="com.google.android.geo.API_KEY"
+           android:value="AIzaSyCZ7E5m7NK51FUloIHQo_3ay73cq0PcVCk"/>
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
