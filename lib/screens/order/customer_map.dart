@@ -171,10 +171,9 @@ class _CustomerMapPageState extends State<CustomerMapPage> {
                     widget.order['documentId'],
                   );
 
-                  Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(
-                      builder: (context) => OrderPage(),
-                    ),
+                  Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(builder: (context) => OrderPage()),
+                    (route) => false,
                   );
                 },
               ),
