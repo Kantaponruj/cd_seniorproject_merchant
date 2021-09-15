@@ -47,9 +47,13 @@ dependencies:
   url_launcher: ^6.0.10
   flutter_phone_direct_caller: ^2.0.0
 
+  #image
+  image_picker: ^0.8.4
+
   bottom_indicator_bar_fork: ^1.0.2
   flutter_switch: ^0.3.2
   auto_size_text: ^2.1.0
+
 
 dev_dependencies:
   flutter_test:

@@ -61,56 +61,58 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                   ),
                   child: Container(
                     padding: EdgeInsets.all(20),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          flex: 2,
-                          child: Container(
-                            height: 40,
-                            width: 40,
-                            alignment: Alignment.centerLeft,
-                            child: CircleAvatar(
-                              backgroundColor: CollectionsColors.yellow,
-                              radius: 35.0,
-                              child: Text(
-                                widget.order['customerName'][0].toString(),
-                                style: FontCollection.descriptionTextStyle,
-                                textAlign: TextAlign.left,
-                              ),
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          flex: 8,
-                          child: Text(
-                            widget.order['customerName'],
-                            style: FontCollection.bodyTextStyle,
-                            textAlign: TextAlign.left,
-                          ),
-                        ),
-                        Expanded(
-                          flex: 2,
-                          child: Container(
-                            width: 40,
-                            height: 40,
-                            alignment: Alignment.centerRight,
-                            child: MaterialButton(
-                              color: CollectionsColors.yellow,
-                              textColor: Colors.white,
-                              child: Icon(
-                                Icons.call,
-                              ),
-                              shape: CircleBorder(),
-                              onPressed: () async {
-                                String number = widget.order['phone'];
-                                await FlutterPhoneDirectCaller.callNumber(
-                                    number);
-                              },
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+                    child: customerInfo(),
+                    // Row(
+                    //   children: [
+                    //     Expanded(
+                    //       flex: 2,
+                    //       child: Container(
+                    //         height: 40,
+                    //         width: 40,
+                    //         alignment: Alignment.centerLeft,
+                    //         child: CircleAvatar(
+                    //           backgroundColor: CollectionsColors.yellow,
+                    //           radius: 35.0,
+                    //           child: Text(
+                    //             widget.order['customerName'][0].toString(),
+                    //             style: FontCollection.descriptionTextStyle,
+                    //             textAlign: TextAlign.left,
+                    //           ),
+                    //         ),
+                    //       ),
+                    //     ),
+                    //     Expanded(
+                    //       flex: 8,
+                    //       child: Text(
+                    //         widget.order['customerName'],
+                    //         style: FontCollection.bodyTextStyle,
+                    //         textAlign: TextAlign.left,
+                    //       ),
+                    //     ),
+                    //     Expanded(
+                    //       flex: 2,
+                    //       child: Container(
+                    //         width: 40,
+                    //         height: 40,
+                    //         alignment: Alignment.centerRight,
+                    //         child: MaterialButton(
+                    //           color: CollectionsColors.yellow,
+                    //           textColor: Colors.white,
+                    //           child: Icon(
+                    //             Icons.call,
+                    //           ),
+                    //           shape: CircleBorder(),
+                    //           onPressed: () async {
+                    //             String number = widget.order['phone'];
+                    //             // launch('tel://$number');
+                    //             await FlutterPhoneDirectCaller.callNumber(
+                    //                 number);
+                    //           },
+                    //         ),
+                    //       ),
+                    //     ),
+                    //   ],
+                    // ),
                   ),
                 ),
               ),
@@ -151,7 +153,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                           widget.order['address'],
                           style: FontCollection.bodyTextStyle,
                           overflow: TextOverflow.ellipsis,
-                          maxLines: 1,
+                          maxLines: 2,
                         ),
                       ),
                     ],
@@ -215,7 +217,22 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                 ),
               ),
               // Add message card
-              Text(widget.order['message'] ?? ''),
+              OrderCard(
+                headerText: 'ข้อความเพิ่มเติม',
+                child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  padding: EdgeInsets.fromLTRB(40, 40, 40, 40),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      widget.order['message'] ?? 'ไม่มีข้อความเพิ่มเติม',
+                      style: FontCollection.bodyTextStyle,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 3,
+                    ),
+                  ),
+                ),
+              ),
               Container(
                 margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
                 child: TextButton(
@@ -321,4 +338,70 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
           ],
         ),
       );
+
+  final height = 50.0;
+  final width = 50.0;
+
+  Widget customerInfo() {
+    return Container(
+      padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          userPicAndName(),
+          Container(
+            width: width,
+            height: height,
+            // alignment: Alignment.centerRight,
+            child: MaterialButton(
+              color: CollectionsColors.yellow,
+              textColor: Colors.white,
+              child: Center(
+                child: Icon(
+                  Icons.call,
+                ),
+              ),
+              shape: CircleBorder(),
+              onPressed: () async {
+                String number = widget.order['phone'];
+                // launch('tel://$number');
+                await FlutterPhoneDirectCaller.callNumber(number);
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget userPicAndName() {
+    return Container(
+      child: Row(
+        children: [
+          Container(
+            width: width,
+            height: height,
+            alignment: Alignment.centerLeft,
+            child: CircleAvatar(
+              backgroundColor: CollectionsColors.yellow,
+              radius: height,
+              child: Text(
+                widget.order['customerName'][0],
+                style: FontCollection.descriptionTextStyle,
+                textAlign: TextAlign.left,
+              ),
+            ),
+          ),
+          Container(
+            padding: EdgeInsets.only(left: 20),
+            child: Text(
+              widget.order['customerName'],
+              style: FontCollection.bodyTextStyle,
+              textAlign: TextAlign.left,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }

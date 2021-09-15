@@ -205,8 +205,8 @@ class _CustomerMapPageState extends State<CustomerMapPage> {
     );
   }
 
-  final height = 50.0;
-  final width = 50.0;
+  final height = 60.0;
+  final width = 60.0;
 
   Widget customerInfo() {
     return Container(
