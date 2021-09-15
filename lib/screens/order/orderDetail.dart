@@ -238,7 +238,11 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
         deliveryStatus: () {
           setState(() {
             isConfirmed = true;
-            Navigator.of(context).push(MaterialPageRoute(builder: (context) => CustomerMapPage(),),);
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => CustomerMapPage(order: widget.order),
+              ),
+            );
           });
         },
       ),

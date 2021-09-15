@@ -10,10 +10,9 @@ import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
-import 'orderDetail.dart';
-
 class CustomerMapPage extends StatefulWidget {
-  CustomerMapPage({Key key}) : super(key: key);
+  CustomerMapPage({Key key, @required this.order}) : super(key: key);
+  final order;
 
   @override
   _CustomerMapPageState createState() => _CustomerMapPageState();
@@ -43,7 +42,10 @@ class _CustomerMapPageState extends State<CustomerMapPage> {
             ),
             body: Padding(
               padding: EdgeInsets.fromLTRB(0, 0, 0, 80),
-              child: MapWidget(mapController: _mapController),
+              child: MapWidget(
+                mapController: _mapController,
+                order: widget.order,
+              ),
             ),
           ),
         ],
@@ -102,7 +104,10 @@ class _CustomerMapPageState extends State<CustomerMapPage> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    buildIconText(Icons.access_time, '12.30 น.'),
+                    buildIconText(
+                      Icons.access_time,
+                      '${widget.order['timeOrdered']} น.',
+                    ),
                     TextButton(
                       onPressed: () {
                         // Navigator.of(context).push(
@@ -133,7 +138,7 @@ class _CustomerMapPageState extends State<CustomerMapPage> {
                     ),
                     Container(
                       child: Text(
-                        '95 บาท',
+                        '${widget.order['netPrice']} บาท',
                         style: FontCollection.topicTextStyle,
                       ),
                     ),
@@ -195,7 +200,7 @@ class _CustomerMapPageState extends State<CustomerMapPage> {
               ),
               shape: CircleBorder(),
               onPressed: () async {
-                String number = '0862584569';
+                String number = widget.order['phone'];
                 // launch('tel://$number');
                 await FlutterPhoneDirectCaller.callNumber(number);
               },
@@ -218,7 +223,7 @@ class _CustomerMapPageState extends State<CustomerMapPage> {
               backgroundColor: CollectionsColors.yellow,
               radius: height,
               child: Text(
-                'A',
+                widget.order['customerName'][0],
                 style: FontCollection.descriptionTextStyle,
                 textAlign: TextAlign.left,
               ),
@@ -227,7 +232,7 @@ class _CustomerMapPageState extends State<CustomerMapPage> {
           Container(
             padding: EdgeInsets.only(left: 20),
             child: Text(
-              'Jane Cooper',
+              widget.order['customerName'],
               style: FontCollection.bodyTextStyle,
               textAlign: TextAlign.left,
             ),
