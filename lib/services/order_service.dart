@@ -27,13 +27,13 @@ import 'package:cs_senior_project_merchant/notifiers/order_notifier.dart';
 Future<void> getOrderMenu(
   OrderNotifier orderNotifier,
   String storeId,
-  String orderId,
+  String documentId,
 ) async {
   QuerySnapshot snapshot = await firebaseFirestore
       .collection('stores')
       .doc(storeId)
       .collection('delivery-orders')
-      .doc(orderId)
+      .doc(documentId)
       .collection('orders')
       .get();
 
@@ -45,4 +45,15 @@ Future<void> getOrderMenu(
   });
 
   orderNotifier.orderMenuList = _orderMenuList;
+}
+
+updateStatusOrder(String uid, String orderId, String orderStatus) {
+  firebaseFirestore
+      .collection('users')
+      .doc(uid)
+      .collection('activities')
+      .doc(orderId)
+      .update({'orderStatus': orderStatus});
+
+  print('Updated Status');
 }

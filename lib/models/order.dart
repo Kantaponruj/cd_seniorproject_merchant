@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class OrderDetail {
+  String documentId;
   String orderId;
+  String customerId;
   String customerName;
   String phone;
   String address;
@@ -15,7 +17,9 @@ class OrderDetail {
   OrderDetail();
 
   OrderDetail.fromMap(Map<String, dynamic> data) {
+    documentId = data['documentId'];
     orderId = data['orderId'];
+    customerId = data['customerId'];
     customerName = data['customerName'];
     address = data['address'];
     addressDetail = data['addressDetail'];

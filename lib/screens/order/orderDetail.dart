@@ -24,6 +24,8 @@ class OrderDetailPage extends StatefulWidget {
 }
 
 class _OrderDetailPageState extends State<OrderDetailPage> {
+  String orderStatus;
+
   @override
   void initState() {
     OrderNotifier orderNotifier =
@@ -31,7 +33,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
     getOrderMenu(
       orderNotifier,
       widget.storeId,
-      widget.order['orderId'],
+      widget.order['documentId'],
     );
     super.initState();
   }
@@ -213,6 +215,8 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                   ),
                 ),
               ),
+              // Add message card
+              Text(widget.order['message'] ?? ''),
               Container(
                 margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
                 child: TextButton(
@@ -231,13 +235,25 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
       ),
       bottomNavigationBar: BottomOrder(
         confirmButton: () {
+          orderStatus = 'ยืนยันคำสั่งซื้อ';
           setState(() {
             isConfirmed = false;
+            updateStatusOrder(
+              widget.order['customerId'],
+              widget.order['orderId'],
+              orderStatus,
+            );
           });
         },
         deliveryStatus: () {
+          orderStatus = 'ยืนยันการจัดส่ง';
           setState(() {
             isConfirmed = true;
+            updateStatusOrder(
+              widget.order['customerId'],
+              widget.order['orderId'],
+              orderStatus,
+            );
             Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (context) => CustomerMapPage(order: widget.order),
