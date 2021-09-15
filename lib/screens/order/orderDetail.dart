@@ -5,6 +5,7 @@ import 'package:cs_senior_project_merchant/component/orderCard.dart';
 import 'package:cs_senior_project_merchant/component/roundAppBar.dart';
 import 'package:cs_senior_project_merchant/models/order.dart';
 import 'package:cs_senior_project_merchant/notifiers/order_notifier.dart';
+import 'package:cs_senior_project_merchant/screens/order/customer_map.dart';
 import 'package:cs_senior_project_merchant/services/order_service.dart';
 import 'package:cs_senior_project_merchant/widgets/bottomOrder_widget.dart';
 import 'package:flutter/cupertino.dart';
@@ -237,6 +238,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
         deliveryStatus: () {
           setState(() {
             isConfirmed = true;
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) => CustomerMapPage(),),);
           });
         },
       ),
