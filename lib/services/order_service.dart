@@ -57,3 +57,13 @@ updateStatusOrder(String uid, String orderId, String orderStatus) {
 
   print('Updated Status');
 }
+
+Future<void> completedOrder(String storeId, String documentId) {
+  return firebaseFirestore
+      .collection('stores')
+      .doc(storeId)
+      .collection('delivery-orders')
+      .doc(documentId)
+      .delete()
+      .then((value) => print("Completed order!"));
+}

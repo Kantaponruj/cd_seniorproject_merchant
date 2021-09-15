@@ -103,7 +103,6 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                               shape: CircleBorder(),
                               onPressed: () async {
                                 String number = widget.order['phone'];
-                                // launch('tel://$number');
                                 await FlutterPhoneDirectCaller.callNumber(
                                     number);
                               },

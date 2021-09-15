@@ -3,9 +3,11 @@ import 'dart:async';
 import 'package:cs_senior_project_merchant/asset/color.dart';
 import 'package:cs_senior_project_merchant/asset/text_style.dart';
 import 'package:cs_senior_project_merchant/notifiers/store_notifier.dart';
+import 'package:cs_senior_project_merchant/screens/order.dart';
 import 'package:cs_senior_project_merchant/screens/order/orderDetail.dart';
 import 'package:cs_senior_project_merchant/widgets/button_widget.dart';
 import 'package:cs_senior_project_merchant/widgets/map_widget.dart';
+import 'package:cs_senior_project_merchant/services/order_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
@@ -74,6 +76,7 @@ class _CustomerMapPageState extends State<CustomerMapPage> {
     @required ScrollController scrollController,
   }) {
     StoreNotifier storeNotifier = Provider.of<StoreNotifier>(context);
+    String orderStatus = 'จัดส่งเรียบร้อยแล้ว';
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -156,7 +159,24 @@ class _CustomerMapPageState extends State<CustomerMapPage> {
               padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
               child: StadiumButtonWidget(
                 text: 'จัดส่งเรียบร้อยแล้ว',
-                onClicked: () {},
+                onClicked: () {
+                  updateStatusOrder(
+                    widget.order['customerId'],
+                    widget.order['orderId'],
+                    orderStatus,
+                  );
+
+                  completedOrder(
+                    storeNotifier.store.storeId,
+                    widget.order['documentId'],
+                  );
+
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(
+                      builder: (context) => OrderPage(),
+                    ),
+                  );
+                },
               ),
             ),
           ],
