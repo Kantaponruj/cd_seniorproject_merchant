@@ -156,6 +156,13 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                           maxLines: 2,
                         ),
                       ),
+                      Container(
+                        child: IconButton(
+                          icon: Icon(Icons.location_on),
+                          onPressed: () {},
+                          color: CollectionsColors.orange,
+                        ),
+                      ),
                     ],
                   ),
                 ),
