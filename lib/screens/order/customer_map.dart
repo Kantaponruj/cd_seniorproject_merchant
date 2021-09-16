@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:cs_senior_project_merchant/asset/color.dart';
 import 'package:cs_senior_project_merchant/asset/text_style.dart';
+import 'package:cs_senior_project_merchant/component/bottomBar.dart';
 import 'package:cs_senior_project_merchant/notifiers/store_notifier.dart';
 import 'package:cs_senior_project_merchant/screens/order.dart';
 import 'package:cs_senior_project_merchant/screens/order/orderDetail.dart';
@@ -172,7 +173,7 @@ class _CustomerMapPageState extends State<CustomerMapPage> {
                   );
 
                   Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(builder: (context) => OrderPage()),
+                    MaterialPageRoute(builder: (context) => BottomBar()),
                     (route) => false,
                   );
                 },
