@@ -8,6 +8,7 @@ import 'package:cs_senior_project_merchant/notifiers/order_notifier.dart';
 import 'package:cs_senior_project_merchant/screens/order/customer_map.dart';
 import 'package:cs_senior_project_merchant/services/order_service.dart';
 import 'package:cs_senior_project_merchant/widgets/bottomOrder_widget.dart';
+import 'package:cs_senior_project_merchant/widgets/map_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -159,7 +160,13 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                       Container(
                         child: IconButton(
                           icon: Icon(Icons.location_on),
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      MapWidget(order: widget.order)),
+                            );
+                          },
                           color: CollectionsColors.orange,
                         ),
                       ),

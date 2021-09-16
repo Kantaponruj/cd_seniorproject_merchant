@@ -64,6 +64,5 @@ Future<void> completedOrder(String storeId, String documentId) {
       .doc(storeId)
       .collection('delivery-orders')
       .doc(documentId)
-      .delete()
-      .then((value) => print("Completed order!"));
+      .delete();
 }

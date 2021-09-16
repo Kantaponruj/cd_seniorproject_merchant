@@ -48,10 +48,7 @@ class _CustomerMapPageState extends State<CustomerMapPage> {
             ),
             body: Padding(
               padding: EdgeInsets.fromLTRB(0, 0, 0, 80),
-              child: MapWidget(
-                mapController: _mapController,
-                order: widget.order,
-              ),
+              child: MapWidget(order: widget.order),
             ),
           ),
         ],
