@@ -21,6 +21,20 @@ class _MapWidgetState extends State<MapWidget> {
     StoreNotifier store = Provider.of<StoreNotifier>(context);
     final routeColor = CollectionsColors.navy;
     final routeWidth = 5;
+    final storeName = "จุดเริ่มต้น";
+    final customerName = "ลูกค้า";
+    final driverName = "ฉัน";
+    final storeIcon = "assets/images/restaurant-marker-icon.png";
+    final customerIcon = "assets/images/house-marker-icon.png";
+    final driverIcon = "assets/images/driver-marker-icon.png";
+    final storeLocation = LatLng(
+      store.store.realtimeLocation.latitude,
+      store.store.realtimeLocation.longitude,
+    );
+    final customerLocation = LatLng(
+      double.parse(widget.order['geoPoint'].latitude.toString()),
+      double.parse(widget.order['geoPoint'].longitude.toString()),
+    );
 
     return MaterialApp(
       home: SafeArea(
@@ -28,63 +42,45 @@ class _MapWidgetState extends State<MapWidget> {
           body: widget.isPreview
               ? GoogleMapsWidget(
                   apiKey: GOOGLE_MAPS_API_KEY,
-                  sourceLatLng: LatLng(
-                    store.store.realtimeLocation.latitude,
-                    store.store.realtimeLocation.longitude,
-                  ),
-                  destinationLatLng: LatLng(
-                    double.parse(widget.order['geoPoint'].latitude.toString()),
-                    double.parse(widget.order['geoPoint'].longitude.toString()),
-                  ),
+                  sourceLatLng: storeLocation,
+                  destinationLatLng: customerLocation,
                   routeWidth: routeWidth,
                   routeColor: routeColor,
-                  sourceMarkerIconInfo: MarkerIconInfo(
-                    assetPath: "assets/images/restaurant-marker-icon.png",
-                  ),
+                  sourceMarkerIconInfo: MarkerIconInfo(assetPath: storeIcon),
                   destinationMarkerIconInfo: MarkerIconInfo(
-                    assetPath: "assets/images/house-marker-icon.png",
+                    assetPath: customerIcon,
                   ),
-                  sourceName: "ฉัน",
-                  destinationName: "ลูกค้า",
-                  driverName: "พ่อค้า",
+                  sourceName: storeName,
+                  destinationName: customerName,
                   totalTimeCallback: (time) => print(time),
                   totalDistanceCallback: (distance) => print(distance),
                 )
               : GoogleMapsWidget(
                   apiKey: GOOGLE_MAPS_API_KEY,
-                  sourceLatLng: LatLng(
-                    store.store.realtimeLocation.latitude,
-                    store.store.realtimeLocation.longitude,
-                  ),
-                  destinationLatLng: LatLng(
-                    double.parse(widget.order['geoPoint'].latitude.toString()),
-                    double.parse(widget.order['geoPoint'].longitude.toString()),
-                  ),
+                  sourceLatLng: storeLocation,
+                  destinationLatLng: customerLocation,
                   routeWidth: routeWidth,
                   routeColor: routeColor,
                   sourceMarkerIconInfo: MarkerIconInfo(
-                    assetPath: "assets/images/restaurant-marker-icon.png",
+                    assetPath: storeIcon,
                     assetMarkerSize: Size.square(125),
                   ),
                   destinationMarkerIconInfo: MarkerIconInfo(
-                    assetPath: "assets/images/house-marker-icon.png",
+                    assetPath: customerIcon,
                   ),
                   driverMarkerIconInfo: MarkerIconInfo(
-                    assetPath: "assets/images/driver-marker-icon.png",
+                    assetPath: driverIcon,
                   ),
                   driverCoordinatesStream: Stream.periodic(
                     Duration(milliseconds: 500),
                     (i) {
                       store.reloadUserModel();
-                      return LatLng(
-                        store.store.realtimeLocation.latitude,
-                        store.store.realtimeLocation.longitude,
-                      );
+                      return storeLocation;
                     },
                   ),
-                  // sourceName: "ฉัน",
-                  destinationName: "ลูกค้า",
-                  driverName: "พ่อค้า",
+                  sourceName: storeName,
+                  destinationName: customerName,
+                  driverName: driverName,
                   totalTimeCallback: (time) => print(time),
                   totalDistanceCallback: (distance) => print(distance),
                 ),
