@@ -36,6 +36,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
       widget.storeId,
       widget.order['documentId'],
     );
+    isDelivery = false;
     super.initState();
   }
 
@@ -250,7 +251,9 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                   ),
                 ),
               ),
-              Container(
+              isDelivery
+                  ? SizedBox.shrink()
+                  : Container(
                 margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
                 child: TextButton(
                   onPressed: () {},
@@ -266,35 +269,40 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
           ),
         ),
       ),
-      bottomNavigationBar: BottomOrder(
-        confirmButton: () {
-          orderStatus = 'ยืนยันคำสั่งซื้อ';
-          setState(() {
-            isConfirmed = false;
-            updateStatusOrder(
-              widget.order['customerId'],
-              widget.order['orderId'],
-              orderStatus,
-            );
-          });
-        },
-        deliveryStatus: () {
-          orderStatus = 'ยืนยันการจัดส่ง';
-          setState(() {
-            isConfirmed = true;
-            updateStatusOrder(
-              widget.order['customerId'],
-              widget.order['orderId'],
-              orderStatus,
-            );
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => CustomerMapPage(order: widget.order),
-              ),
-            );
-          });
-        },
-      ),
+      bottomNavigationBar: isDelivery
+          ? SizedBox.shrink()
+          : BottomOrder(
+              confirmButton: () {
+                orderStatus = 'ยืนยันคำสั่งซื้อ';
+                setState(() {
+                  isConfirmed = false;
+                  isDelivery = false;
+                  updateStatusOrder(
+                    widget.order['customerId'],
+                    widget.order['orderId'],
+                    orderStatus,
+                  );
+                });
+              },
+              deliveryStatus: () {
+                orderStatus = 'ยืนยันการจัดส่ง';
+                setState(() {
+                  isConfirmed = true;
+                  isDelivery = true;
+                  updateStatusOrder(
+                    widget.order['customerId'],
+                    widget.order['orderId'],
+                    orderStatus,
+                  );
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          CustomerMapPage(order: widget.order),
+                    ),
+                  );
+                });
+              },
+            ),
     );
   }
 

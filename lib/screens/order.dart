@@ -52,7 +52,7 @@ class _OrderPageState extends State<OrderPage> {
         '${_currentPosition.latitude} ${_currentPosition.longitude}',
       );
 
-      Future.delayed(Duration(seconds: 3), () {
+      Future.delayed(Duration(seconds: 1), () {
         updateLocation();
       });
     }

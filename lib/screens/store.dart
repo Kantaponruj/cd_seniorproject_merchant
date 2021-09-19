@@ -1,4 +1,5 @@
 import 'package:cs_senior_project_merchant/asset/color.dart';
+import 'package:cs_senior_project_merchant/asset/constant.dart';
 import 'package:cs_senior_project_merchant/asset/text_style.dart';
 import 'package:cs_senior_project_merchant/component/storeCard.dart';
 import 'package:cs_senior_project_merchant/notifiers/dateTime_notifier.dart';
@@ -154,12 +155,19 @@ class _StorePageState extends State<StorePage> {
                                       child: Row(
                                         children: [
                                           Expanded(
-                                              flex: 9,
-                                              child: Text(storeNotifier
-                                                  .store.storeName, style: FontCollection.topicBoldTextStyle,),),
+                                            flex: 9,
+                                            child: Text(
+                                              storeNotifier.store.storeName,
+                                              style: FontCollection
+                                                  .topicBoldTextStyle,
+                                            ),
+                                          ),
                                           Expanded(
                                             flex: 3,
-                                            child: EditButton(editText: 'แก้ไขข้อมูล',onClicked: () {},),
+                                            child: EditButton(
+                                              editText: 'แก้ไขข้อมูล',
+                                              onClicked: () {},
+                                            ),
                                           ),
                                         ],
                                       ),
@@ -314,14 +322,43 @@ class _StorePageState extends State<StorePage> {
                             storeCard(
                               onClicked: () {},
                               headerText: 'รูปแบบการจัดส่ง',
-                              child: Center(
-                                child: Container(
-                                  padding: EdgeInsets.all(20),
-                                  child: Text(
-                                    //TODO delivery type
-                                    'ประเภทการจัดส่ง',
-                                    style: FontCollection.bodyTextStyle,
-                                  ),
+                              child: Container(
+                                padding: EdgeInsets.all(20),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    saleType(
+                                      Icons.directions_walk,
+                                      'รับด้วยตนเอง',
+                                      isPressed,
+                                      () {
+                                        if (isPressed == false) {
+                                          setState(() {
+                                            isPressed = true;
+                                          });
+                                        } else {
+                                          setState(() {
+                                            isPressed = false;
+                                          });
+                                        }
+                                      },
+                                    ),
+                                    saleType(
+                                      Icons.local_shipping,
+                                      'บริการจัดส่ง',
+                                      isPressed2,
+                                      () {
+                                        if (isPressed2 == false) {
+                                          isPressed2 = true;
+                                          setState(() {});
+                                        } else {
+                                          isPressed2 = false;
+                                          setState(() {});
+                                        }
+                                      },
+                                    ),
+                                  ],
                                 ),
                               ),
                               canEdit: false,
@@ -413,6 +450,40 @@ class _StorePageState extends State<StorePage> {
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  bool isPressed = false;
+  bool isPressed2 = false;
+
+  Widget saleType(IconData icon, String text, bool isPressed, VoidCallback onClicked,) {
+    return GestureDetector(
+      onTap: onClicked,
+      child: Container(
+        child: Column(
+          children: [
+            CircleAvatar(
+              radius: 40,
+              backgroundColor:
+                  isPressed ? CollectionsColors.orange : Colors.grey,
+              foregroundColor: CollectionsColors.white,
+              child: Icon(
+                icon,
+                size: 40,
+              ),
+            ),
+            Container(
+              padding: EdgeInsets.only(top: 10),
+              child: Text(
+                text,
+                style: isPressed
+                    ? FontCollection.smallBodyTextStyle
+                    : TextStyle(fontSize: 14, color: Colors.grey),
+              ),
+            ),
+          ],
         ),
       ),
     );

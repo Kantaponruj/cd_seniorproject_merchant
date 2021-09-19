@@ -13,3 +13,5 @@ FirebaseAuth auth = FirebaseAuth.instance;
 FirebaseMessaging fcm = FirebaseMessaging.instance;
 
 bool isConfirmed = true;
+bool isDelivery = false;
+

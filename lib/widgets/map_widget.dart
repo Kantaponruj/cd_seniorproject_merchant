@@ -1,3 +1,4 @@
+import 'package:cs_senior_project_merchant/asset/color.dart';
 import 'package:cs_senior_project_merchant/asset/constant.dart';
 import 'package:cs_senior_project_merchant/notifiers/store_notifier.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +19,8 @@ class _MapWidgetState extends State<MapWidget> {
   @override
   Widget build(BuildContext context) {
     StoreNotifier store = Provider.of<StoreNotifier>(context);
+    final routeColor = CollectionsColors.navy;
+    final routeWidth = 5;
 
     return MaterialApp(
       home: SafeArea(
@@ -33,7 +36,8 @@ class _MapWidgetState extends State<MapWidget> {
                     double.parse(widget.order['geoPoint'].latitude.toString()),
                     double.parse(widget.order['geoPoint'].longitude.toString()),
                   ),
-                  routeWidth: 2,
+                  routeWidth: routeWidth,
+                  routeColor: routeColor,
                   sourceMarkerIconInfo: MarkerIconInfo(
                     assetPath: "assets/images/restaurant-marker-icon.png",
                   ),
@@ -56,23 +60,27 @@ class _MapWidgetState extends State<MapWidget> {
                     double.parse(widget.order['geoPoint'].latitude.toString()),
                     double.parse(widget.order['geoPoint'].longitude.toString()),
                   ),
-                  routeWidth: 2,
+                  routeWidth: routeWidth,
+                  routeColor: routeColor,
                   sourceMarkerIconInfo: MarkerIconInfo(
-                    assetPath: "assets/images/house-marker-icon.png",
+                    assetPath: "assets/images/restaurant-marker-icon.png",
+                    assetMarkerSize: Size.square(125),
                   ),
                   destinationMarkerIconInfo: MarkerIconInfo(
-                    assetPath: "assets/images/restaurant-marker-icon.png",
+                    assetPath: "assets/images/house-marker-icon.png",
                   ),
                   driverMarkerIconInfo: MarkerIconInfo(
                     assetPath: "assets/images/driver-marker-icon.png",
-                    assetMarkerSize: Size.square(125),
                   ),
                   driverCoordinatesStream: Stream.periodic(
-                    Duration(seconds: 2),
-                    (i) => LatLng(
-                      store.store.realtimeLocation.latitude,
-                      store.store.realtimeLocation.longitude,
-                    ),
+                    Duration(milliseconds: 500),
+                    (i) {
+                      store.reloadUserModel();
+                      return LatLng(
+                        store.store.realtimeLocation.latitude,
+                        store.store.realtimeLocation.longitude,
+                      );
+                    },
                   ),
                   // sourceName: "ฉัน",
                   destinationName: "ลูกค้า",
