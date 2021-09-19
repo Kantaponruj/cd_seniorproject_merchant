@@ -163,8 +163,11 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                           onPressed: () {
                             Navigator.of(context).push(
                               MaterialPageRoute(
-                                  builder: (BuildContext context) =>
-                                      MapWidget(order: widget.order)),
+                                builder: (BuildContext context) => MapWidget(
+                                  order: widget.order,
+                                  isPreview: true,
+                                ),
+                              ),
                             );
                           },
                           color: CollectionsColors.orange,

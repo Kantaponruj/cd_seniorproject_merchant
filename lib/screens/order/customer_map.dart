@@ -4,7 +4,6 @@ import 'package:cs_senior_project_merchant/asset/color.dart';
 import 'package:cs_senior_project_merchant/asset/text_style.dart';
 import 'package:cs_senior_project_merchant/component/bottomBar.dart';
 import 'package:cs_senior_project_merchant/notifiers/store_notifier.dart';
-import 'package:cs_senior_project_merchant/screens/order.dart';
 import 'package:cs_senior_project_merchant/screens/order/orderDetail.dart';
 import 'package:cs_senior_project_merchant/widgets/button_widget.dart';
 import 'package:cs_senior_project_merchant/widgets/map_widget.dart';
@@ -25,7 +24,6 @@ class CustomerMapPage extends StatefulWidget {
 }
 
 class _CustomerMapPageState extends State<CustomerMapPage> {
-  final Completer<GoogleMapController> _mapController = Completer();
   final panelController = PanelController();
 
   @override
@@ -48,7 +46,10 @@ class _CustomerMapPageState extends State<CustomerMapPage> {
             ),
             body: Padding(
               padding: EdgeInsets.fromLTRB(0, 0, 0, 80),
-              child: MapWidget(order: widget.order),
+              child: MapWidget(
+                order: widget.order,
+                isPreview: false,
+              ),
             ),
           ),
         ],
