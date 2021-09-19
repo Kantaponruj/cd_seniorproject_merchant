@@ -35,10 +35,10 @@ class _MapWidgetState extends State<MapWidget> {
                   ),
                   routeWidth: 2,
                   sourceMarkerIconInfo: MarkerIconInfo(
-                    assetPath: "assets/images/house-marker-icon.png",
+                    assetPath: "assets/images/restaurant-marker-icon.png",
                   ),
                   destinationMarkerIconInfo: MarkerIconInfo(
-                    assetPath: "assets/images/restaurant-marker-icon.png",
+                    assetPath: "assets/images/house-marker-icon.png",
                   ),
                   sourceName: "ฉัน",
                   destinationName: "ลูกค้า",
