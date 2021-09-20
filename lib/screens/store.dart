@@ -1,5 +1,4 @@
 import 'package:cs_senior_project_merchant/asset/color.dart';
-import 'package:cs_senior_project_merchant/asset/constant.dart';
 import 'package:cs_senior_project_merchant/asset/text_style.dart';
 import 'package:cs_senior_project_merchant/component/storeCard.dart';
 import 'package:cs_senior_project_merchant/notifiers/dateTime_notifier.dart';
@@ -24,6 +23,8 @@ class StorePage extends StatefulWidget {
 class _StorePageState extends State<StorePage> {
   bool _deliveryStatus;
   bool _storeStatus;
+  bool _isPickUp;
+  bool _isDelivery;
 
   @override
   void initState() {
@@ -35,6 +36,8 @@ class _StorePageState extends State<StorePage> {
 
     _deliveryStatus = storeNotifier.store.deliveryStatus;
     _storeStatus = storeNotifier.store.storeStatus;
+    _isPickUp = storeNotifier.store.isPickUp;
+    _isDelivery = storeNotifier.store.isDelivery;
 
     super.initState();
   }
@@ -331,15 +334,21 @@ class _StorePageState extends State<StorePage> {
                                     saleType(
                                       Icons.directions_walk,
                                       'รับด้วยตนเอง',
-                                      isPressed,
+                                      _isPickUp,
                                       () {
-                                        if (isPressed == false) {
+                                        if (_isPickUp == false) {
                                           setState(() {
-                                            isPressed = true;
+                                            _isPickUp = true;
+                                            storeNotifier.updateUserData({
+                                              'isPickUp': true,
+                                            });
                                           });
                                         } else {
                                           setState(() {
-                                            isPressed = false;
+                                            _isPickUp = false;
+                                            storeNotifier.updateUserData({
+                                              'isPickUp': false,
+                                            });
                                           });
                                         }
                                       },
@@ -347,14 +356,22 @@ class _StorePageState extends State<StorePage> {
                                     saleType(
                                       Icons.local_shipping,
                                       'บริการจัดส่ง',
-                                      isPressed2,
+                                      _isDelivery,
                                       () {
-                                        if (isPressed2 == false) {
-                                          isPressed2 = true;
-                                          setState(() {});
+                                        if (_isDelivery == false) {
+                                          setState(() {
+                                            _isDelivery = true;
+                                            storeNotifier.updateUserData({
+                                              'isDelivery': true,
+                                            });
+                                          });
                                         } else {
-                                          isPressed2 = false;
-                                          setState(() {});
+                                          setState(() {
+                                            _isDelivery = false;
+                                            storeNotifier.updateUserData({
+                                              'isDelivery': false,
+                                            });
+                                          });
                                         }
                                       },
                                     ),
@@ -458,7 +475,12 @@ class _StorePageState extends State<StorePage> {
   bool isPressed = false;
   bool isPressed2 = false;
 
-  Widget saleType(IconData icon, String text, bool isPressed, VoidCallback onClicked,) {
+  Widget saleType(
+    IconData icon,
+    String text,
+    bool isPressed,
+    VoidCallback onClicked,
+  ) {
     return GestureDetector(
       onTap: onClicked,
       child: Container(
