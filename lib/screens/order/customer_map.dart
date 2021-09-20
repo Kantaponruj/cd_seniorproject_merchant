@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:cs_senior_project_merchant/asset/color.dart';
 import 'package:cs_senior_project_merchant/asset/text_style.dart';
 import 'package:cs_senior_project_merchant/component/bottomBar.dart';
@@ -11,7 +9,6 @@ import 'package:cs_senior_project_merchant/services/order_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
@@ -120,8 +117,9 @@ class _CustomerMapPageState extends State<CustomerMapPage> {
                       Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (BuildContext context) => OrderDetailPage(
-                            storeNotifier.store.storeId,
-                            widget.order,
+                            storeId: storeNotifier.store.storeId,
+                            order: widget.order,
+                            isConfirm: true,
                           ),
                         ),
                       );
@@ -161,7 +159,9 @@ class _CustomerMapPageState extends State<CustomerMapPage> {
                 onClicked: () {
                   updateStatusOrder(
                     widget.order['customerId'],
+                    widget.order['storeId'],
                     widget.order['orderId'],
+                    widget.order['documentId'],
                     orderStatus,
                   );
 

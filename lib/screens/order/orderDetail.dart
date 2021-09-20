@@ -15,10 +15,13 @@ import 'package:provider/provider.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 
 class OrderDetailPage extends StatefulWidget {
-  OrderDetailPage(this.storeId, this.order);
+  OrderDetailPage(
+      {Key key, @required this.storeId, @required this.order, this.isConfirm})
+      : super(key: key);
 
   final String storeId;
   final order;
+  final bool isConfirm;
 
   @override
   _OrderDetailPageState createState() => _OrderDetailPageState();
@@ -36,13 +39,13 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
       widget.storeId,
       widget.order['documentId'],
     );
-    isDelivery = false;
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     OrderNotifier orderNotifier = Provider.of<OrderNotifier>(context);
+    // StoreNotifier storeNotifier = Provider.of<StoreNotifier>(context);
 
     return Scaffold(
       // extendBodyBehindAppBar: true,
@@ -251,25 +254,25 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                   ),
                 ),
               ),
-              isDelivery
+              widget.isConfirm
                   ? SizedBox.shrink()
                   : Container(
-                margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
-                child: TextButton(
-                  onPressed: () {},
-                  child: Text(
-                    'ยกเลิกคำสั่งซื้อ',
-                    style: FontCollection.underlineButtonTextStyle,
-                  ),
-                ),
-              ),
+                      margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
+                      child: TextButton(
+                        onPressed: () {},
+                        child: Text(
+                          'ยกเลิกคำสั่งซื้อ',
+                          style: FontCollection.underlineButtonTextStyle,
+                        ),
+                      ),
+                    ),
 
               ///End Column
             ],
           ),
         ),
       ),
-      bottomNavigationBar: isDelivery
+      bottomNavigationBar: widget.isConfirm
           ? SizedBox.shrink()
           : BottomOrder(
               confirmButton: () {
@@ -279,7 +282,9 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                   isDelivery = false;
                   updateStatusOrder(
                     widget.order['customerId'],
+                    widget.order['storeId'],
                     widget.order['orderId'],
+                    widget.order['documentId'],
                     orderStatus,
                   );
                 });
@@ -291,7 +296,9 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                   isDelivery = true;
                   updateStatusOrder(
                     widget.order['customerId'],
+                    widget.order['storeId'],
                     widget.order['orderId'],
+                    widget.order['documentId'],
                     orderStatus,
                   );
                   Navigator.of(context).push(

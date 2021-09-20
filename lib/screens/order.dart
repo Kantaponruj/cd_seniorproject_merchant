@@ -5,6 +5,7 @@ import 'package:cs_senior_project_merchant/asset/text_style.dart';
 import 'package:cs_senior_project_merchant/component/mainAppBar.dart';
 import 'package:cs_senior_project_merchant/notifiers/location_notifier.dart';
 import 'package:cs_senior_project_merchant/notifiers/store_notifier.dart';
+import 'package:cs_senior_project_merchant/screens/order/customer_map.dart';
 import 'package:cs_senior_project_merchant/screens/order/orderDetail.dart';
 import 'package:cs_senior_project_merchant/widgets/loading_widget.dart';
 import 'package:flutter/material.dart';
@@ -102,11 +103,19 @@ class _OrderPageState extends State<OrderPage> {
       child: GestureDetector(
         onTap: () {
           // orderNotifier.currentOrder = order;
+          switchPage() {
+            switch (order['orderStatus']) {
+              case 'ยืนยันคำสั่งซื้อ':
+                return OrderDetailPage(storeId: storeId, order: order, isConfirm: false);
+              case 'ยืนยันการจัดส่ง':
+                return CustomerMapPage(order: order);
+              default:
+                return OrderDetailPage(storeId: storeId, order: order, isConfirm: false);
+            }
+          }
+
           Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (BuildContext context) =>
-                  OrderDetailPage(storeId, order),
-            ),
+            MaterialPageRoute(builder: (BuildContext context) => switchPage()),
           );
         },
         child: Card(

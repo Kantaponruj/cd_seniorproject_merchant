@@ -47,12 +47,25 @@ Future<void> getOrderMenu(
   orderNotifier.orderMenuList = _orderMenuList;
 }
 
-updateStatusOrder(String uid, String orderId, String orderStatus) {
+updateStatusOrder(
+  String uid,
+  String storeId,
+  String orderId,
+  String docId,
+  String orderStatus,
+) {
   firebaseFirestore
       .collection('users')
       .doc(uid)
       .collection('activities')
       .doc(orderId)
+      .update({'orderStatus': orderStatus});
+
+  firebaseFirestore
+      .collection('stores')
+      .doc(storeId)
+      .collection('delivery-orders')
+      .doc(docId)
       .update({'orderStatus': orderStatus});
 
   print('Updated Status');
