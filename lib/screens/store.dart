@@ -472,9 +472,6 @@ class _StorePageState extends State<StorePage> {
     );
   }
 
-  bool isPressed = false;
-  bool isPressed2 = false;
-
   Widget saleType(
     IconData icon,
     String text,
