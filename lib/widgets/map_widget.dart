@@ -27,14 +27,14 @@ class _MapWidgetState extends State<MapWidget> {
     final storeIcon = "assets/images/restaurant-marker-icon.png";
     final customerIcon = "assets/images/house-marker-icon.png";
     final driverIcon = "assets/images/driver-marker-icon.png";
-    final storeLocation = LatLng(
-      store.store.realtimeLocation.latitude,
-      store.store.realtimeLocation.longitude,
-    );
-    final customerLocation = LatLng(
-      double.parse(widget.order['geoPoint'].latitude.toString()),
-      double.parse(widget.order['geoPoint'].longitude.toString()),
-    );
+    // final storeLocation = LatLng(
+    //   store.store.realtimeLocation.latitude,
+    //   store.store.realtimeLocation.longitude,
+    // );
+    // final customerLocation = LatLng(
+    //   double.parse(widget.order['geoPoint'].latitude.toString()),
+    //   double.parse(widget.order['geoPoint'].longitude.toString()),
+    // );
 
     return MaterialApp(
       home: SafeArea(
@@ -42,8 +42,14 @@ class _MapWidgetState extends State<MapWidget> {
           body: widget.isPreview
               ? GoogleMapsWidget(
                   apiKey: GOOGLE_MAPS_API_KEY,
-                  sourceLatLng: storeLocation,
-                  destinationLatLng: customerLocation,
+                  sourceLatLng: LatLng(
+                    store.store.realtimeLocation.latitude,
+                    store.store.realtimeLocation.longitude,
+                  ),
+                  destinationLatLng: LatLng(
+                    double.parse(widget.order['geoPoint'].latitude.toString()),
+                    double.parse(widget.order['geoPoint'].longitude.toString()),
+                  ),
                   routeWidth: routeWidth,
                   routeColor: routeColor,
                   sourceMarkerIconInfo: MarkerIconInfo(assetPath: storeIcon),
@@ -57,8 +63,14 @@ class _MapWidgetState extends State<MapWidget> {
                 )
               : GoogleMapsWidget(
                   apiKey: GOOGLE_MAPS_API_KEY,
-                  sourceLatLng: storeLocation,
-                  destinationLatLng: customerLocation,
+                  sourceLatLng: LatLng(
+                    store.store.realtimeLocation.latitude,
+                    store.store.realtimeLocation.longitude,
+                  ),
+                  destinationLatLng: LatLng(
+                    double.parse(widget.order['geoPoint'].latitude.toString()),
+                    double.parse(widget.order['geoPoint'].longitude.toString()),
+                  ),
                   routeWidth: routeWidth,
                   routeColor: routeColor,
                   sourceMarkerIconInfo: MarkerIconInfo(
@@ -75,7 +87,10 @@ class _MapWidgetState extends State<MapWidget> {
                     Duration(milliseconds: 500),
                     (i) {
                       store.reloadUserModel();
-                      return storeLocation;
+                      return LatLng(
+                        store.store.realtimeLocation.latitude,
+                        store.store.realtimeLocation.longitude,
+                      );
                     },
                   ),
                   sourceName: storeName,
