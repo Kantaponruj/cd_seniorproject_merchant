@@ -6,6 +6,7 @@ import 'package:cs_senior_project_merchant/component/roundAppBar.dart';
 import 'package:cs_senior_project_merchant/models/order.dart';
 import 'package:cs_senior_project_merchant/notifiers/order_notifier.dart';
 import 'package:cs_senior_project_merchant/screens/order/customer_map.dart';
+import 'package:cs_senior_project_merchant/screens/order/cutomer_map.dart';
 import 'package:cs_senior_project_merchant/services/order_service.dart';
 import 'package:cs_senior_project_merchant/widgets/bottomOrder_widget.dart';
 import 'package:cs_senior_project_merchant/widgets/map_widget.dart';
@@ -167,9 +168,8 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                           onPressed: () {
                             Navigator.of(context).push(
                               MaterialPageRoute(
-                                builder: (BuildContext context) => MapWidget(
+                                builder: (BuildContext context) => CustomerMap(
                                   order: widget.order,
-                                  isPreview: true,
                                 ),
                               ),
                             );

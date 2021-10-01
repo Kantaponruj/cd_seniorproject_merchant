@@ -7,6 +7,7 @@ import 'package:cs_senior_project_merchant/notifiers/location_notifier.dart';
 import 'package:cs_senior_project_merchant/notifiers/store_notifier.dart';
 import 'package:cs_senior_project_merchant/screens/order/customer_map.dart';
 import 'package:cs_senior_project_merchant/screens/order/orderDetail.dart';
+import 'package:cs_senior_project_merchant/widgets/icontext_widget.dart';
 import 'package:cs_senior_project_merchant/widgets/loading_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -74,43 +75,94 @@ class _OrderPageState extends State<OrderPage> {
         appBar: MainAppbar(
           appBarTitle: 'คำสั่งซื้อ',
         ),
-        body: StreamBuilder(
-            stream: firebaseFirestore
-                .collection('stores')
-                .doc(storeNotifier.store.storeId)
-                .collection('delivery-orders')
-                .orderBy('timeOrdered')
-                .snapshots(),
-            builder:
-                (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-              if (!snapshot.hasData) {
-                return LoadingWidget();
-              }
-
-              return ListView(
-                children: snapshot.data.docs.map((order) {
-                  return buildStoreCard(order, storeNotifier.store.storeId);
-                }).toList(),
-              );
-            }),
+        body: SingleChildScrollView(
+          child: StreamBuilder(
+              stream: firebaseFirestore
+                  .collection('stores')
+                  .doc(storeNotifier.store.storeId)
+                  .collection('delivery-orders')
+                  .orderBy('timeOrdered')
+                  .snapshots(),
+              builder: (BuildContext context,
+                  AsyncSnapshot<QuerySnapshot> snapshot) {
+                if (!snapshot.hasData) {
+                  return LoadingWidget();
+                }
+                return Container(
+                  child: Column(
+                    children: [
+                      Container(
+                        padding: EdgeInsets.fromLTRB(20, 30, 0, 10),
+                        alignment: Alignment.topLeft,
+                        child: Text(
+                          'รอการยืนยัน',
+                          style: FontCollection.topicBoldTextStyle,
+                        ),
+                      ),
+                      ListView(
+                        children: snapshot.data.docs.map((order) {
+                          return orderCard(
+                              order, storeNotifier.store.storeId);
+                        }).toList(),
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        padding: EdgeInsets.zero,
+                      ),
+                      Container(
+                        padding: EdgeInsets.fromLTRB(20, 20, 0, 10),
+                        alignment: Alignment.topLeft,
+                        child: Text(
+                          'ยืนยันแล้ว',
+                          style: FontCollection.topicBoldTextStyle,
+                        ),
+                      ),
+                      ListView(
+                        children: snapshot.data.docs.map((order) {
+                          return orderCard(order, storeNotifier.store.storeId);
+                        }).toList(),
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        padding: EdgeInsets.zero,
+                      ),
+                    ],
+                  ),
+                );
+              }),
+        ),
       ),
     );
   }
 
-  Widget buildStoreCard(final order, String storeId) {
+  Widget priceText(String text) {
+    return Container(
+      alignment: Alignment.centerRight,
+      child: Text(
+        text,
+        style: TextStyle(
+          fontFamily: NotoSansFont,
+          fontWeight: FontWeight.w700,
+          fontSize: regularSize,
+          color: CollectionsColors.orange,
+        ),
+      ),
+    );
+  }
+
+  Widget orderCard(final order, String storeId) {
     return Padding(
       padding: EdgeInsets.fromLTRB(10, 10, 10, 5),
       child: GestureDetector(
         onTap: () {
-          // orderNotifier.currentOrder = order;
           switchPage() {
             switch (order['orderStatus']) {
               case 'ยืนยันคำสั่งซื้อ':
-                return OrderDetailPage(storeId: storeId, order: order, isConfirm: false);
+                return OrderDetailPage(
+                    storeId: storeId, order: order, isConfirm: false);
               case 'ยืนยันการจัดส่ง':
                 return CustomerMapPage(order: order);
               default:
-                return OrderDetailPage(storeId: storeId, order: order, isConfirm: false);
+                return OrderDetailPage(
+                    storeId: storeId, order: order, isConfirm: false);
             }
           }
 
@@ -123,101 +175,88 @@ class _OrderPageState extends State<OrderPage> {
             borderRadius: BorderRadius.circular(20),
           ),
           child: Container(
-            padding: EdgeInsets.all(20),
+            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Expanded(
-                        flex: 2,
-                        child: Container(
-                          height: 40,
-                          width: 40,
-                          alignment: Alignment.centerLeft,
-                          child: CircleAvatar(
-                            backgroundColor: CollectionsColors.grey,
-                            radius: 35.0,
-                            child: Text(
-                              order['customerName'][0].toUpperCase(),
-                              style: FontCollection.descriptionTextStyle,
-                              textAlign: TextAlign.left,
-                            ),
+                      buildName(order['customerName'][0].toUpperCase(),order['customerName'],),
+                      Container(
+                        padding: EdgeInsets.all(5),
+                        decoration: BoxDecoration(
+                          color: CollectionsColors.orange,
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(10),
                           ),
                         ),
-                      ),
-                      Expanded(
-                        flex: 5,
-                        child: Text(
-                          order['customerName'],
-                          style: FontCollection.bodyTextStyle,
-                        ),
-                      ),
-                      Expanded(
-                        flex: 4,
-                        child: Text(
-                          'รายละเอียด',
-                          style: FontCollection.underlineButtonTextStyle,
-                          textAlign: TextAlign.right,
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.location_on,
+                              color: Colors.white,
+                            ),
+                            Text(
+                              '0.5 กม.',
+                              style:
+                                  TextStyle(fontSize: 14, color: Colors.white),
+                            ),
+                          ],
                         ),
                       ),
                     ],
                   ),
                 ),
-                SizedBox(
-                  height: 40,
-                ),
                 Container(
-                  // padding: ,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  padding: EdgeInsets.only(top: 15),
+                  child: Column(
                     children: [
-                      Expanded(
-                        flex: 7,
+                      Container(
                         child: Row(
                           children: [
-                            Container(
+                            BuildIconText(
+                              icon: Icons.date_range,
                               child: Text(
                                 order['dateOrdered'],
-                                textAlign: TextAlign.left,
-                                style: FontCollection.bodyTextStyle,
+                                style: FontCollection.smallBodyTextStyle,
                               ),
                             ),
-                            Container(
-                              margin: EdgeInsets.only(left: 20),
-                              child: Text(
-                                order['timeOrdered'],
-                                textAlign: TextAlign.left,
-                                style: FontCollection.bodyTextStyle,
+                            SizedBox(width: 10,),
+                            BuildIconText(
+                              icon: Icons.access_time,
+                              child: Row(
+                                children: [
+                                  Container(
+                                    padding: EdgeInsets.only(right: 10),
+                                    child: Text(
+                                      'ก่อน',
+                                      style: FontCollection.smallBodyTextStyle,
+                                    ),
+                                  ),
+                                  priceText('12.30'),
+                                ],
                               ),
                             ),
                           ],
                         ),
                       ),
-                      Expanded(
-                        flex: 4,
-                        child: Container(
-                          alignment: Alignment.centerRight,
-                          margin: EdgeInsets.only(right: 10),
-                          child: Text(
-                            order['netPrice'],
-                            style: TextStyle(
-                              fontFamily: NotoSansFont,
-                              fontWeight: FontWeight.w700,
-                              fontSize: bigSize,
-                              color: CollectionsColors.red,
-                            ),
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        flex: 1,
-                        child: Container(
-                          alignment: Alignment.bottomRight,
-                          child: Text(
-                            ' บาท',
-                            style: FontCollection.bodyTextStyle,
+                      Container(
+                        padding: EdgeInsets.only(top: 10),
+                        child: IntrinsicHeight(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              bottomLeft('7', order['netPrice'],),
+                              Container(
+                                child: Text(
+                                  'รายละเอียด',
+                                  style:
+                                      FontCollection.underlineButtonTextStyle,
+                                  textAlign: TextAlign.right,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ),
@@ -232,17 +271,57 @@ class _OrderPageState extends State<OrderPage> {
     );
   }
 
-  Widget priceText(String text) {
+  Widget bottomLeft(String orderNumber,String price) {
     return Container(
-      alignment: Alignment.centerRight,
-      child: Text(
-        text,
-        style: TextStyle(
-          fontFamily: NotoSansFont,
-          fontWeight: FontWeight.w700,
-          fontSize: bigSize,
-          color: CollectionsColors.red,
-        ),
+      child: Row(
+        children: [
+          BuildIconText(
+            icon: Icons.list_alt,
+            text: '$orderNumber รายการ',
+          ),
+          SizedBox(
+            height: 20,
+              child: VerticalDivider(
+            thickness: 2,
+                width: 20,
+          ),),
+          priceText(price),
+          Container(
+            padding: EdgeInsets.only(left: 10),
+            child: Text(
+              'บาท',
+              style: FontCollection.smallBodyTextStyle,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget buildName(String leadingName, String name) {
+    return Container(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          CircleAvatar(
+            backgroundColor: CollectionsColors.navy,
+            child: Text(
+              leadingName,
+              style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.white,
+                  fontWeight: FontWeight.w700),
+            ),
+            radius: 15,
+          ),
+          Container(
+            padding: EdgeInsets.only(left: 10),
+            child: Text(
+              name,
+              style: FontCollection.smallBodyTextStyle,
+            ),
+          )
+        ],
       ),
     );
   }

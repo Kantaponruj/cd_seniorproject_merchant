@@ -26,6 +26,15 @@ class _CustomerMapPageState extends State<CustomerMapPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButtonLocation: FloatingActionButtonLocation.startTop,
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        onPressed: () {
+          Navigator.of(context).pop();
+        },
+        child: Icon(Icons.arrow_back, color: Colors.black,),
+      ),
       body: Stack(
         // fit: StackFit.expand,
         children: [
