@@ -4,7 +4,6 @@ import 'package:cs_senior_project_merchant/asset/constant.dart';
 import 'package:cs_senior_project_merchant/asset/text_style.dart';
 import 'package:cs_senior_project_merchant/component/mainAppBar.dart';
 import 'package:cs_senior_project_merchant/notifiers/location_notifier.dart';
-import 'package:cs_senior_project_merchant/notifiers/order_notifier.dart';
 import 'package:cs_senior_project_merchant/notifiers/store_notifier.dart';
 import 'package:cs_senior_project_merchant/screens/order/customer_map.dart';
 import 'package:cs_senior_project_merchant/screens/order/orderDetail.dart';
@@ -154,8 +153,6 @@ class _OrderPageState extends State<OrderPage> {
   }
 
   Widget orderCard(final order, String storeId) {
-    OrderNotifier orderMenu = Provider.of<OrderNotifier>(context);
-
     return Padding(
       padding: EdgeInsets.fromLTRB(10, 10, 10, 5),
       child: GestureDetector(
@@ -260,7 +257,7 @@ class _OrderPageState extends State<OrderPage> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               bottomLeft(
-                                orderMenu.orderMenuList.length.toString(),
+                                order['amountOfMenu'],
                                 order['netPrice'],
                               ),
                               Container(
