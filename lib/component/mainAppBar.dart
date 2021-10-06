@@ -31,7 +31,7 @@ class _MainAppbarState extends State<MainAppbar> {
             IconButton(
               onPressed: () {},
               icon: Icon(
-                Icons.notifications,
+                Icons.map_outlined,
                 color: Colors.black,
               ),
             ),
