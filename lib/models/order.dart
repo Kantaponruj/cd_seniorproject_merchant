@@ -7,12 +7,14 @@ class OrderDetail {
   String customerName;
   String phone;
   String address;
+  // String addressName;
   String addressDetail;
-  GeoPoint geoPoint;
+  // GeoPoint geoPoint;
   String message;
-  String netPrice;
   String dateOrdered;
   String timeOrdered;
+  String netPrice;
+  String amountOfMenu;
 
   OrderDetail();
 
@@ -21,13 +23,34 @@ class OrderDetail {
     orderId = data['orderId'];
     customerId = data['customerId'];
     customerName = data['customerName'];
+    phone = data['phone'];
     address = data['address'];
+    // addressName = data['addressName'];
     addressDetail = data['addressDetail'];
-    geoPoint = data['geoPoint'];
+    // geoPoint = data['geoPoint'];
     message = data['message'];
-    netPrice = data['netPrice'];
     dateOrdered = data['dateOrdered'];
     timeOrdered = data['timeOrdered'];
+    netPrice = data['netPrice'];
+    amountOfMenu = data['amountOfFood'];
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'documentId': documentId,
+      'orderId': orderId,
+      'customerId': customerId,
+      'customerName': customerName,
+      'phone': phone,
+      'address': address,
+      // 'addressName': addressName,
+      'addressDetail': addressDetail,
+      // 'geoPoint': geoPoint,
+      'message': message,
+      'dateOrdered': dateOrdered,
+      'timeOrdered': timeOrdered,
+      'netPrice': netPrice,
+    };
   }
 }
 
@@ -48,5 +71,16 @@ class OrderMenu {
     amount = data['amount'];
     other = data['other'];
     topping = data['topping'];
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'menuId': menuId,
+      'menuName': menuName,
+      'totalPrice': totalPrice,
+      'amount': amount,
+      'other': other,
+      'topping': topping
+    };
   }
 }
