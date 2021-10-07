@@ -80,7 +80,7 @@ class _AddMenuPageState extends State<AddMenuPage> {
                     () {},
                   );
                 },
-                _currentMenu.haveMenu,
+                _currentMenu.haveMenu ?? status,
               ),
             ),
             Container(
