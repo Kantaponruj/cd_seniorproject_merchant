@@ -1,11 +1,16 @@
+import 'dart:io';
+
 import 'package:cs_senior_project_merchant/asset/color.dart';
 import 'package:cs_senior_project_merchant/asset/text_style.dart';
 import 'package:cs_senior_project_merchant/component/roundAppBar.dart';
 import 'package:cs_senior_project_merchant/models/menu.dart';
 import 'package:cs_senior_project_merchant/notifiers/menu_notifier.dart';
+import 'package:cs_senior_project_merchant/notifiers/store_notifier.dart';
+import 'package:cs_senior_project_merchant/services/menu_service.dart';
 import 'package:cs_senior_project_merchant/widgets/button_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_switch/flutter_switch.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 class AddMenuPage extends StatefulWidget {
@@ -17,11 +22,13 @@ class AddMenuPage extends StatefulWidget {
 }
 
 class _AddMenuPageState extends State<AddMenuPage> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool status = false;
   TextEditingController controller = new TextEditingController();
 
   Menu _currentMenu;
   String _imageUrl;
+  File _imageFile;
 
   @override
   void initState() {
@@ -35,6 +42,43 @@ class _AddMenuPageState extends State<AddMenuPage> {
     super.initState();
   }
 
+  menuUploaded(Menu menu) {
+    MenuNotfier menuNotfier = Provider.of<MenuNotfier>(context, listen: false);
+    if (!widget.isUpdating) {
+      menuNotfier.addMenu(menu);
+    }
+    Navigator.pop(context);
+  }
+
+  handleSaveMenu() {
+    StoreNotifier storeNotifier =
+        Provider.of<StoreNotifier>(context, listen: false);
+
+    _formKey.currentState.save();
+
+    _currentMenu.categoryFood = 'test';
+    _currentMenu.haveMenu = true;
+
+    updateMenuAndImage(
+      _currentMenu,
+      widget.isUpdating,
+      _imageFile,
+      menuUploaded,
+      storeNotifier.store.storeId,
+    );
+  }
+
+  getLocalImage() async {
+    PickedFile imageFile =
+        await ImagePicker().getImage(source: ImageSource.gallery);
+
+    if (imageFile != null) {
+      setState(() {
+        _imageFile = File(imageFile.path);
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,24 +86,46 @@ class _AddMenuPageState extends State<AddMenuPage> {
         appBarTittle: 'รายละเอียดรายการอาหาร',
       ),
       body: SingleChildScrollView(
-        child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-          child: Column(
-            children: [
-              mainCard(),
-              Container(
-                padding: EdgeInsets.only(top: 20),
-                child: cardOption(),
-              ),
-              Container(
-                padding: EdgeInsets.only(top: 20),
-                child: StadiumButtonWidget(text: 'บันทึก', onClicked: () {}),
-              ),
-            ],
+        child: Form(
+          key: _formKey,
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+            child: Column(
+              children: [
+                mainCard(),
+                Container(
+                  padding: EdgeInsets.only(top: 20),
+                  child: cardOption(),
+                ),
+                Container(
+                  padding: EdgeInsets.only(top: 20),
+                  child: StadiumButtonWidget(
+                    text: 'บันทึก',
+                    onClicked: () {
+                      FocusScope.of(context).requestFocus(new FocusNode());
+                      handleSaveMenu();
+                    },
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
     );
+  }
+
+  Widget showImage() {
+    if (_imageUrl == null && _imageFile == null) {
+      return Image.network(
+        'https://www.testingxperts.com/wp-content/uploads/2019/02/placeholder-img.jpg',
+        fit: BoxFit.cover,
+      );
+    } else if (_imageFile != null) {
+      return Image.file(_imageFile, fit: BoxFit.cover);
+    } else if (_imageUrl != null) {
+      return Image.network(_imageUrl, fit: BoxFit.cover);
+    }
   }
 
   Widget mainCard() {
@@ -95,31 +161,41 @@ class _AddMenuPageState extends State<AddMenuPage> {
               height: 150,
               padding: EdgeInsets.symmetric(vertical: 10),
               child: SizedBox(
-                child: Image.network(
-                  _imageUrl != null
-                      ? _imageUrl
-                      : 'https://www.testingxperts.com/wp-content/uploads/2019/02/placeholder-img.jpg',
-                  fit: BoxFit.cover,
-                ),
+                child: showImage(),
               ),
             ),
             Container(
               alignment: Alignment.center,
-              child: buildButton('อัปโหลดรูปภาพใหม่'),
+              child: buildButton('อัปโหลดรูปภาพใหม่', getLocalImage),
             ),
             Container(
               padding: EdgeInsets.symmetric(vertical: 10),
               child: buildTextField(
-                  'ชื่อรายการอาหาร', _currentMenu.name, controller),
+                'ชื่อรายการอาหาร',
+                _currentMenu.name,
+                (String value) {
+                  _currentMenu.name = value;
+                },
+              ),
             ),
             Container(
               padding: EdgeInsets.symmetric(vertical: 10),
               child: buildTextField(
-                  'รายละเอียด', _currentMenu.description, controller),
+                'รายละเอียด',
+                _currentMenu.description,
+                (String value) {
+                  _currentMenu.description = value;
+                },
+              ),
             ),
             Container(
               padding: EdgeInsets.symmetric(vertical: 10),
-              child: buildPrice(_currentMenu.price, controller),
+              child: buildPrice(
+                _currentMenu.price,
+                (String value) {
+                  _currentMenu.price = value;
+                },
+              ),
             ),
           ],
         ),
@@ -147,10 +223,8 @@ class _AddMenuPageState extends State<AddMenuPage> {
   }
 
   Widget buildTextField(
-    String headerText,
-    String hintText,
-    TextEditingController controller,
-  ) {
+      String headerText, String initialValue, Function onSaved,
+      {String hintText}) {
     return Container(
       child: Column(
         children: [
@@ -163,22 +237,20 @@ class _AddMenuPageState extends State<AddMenuPage> {
             ),
           ),
           TextFormField(
-            controller: controller,
+            initialValue: initialValue,
             decoration: InputDecoration(
               hintText: hintText,
               border:
                   OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
             ),
+            onSaved: onSaved,
           ),
         ],
       ),
     );
   }
 
-  Widget buildPrice(
-    String hintText,
-    TextEditingController controller,
-  ) {
+  Widget buildPrice(String initialValue, Function onSaved, {String hintText}) {
     return Row(
       children: [
         Container(
@@ -192,12 +264,13 @@ class _AddMenuPageState extends State<AddMenuPage> {
         SizedBox(
           width: 100,
           child: TextFormField(
-            controller: controller,
+            initialValue: initialValue,
             decoration: InputDecoration(
               hintText: hintText,
               border:
                   OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
             ),
+            onSaved: onSaved,
           ),
         ),
         Container(
@@ -223,17 +296,17 @@ class _AddMenuPageState extends State<AddMenuPage> {
             style: FontCollection.underlineButtonTextStyle,
           ),
         ),
-        buildButton('เพิ่มตัวเลือกเพิ่มเติม'),
+        buildButton('เพิ่มตัวเลือกเพิ่มเติม', () => {}),
       ],
     );
   }
 
-  Widget buildButton(String text) {
+  Widget buildButton(String text, Function handleClick) {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
         primary: Theme.of(context).buttonColor,
       ),
-      onPressed: () {},
+      onPressed: handleClick,
       child: Text(
         text,
         style: FontCollection.smallBodyTextStyle,
