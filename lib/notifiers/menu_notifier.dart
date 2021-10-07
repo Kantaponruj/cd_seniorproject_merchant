@@ -20,4 +20,9 @@ class MenuNotfier with ChangeNotifier {
     _currentMenu = menu;
     notifyListeners();
   }
+
+  addMenu(Menu menu) {
+    _menuList.add(menu);
+    notifyListeners();
+  }
 }

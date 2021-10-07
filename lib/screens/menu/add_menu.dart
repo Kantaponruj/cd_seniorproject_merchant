@@ -1,12 +1,16 @@
 import 'package:cs_senior_project_merchant/asset/color.dart';
 import 'package:cs_senior_project_merchant/asset/text_style.dart';
 import 'package:cs_senior_project_merchant/component/roundAppBar.dart';
+import 'package:cs_senior_project_merchant/models/menu.dart';
+import 'package:cs_senior_project_merchant/notifiers/menu_notifier.dart';
 import 'package:cs_senior_project_merchant/widgets/button_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_switch/flutter_switch.dart';
+import 'package:provider/provider.dart';
 
 class AddMenuPage extends StatefulWidget {
-  AddMenuPage({Key key}) : super(key: key);
+  AddMenuPage({Key key, @required this.isUpdating}) : super(key: key);
+  final bool isUpdating;
 
   @override
   _AddMenuPageState createState() => _AddMenuPageState();
@@ -15,6 +19,21 @@ class AddMenuPage extends StatefulWidget {
 class _AddMenuPageState extends State<AddMenuPage> {
   bool status = false;
   TextEditingController controller = new TextEditingController();
+
+  Menu _currentMenu;
+  String _imageUrl;
+
+  @override
+  void initState() {
+    MenuNotfier menuNotfier = Provider.of<MenuNotfier>(context, listen: false);
+    if (menuNotfier.currentMenu != null) {
+      _currentMenu = menuNotfier.currentMenu;
+    } else {
+      _currentMenu = Menu();
+    }
+    _imageUrl = _currentMenu.image;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +80,7 @@ class _AddMenuPageState extends State<AddMenuPage> {
                     () {},
                   );
                 },
-                status,
+                _currentMenu.haveMenu,
               ),
             ),
             Container(
@@ -77,7 +96,9 @@ class _AddMenuPageState extends State<AddMenuPage> {
               padding: EdgeInsets.symmetric(vertical: 10),
               child: SizedBox(
                 child: Image.network(
-                  'https://www.testingxperts.com/wp-content/uploads/2019/02/placeholder-img.jpg',
+                  _imageUrl != null
+                      ? _imageUrl
+                      : 'https://www.testingxperts.com/wp-content/uploads/2019/02/placeholder-img.jpg',
                   fit: BoxFit.cover,
                 ),
               ),
@@ -89,15 +110,16 @@ class _AddMenuPageState extends State<AddMenuPage> {
             Container(
               padding: EdgeInsets.symmetric(vertical: 10),
               child: buildTextField(
-                  'ชื่อรายการอาหาร', 'ชื่อรายการอาหาร', controller),
+                  'ชื่อรายการอาหาร', _currentMenu.name, controller),
             ),
             Container(
               padding: EdgeInsets.symmetric(vertical: 10),
-              child: buildTextField('รายละเอียด', 'รายละเอียด', controller),
+              child: buildTextField(
+                  'รายละเอียด', _currentMenu.description, controller),
             ),
             Container(
               padding: EdgeInsets.symmetric(vertical: 10),
-              child: buildPrice('ราคา', controller),
+              child: buildPrice(_currentMenu.price, controller),
             ),
           ],
         ),

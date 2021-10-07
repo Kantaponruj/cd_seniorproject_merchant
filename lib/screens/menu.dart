@@ -97,8 +97,9 @@ class _MenuPageState extends State<MenuPage> {
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            Navigator.of(context)
-                .push(MaterialPageRoute(builder: (context) => AddMenuPage()));
+            menuNotfier.currentMenu = null;
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => AddMenuPage(isUpdating: false)));
           },
           backgroundColor: CollectionsColors.orange,
           child: Icon(Icons.add),
@@ -151,17 +152,23 @@ class _MenuPageState extends State<MenuPage> {
         itemCount: menuNotfier.menuList.length,
         itemBuilder: (context, index) {
           // final item = items[index];
-          return menuData(menuNotfier.menuList[index]);
+          return menuData(menuNotfier.menuList[index], menuNotfier);
         },
       ),
     );
   }
 
-  Widget menuData(Menu menu) {
+  Widget menuData(Menu menu, MenuNotfier menuNotfier) {
     return Stack(
       children: [
         InkWell(
-          onTap: () {},
+          onTap: () {
+            menuNotfier.currentMenu = menu;
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                  builder: (context) => AddMenuPage(isUpdating: true)),
+            );
+          },
           child: Container(
             alignment: Alignment.centerLeft,
             width: 150,
