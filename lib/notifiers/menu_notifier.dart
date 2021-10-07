@@ -25,4 +25,9 @@ class MenuNotfier with ChangeNotifier {
     _menuList.add(menu);
     notifyListeners();
   }
+
+  deleteMenu(Menu menu) {
+    _menuList.removeWhere((_menu) => _menu.menuId == menu.menuId);
+    notifyListeners();
+  }
 }

@@ -84,3 +84,23 @@ _uploadMenu(Menu menu, bool isUpdating, Function menuUploaded, String storeId,
     menuUploaded(menu);
   }
 }
+
+deleteMenu(Menu menu, Function menuDeleted, String storeId) async {
+  if (menu.image != null) {
+    Reference storageRef =
+        await FirebaseStorage.instance.refFromURL(menu.image);
+
+    await storageRef.delete();
+
+    print('image deleted');
+  }
+
+  await FirebaseFirestore.instance
+      .collection('stores')
+      .doc(storeId)
+      .collection('menu')
+      .doc(menu.menuId)
+      .delete();
+
+  menuDeleted(menu);
+}

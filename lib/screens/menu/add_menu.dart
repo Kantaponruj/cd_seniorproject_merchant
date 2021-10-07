@@ -42,11 +42,17 @@ class _AddMenuPageState extends State<AddMenuPage> {
     super.initState();
   }
 
-  menuUploaded(Menu menu) {
+  _menuUploaded(Menu menu) {
     MenuNotfier menuNotfier = Provider.of<MenuNotfier>(context, listen: false);
     if (!widget.isUpdating) {
       menuNotfier.addMenu(menu);
     }
+    Navigator.pop(context);
+  }
+
+  _menuDeleted(Menu menu) {
+    MenuNotfier menuNotfier = Provider.of<MenuNotfier>(context, listen: false);
+    menuNotfier.deleteMenu(menu);
     Navigator.pop(context);
   }
 
@@ -57,13 +63,13 @@ class _AddMenuPageState extends State<AddMenuPage> {
     _formKey.currentState.save();
 
     _currentMenu.categoryFood = 'test';
-    _currentMenu.haveMenu = true;
+    _currentMenu.haveMenu = false;
 
     updateMenuAndImage(
       _currentMenu,
       widget.isUpdating,
       _imageFile,
-      menuUploaded,
+      _menuUploaded,
       storeNotifier.store.storeId,
     );
   }
@@ -286,11 +292,17 @@ class _AddMenuPageState extends State<AddMenuPage> {
   }
 
   Widget cardOption() {
+    StoreNotifier storeNotifier = Provider.of<StoreNotifier>(context);
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         TextButton(
-          onPressed: () {},
+          onPressed: () => deleteMenu(
+            _currentMenu,
+            _menuDeleted,
+            storeNotifier.store.storeId,
+          ),
           child: Text(
             'ลบรายการนี้',
             style: FontCollection.underlineButtonTextStyle,
