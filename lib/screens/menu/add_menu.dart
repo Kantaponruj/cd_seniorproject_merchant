@@ -22,20 +22,22 @@ class _AddMenuPageState extends State<AddMenuPage> {
       appBar: RoundedAppBar(
         appBarTittle: 'รายละเอียดรายการอาหาร',
       ),
-      body: Container(
-        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-        child: Column(
-          children: [
-            mainCard(),
-            Container(
-              padding: EdgeInsets.only(top: 20),
-              child: cardOption(),
-            ),
-            Container(
-              padding: EdgeInsets.only(top: 20),
-              child: StadiumButtonWidget(text: 'บันทึก', onClicked: () {}),
-            ),
-          ],
+      body: SingleChildScrollView(
+        child: Container(
+          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+          child: Column(
+            children: [
+              mainCard(),
+              Container(
+                padding: EdgeInsets.only(top: 20),
+                child: cardOption(),
+              ),
+              Container(
+                padding: EdgeInsets.only(top: 20),
+                child: StadiumButtonWidget(text: 'บันทึก', onClicked: () {}),
+              ),
+            ],
+          ),
         ),
       ),
     );

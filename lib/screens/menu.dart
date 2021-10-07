@@ -1,13 +1,13 @@
-import 'dart:async';
-
 import 'package:cs_senior_project_merchant/asset/color.dart';
 import 'package:cs_senior_project_merchant/asset/text_style.dart';
 import 'package:cs_senior_project_merchant/component/orderCard.dart';
 import 'package:cs_senior_project_merchant/component/roundAppBar.dart';
-import 'package:cs_senior_project_merchant/notifiers/order_notifier.dart';
+import 'package:cs_senior_project_merchant/models/menu.dart';
+import 'package:cs_senior_project_merchant/notifiers/menu_notifier.dart';
 import 'package:cs_senior_project_merchant/notifiers/store_notifier.dart';
 import 'package:cs_senior_project_merchant/screens/login.dart';
 import 'package:cs_senior_project_merchant/screens/menu/add_menu.dart';
+import 'package:cs_senior_project_merchant/services/menu_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -19,12 +19,30 @@ class MenuPage extends StatefulWidget {
 }
 
 class _MenuPageState extends State<MenuPage> {
-  List<Widget> _children;
   final controller = ScrollController();
+
+  List categories = [];
+
+  @override
+  void initState() {
+    MenuNotfier menuNotfier = Provider.of<MenuNotfier>(context, listen: false);
+    StoreNotifier storeNotifier =
+        Provider.of<StoreNotifier>(context, listen: false);
+    getMenu(menuNotfier, storeNotifier.store.storeId);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    StoreNotifier store = Provider.of<StoreNotifier>(context, listen: false);
+    StoreNotifier store = Provider.of<StoreNotifier>(context);
+    MenuNotfier menuNotfier = Provider.of<MenuNotfier>(context);
+
+    menuNotfier.menuList.forEach((menu) {
+      if (categories.contains(menu.categoryFood)) {
+      } else {
+        categories.add(menu.categoryFood);
+      }
+    });
 
     return SafeArea(
       child: Scaffold(
@@ -32,13 +50,16 @@ class _MenuPageState extends State<MenuPage> {
         appBar: RoundedAppBar(
           appBarTittle: 'เพิ่มรายการอาหารของคุณ',
           action: [
-            IconButton(onPressed: () {
-              store.signOut();
-              Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (context) => LoginPage()),
-                      (route) => false);
-            }, icon: Icon(Icons.logout),),
+            IconButton(
+              onPressed: () {
+                store.signOut();
+                Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context) => LoginPage()),
+                    (route) => false);
+              },
+              icon: Icon(Icons.logout),
+            ),
           ],
         ),
         body: Container(
@@ -55,15 +76,15 @@ class _MenuPageState extends State<MenuPage> {
                   child: Column(
                     children: [
                       Container(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 20, vertical: 20),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 20, vertical: 20),
                         child: ListView.builder(
                           shrinkWrap: true,
                           physics: NeverScrollableScrollPhysics(),
-                          itemCount: 2,
+                          itemCount: categories.length,
                           padding: EdgeInsets.zero,
                           itemBuilder: (context, index) {
-                            return menuCategories();
+                            return menuCategories(categories[index]);
                           },
                         ),
                       ),
@@ -76,7 +97,8 @@ class _MenuPageState extends State<MenuPage> {
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            Navigator.of(context).push(MaterialPageRoute(builder: (context) => AddMenuPage()));
+            Navigator.of(context)
+                .push(MaterialPageRoute(builder: (context) => AddMenuPage()));
           },
           backgroundColor: CollectionsColors.orange,
           child: Icon(Icons.add),
@@ -86,33 +108,33 @@ class _MenuPageState extends State<MenuPage> {
   }
 
   Widget buildHorizontalListView() => ListView.builder(
-    padding: EdgeInsets.all(16),
-    scrollDirection: Axis.horizontal,
-    physics: NeverScrollableScrollPhysics(),
-    // separatorBuilder: (context, index) => Divider(),
-    itemCount: 2,
-    itemBuilder: (context, index) {
-      return Container(
-        margin: EdgeInsets.only(right: 16),
-        child: Text(
-          'categories name',
-          style: FontCollection.topicBoldTextStyle,
-        ),
+        padding: EdgeInsets.all(16),
+        scrollDirection: Axis.horizontal,
+        physics: NeverScrollableScrollPhysics(),
+        // separatorBuilder: (context, index) => Divider(),
+        itemCount: categories.length,
+        itemBuilder: (context, index) {
+          return Container(
+            margin: EdgeInsets.only(right: 16),
+            child: Text(
+              categories[index],
+              style: FontCollection.topicBoldTextStyle,
+            ),
+          );
+        },
       );
-    },
-  );
 
-  Widget menuCategories() => BuildCard(
-    headerText: 'categories name',
-    child: Container(
-      margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-      child: gridView(),
-    ),
-    canEdit: false,
-  );
+  Widget menuCategories(String categoryName) => BuildCard(
+        headerText: categoryName,
+        child: Container(
+          margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+          child: gridView(),
+        ),
+        canEdit: false,
+      );
 
   Widget gridView() {
-    StoreNotifier storeNotifier = Provider.of<StoreNotifier>(context);
+    MenuNotfier menuNotfier = Provider.of<MenuNotfier>(context);
 
     return Container(
       child: GridView.builder(
@@ -126,21 +148,20 @@ class _MenuPageState extends State<MenuPage> {
         ),
         padding: EdgeInsets.fromLTRB(20, 20, 20, 0),
         controller: controller,
-        itemCount: 3,
+        itemCount: menuNotfier.menuList.length,
         itemBuilder: (context, index) {
           // final item = items[index];
-          return menuData(storeNotifier, index);
+          return menuData(menuNotfier.menuList[index]);
         },
       ),
     );
   }
 
-  Widget menuData(StoreNotifier storeNotifier, int index) {
+  Widget menuData(Menu menu) {
     return Stack(
       children: [
         InkWell(
-          onTap: () {
-          },
+          onTap: () {},
           child: Container(
             alignment: Alignment.centerLeft,
             width: 150,
@@ -150,7 +171,9 @@ class _MenuPageState extends State<MenuPage> {
                   height: 150,
                   child: SizedBox(
                     child: Image.network(
-                      'https://www.testingxperts.com/wp-content/uploads/2019/02/placeholder-img.jpg',
+                      menu.image != null
+                          ? menu.image
+                          : 'https://www.testingxperts.com/wp-content/uploads/2019/02/placeholder-img.jpg',
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -159,7 +182,7 @@ class _MenuPageState extends State<MenuPage> {
                   alignment: Alignment.centerLeft,
                   margin: EdgeInsets.only(top: 10),
                   child: Text(
-                    'name',
+                    menu.name,
                     textAlign: TextAlign.left,
                     style: FontCollection.bodyTextStyle,
                   ),
@@ -167,7 +190,7 @@ class _MenuPageState extends State<MenuPage> {
                 Container(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    'price' + ' บาท',
+                    menu.price + ' บาท',
                     textAlign: TextAlign.left,
                     style: FontCollection.bodyTextStyle,
                   ),
@@ -179,6 +202,4 @@ class _MenuPageState extends State<MenuPage> {
       ],
     );
   }
-
-
 }
