@@ -72,31 +72,34 @@ class BuildCard extends StatelessWidget {
                 children: [
                   (canEdit == true)
                       ? Container(
-                    margin: EdgeInsets.fromLTRB(20, 20, 20, 0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
+                          margin: EdgeInsets.fromLTRB(20, 20, 20, 0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Container(
+                                child: Text(
+                                  headerText,
+                                  style: FontCollection.topicBoldTextStyle,
+                                ),
+                              ),
+                              Container(
+                                child: EditButton(
+                                  onClicked: onClicked,
+                                  editText: editText,
+                                ),
+                              )
+                            ],
+                          ),
+                        )
+                      : Container(
+                          margin: EdgeInsets.fromLTRB(20, 20, 20, 0),
+                          alignment: Alignment.centerLeft,
                           child: Text(
                             headerText,
                             style: FontCollection.topicBoldTextStyle,
+                            textAlign: TextAlign.left,
                           ),
                         ),
-                        Container(
-                          child: EditButton(onClicked: onClicked,editText: editText,),
-                        )
-                      ],
-                    ),
-                  )
-                      : Container(
-                    margin: EdgeInsets.fromLTRB(20, 20, 20, 0),
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      headerText,
-                      style: FontCollection.topicBoldTextStyle,
-                      textAlign: TextAlign.left,
-                    ),
-                  ),
                   Container(
                     child: child,
                   ),
@@ -110,5 +113,18 @@ class BuildCard extends StatelessWidget {
   }
 }
 
+class BuildPlainCard extends StatelessWidget {
+  BuildPlainCard({Key key, this.child}) : super(key: key);
 
+  final Widget child;
 
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: child,
+    );
+  }
+}

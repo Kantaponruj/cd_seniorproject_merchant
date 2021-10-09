@@ -128,3 +128,38 @@ class _BuildPasswordFieldState extends State<BuildPasswordField> {
 
   void togglePasswordVisibility() => setState(() => isHidden = !isHidden);
 }
+
+class BuildPlainTextField extends StatefulWidget {
+  BuildPlainTextField({
+    Key key,
+    this.textEditingController,
+    this.hintText,
+    this.initialValue,
+    this.errorText,
+    @required this.validator,
+  }) : super(key: key);
+
+  final TextEditingController textEditingController;
+  final String hintText;
+  final String initialValue;
+  final String errorText;
+  final Function(String) validator;
+
+  @override
+  _BuildPlainTextFieldState createState() => _BuildPlainTextFieldState();
+}
+
+class _BuildPlainTextFieldState extends State<BuildPlainTextField> {
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      controller: widget.textEditingController,
+      initialValue: widget.initialValue,
+      decoration: InputDecoration(
+        hintText: widget.hintText,
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+      ),
+      onSaved: widget.validator,
+    );
+  }
+}
