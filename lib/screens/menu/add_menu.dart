@@ -6,6 +6,7 @@ import 'package:cs_senior_project_merchant/component/roundAppBar.dart';
 import 'package:cs_senior_project_merchant/models/menu.dart';
 import 'package:cs_senior_project_merchant/notifiers/menu_notifier.dart';
 import 'package:cs_senior_project_merchant/notifiers/store_notifier.dart';
+import 'package:cs_senior_project_merchant/screens/menu.dart';
 import 'package:cs_senior_project_merchant/services/menu_service.dart';
 import 'package:cs_senior_project_merchant/widgets/button_widget.dart';
 import 'package:flutter/material.dart';
@@ -47,13 +48,13 @@ class _AddMenuPageState extends State<AddMenuPage> {
     if (!widget.isUpdating) {
       menuNotfier.addMenu(menu);
     }
-    Navigator.pop(context);
+    Navigator.pushNamedAndRemoveUntil(context, '/menu', (route) => false);
   }
 
   _menuDeleted(Menu menu) {
     MenuNotfier menuNotfier = Provider.of<MenuNotfier>(context, listen: false);
     menuNotfier.deleteMenu(menu);
-    Navigator.pop(context);
+    Navigator.pushNamedAndRemoveUntil(context, '/menu', (route) => false);
   }
 
   handleSaveMenu() {

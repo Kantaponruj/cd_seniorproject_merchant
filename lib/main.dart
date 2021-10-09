@@ -7,6 +7,7 @@ import 'package:cs_senior_project_merchant/notifiers/menu_notifier.dart';
 import 'package:cs_senior_project_merchant/notifiers/order_notifier.dart';
 import 'package:cs_senior_project_merchant/notifiers/store_notifier.dart';
 import 'package:cs_senior_project_merchant/screens/login.dart';
+import 'package:cs_senior_project_merchant/screens/menu.dart';
 import 'package:cs_senior_project_merchant/widgets/loading_widget.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -42,6 +43,7 @@ void main() async {
         // '/': (context) => BottomBar(),
         // '/address': (context) => AddressPage(),
         // '/openingHours': (context) => OpeningHoursPage(),
+        '/menu': (context) => MenuPage(),
       },
     ),
   ));
