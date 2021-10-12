@@ -1,6 +1,7 @@
 import 'package:cs_senior_project_merchant/asset/color.dart';
 import 'package:cs_senior_project_merchant/asset/text_style.dart';
 import 'package:cs_senior_project_merchant/component/storeCard.dart';
+import 'package:cs_senior_project_merchant/component/switch.dart';
 import 'package:cs_senior_project_merchant/notifiers/dateTime_notifier.dart';
 import 'package:cs_senior_project_merchant/notifiers/store_notifier.dart';
 import 'package:cs_senior_project_merchant/screens/store/address.dart';
@@ -451,16 +452,10 @@ class _StorePageState extends State<StorePage> {
               ),
               SizedBox(
                 width: 100,
-                child: FlutterSwitch(
+                child: BuildSwitch(
                   width: 100,
-                  showOnOff: true,
-                  activeTextColor: CollectionsColors.white,
-                  activeColor: CollectionsColors.orange,
-                  inactiveTextColor: CollectionsColors.white,
                   activeText: 'เปิด',
                   inactiveText: 'ปิด',
-                  activeTextFontWeight: FontWeight.w400,
-                  inactiveTextFontWeight: FontWeight.w400,
                   value: status,
                   onToggle: handleToggle,
                 ),

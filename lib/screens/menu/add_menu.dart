@@ -2,8 +2,10 @@ import 'dart:io';
 
 import 'package:cs_senior_project_merchant/asset/color.dart';
 import 'package:cs_senior_project_merchant/asset/text_style.dart';
+import 'package:cs_senior_project_merchant/component/dropdown.dart';
 import 'package:cs_senior_project_merchant/component/orderCard.dart';
 import 'package:cs_senior_project_merchant/component/roundAppBar.dart';
+import 'package:cs_senior_project_merchant/component/switch.dart';
 import 'package:cs_senior_project_merchant/component/textformfield.dart';
 import 'package:cs_senior_project_merchant/models/menu.dart';
 import 'package:cs_senior_project_merchant/notifiers/menu_notifier.dart';
@@ -93,6 +95,9 @@ class _AddMenuPageState extends State<AddMenuPage> {
     List<Widget> _addOption =
         new List.generate(_count, (int i) => buildAddOption());
 
+    List<Widget> _addNewLists =
+        new List.generate(_count2, (int i) => addList());
+
     return Scaffold(
       appBar: RoundedAppBar(
         appBarTittle: 'รายละเอียดรายการอาหาร',
@@ -107,15 +112,15 @@ class _AddMenuPageState extends State<AddMenuPage> {
                 mainCard(),
                 Container(
                   padding: EdgeInsets.only(top: 20),
-                  child: cardOption(),
-                ),
-                Container(
-                  padding: EdgeInsets.only(top: 20),
                   child: new ListView(
                     children: _addOption,
                     physics: NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
                   ),
+                ),
+                Container(
+                  padding: EdgeInsets.only(top: 20),
+                  child: cardOption(),
                 ),
                 Container(
                   padding: EdgeInsets.only(top: 20),
@@ -157,14 +162,7 @@ class _AddMenuPageState extends State<AddMenuPage> {
           children: [
             Container(
               alignment: Alignment.topRight,
-              child: buildSwitch(
-                (val) {
-                  setState(
-                    () {},
-                  );
-                },
-                _currentMenu.haveMenu ?? status,
-              ),
+              child: buildSwitch(),
             ),
             Container(
               alignment: Alignment.topLeft,
@@ -214,27 +212,39 @@ class _AddMenuPageState extends State<AddMenuPage> {
                 },
               ),
             ),
+            Container(
+              padding: EdgeInsets.symmetric(vertical: 10),
+              child: buildDropdown(
+                'หมวดหมู่',
+              ),
+            ),
+            Container(
+              alignment: Alignment.topRight,
+              padding: EdgeInsets.symmetric(vertical: 10),
+              child: buildButton(
+                'แก้ไขหมวดหมู่',
+                () {},
+              ),
+            ),
           ],
         ),
       ),
     );
   }
 
-  Widget buildSwitch(Function handleToggle, bool status) {
+  Widget buildSwitch() {
     return SizedBox(
-      width: 100,
-      child: FlutterSwitch(
+      width: 80,
+      child: BuildSwitch(
         width: 100,
-        showOnOff: true,
-        activeTextColor: CollectionsColors.white,
-        activeColor: CollectionsColors.orange,
-        inactiveTextColor: CollectionsColors.white,
         activeText: 'เปิด',
         inactiveText: 'ปิด',
-        activeTextFontWeight: FontWeight.w400,
-        inactiveTextFontWeight: FontWeight.w400,
-        value: status,
-        onToggle: handleToggle,
+        value: _currentMenu.haveMenu ?? status,
+        onToggle: (val) {
+          setState(
+            () {},
+          );
+        },
       ),
     );
   }
@@ -261,6 +271,35 @@ class _AddMenuPageState extends State<AddMenuPage> {
                   OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
             ),
             onSaved: onSaved,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget buildDropdown(
+    String headerText,
+  ) {
+    return Container(
+      child: Column(
+        children: [
+          Container(
+            alignment: Alignment.centerLeft,
+            margin: EdgeInsets.only(bottom: 10),
+            child: Text(
+              headerText,
+              style: FontCollection.bodyTextStyle,
+            ),
+          ),
+          BuildDropdown(
+            width: MediaQuery.of(context).size.width,
+            dropdownValues: catalog,
+            hintText: 'กรุณาเลือกหมวดหมู่',
+            onChanged: (String value) {
+              setState(() {
+                _chosenValue = value;
+              });
+            },
           ),
         ],
       ),
@@ -313,17 +352,16 @@ class _AddMenuPageState extends State<AddMenuPage> {
             style: FontCollection.bodyTextStyle,
           ),
         ),
-        SizedBox(
-            width: 100,
-            child: buildDropDown(
-              number,
-              'จำนวน',
-              (String value) {
-                setState(() {
-                  _chosenValue = value;
-                });
-              },
-            )),
+        Container(
+            child: BuildDropdown(
+          dropdownValues: number,
+          hintText: 'จำนวน',
+          onChanged: (String value) {
+            setState(() {
+              _chosenValue = value;
+            });
+          },
+        )),
         Container(
           alignment: Alignment.centerLeft,
           margin: EdgeInsets.only(left: 20),
@@ -341,6 +379,12 @@ class _AddMenuPageState extends State<AddMenuPage> {
   void _addNewOption() {
     setState(() {
       _count = _count + 1;
+    });
+  }
+
+  void _removeOption() {
+    setState(() {
+      _count = _count - 1;
     });
   }
 
@@ -392,7 +436,16 @@ class _AddMenuPageState extends State<AddMenuPage> {
     });
   }
 
+  void _removeList() {
+    setState(() {
+      _count2 = _count2 - 1;
+    });
+  }
+
   Widget buildAddOption() {
+    List<Widget> _addNewLists =
+        new List.generate(_count2, (int i) => addList());
+
     return new BuildPlainCard(
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
@@ -401,10 +454,10 @@ class _AddMenuPageState extends State<AddMenuPage> {
             Container(
               child: Row(
                 children: [
-                  buildDropDown(
-                    type,
-                    'กรุณาเลือกประเภท',
-                    (String value) {
+                  BuildDropdown(
+                    dropdownValues: type,
+                    hintText: 'กรุณาเลือกประเภท',
+                    onChanged: (String value) {
                       setState(() {
                         _chosenValue = value;
                       });
@@ -414,11 +467,11 @@ class _AddMenuPageState extends State<AddMenuPage> {
               ),
             ),
             Container(
-              margin: EdgeInsets.only(top: 10),
+              margin: EdgeInsets.only(top: 20),
               child: buildRowDropdown(),
             ),
             Container(
-              margin: EdgeInsets.only(top: 10),
+              margin: EdgeInsets.only(top: 20),
               child: buildTextField(
                 'ชื่อตัวเลือก',
                 ' ',
@@ -442,14 +495,14 @@ class _AddMenuPageState extends State<AddMenuPage> {
               child: Row(
                 children: [
                   Expanded(
-                    flex: 5,
+                    flex: 6,
                     child: Text(
                       'รายการเพิ่มเติม',
                       style: FontCollection.smallBodyTextStyle,
                     ),
                   ),
                   Expanded(
-                    flex: 7,
+                    flex: 6,
                     child: Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
@@ -458,29 +511,33 @@ class _AddMenuPageState extends State<AddMenuPage> {
                       ),
                     ),
                   ),
-                  // Container(
-                  //   padding: EdgeInsets.only(top: 20),
-                  //   child: new ListView(
-                  //     children: _addOption,
-                  //     physics: NeverScrollableScrollPhysics(),
-                  //     shrinkWrap: true,
-                  //   ),
-                  // ),
                 ],
+              ),
+            ),
+            Container(
+              padding: EdgeInsets.only(top: 20),
+              child: new ListView(
+                children: _addNewLists,
+                physics: NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
               ),
             ),
             Container(
               alignment: Alignment.centerLeft,
               child: EditButton(
                 editText: 'เพิ่มตัวเลือก',
-                onClicked: () {},
+                onClicked: () {
+                  _addNewList();
+                },
               ),
             ),
             Container(
               alignment: Alignment.bottomRight,
               child: EditButton(
                 editText: 'ลบตัวเลือกเพิ่มเติมนี้',
-                onClicked: () {},
+                onClicked: () {
+                  _removeOption();
+                },
               ),
             ),
           ],
@@ -492,6 +549,11 @@ class _AddMenuPageState extends State<AddMenuPage> {
   String _chosenValue;
 
   final List<String> type = ['ตัวเลือกเดียว', 'หลายตัวเลือก'];
+  final List<String> catalog = [
+    'โตเกียว',
+    'โตเกียวยักษ์',
+    'อื่น ๆ',
+  ];
   final List<String> number = [
     '1',
     '2',
@@ -505,46 +567,63 @@ class _AddMenuPageState extends State<AddMenuPage> {
     '10',
   ];
 
-  Widget buildDropDown(
-      List<String> items, String hintText, Function(String) onChanged) {
-    return DropdownButton<String>(
-      value: _chosenValue,
-      items: items.map<DropdownMenuItem<String>>((String value) {
-        return DropdownMenuItem<String>(
-            value: value,
-            child: Text(
-              value,
-              style: FontCollection.smallBodyTextStyle,
-            ));
-      }).toList(),
-      hint: Text(
-        hintText,
-        style: FontCollection.smallBodyTextStyle,
-      ),
-      onChanged: onChanged,
-    );
-  }
+  bool testSwitch = false;
 
-  Widget addList(
-    Function(String) name,
-  ) {
-    return Row(
-      children: [
-        Expanded(
-          flex: 5,
-          child: BuildPlainTextField(
-            initialValue: '',
-            validator: name,
+  Widget addList() {
+    return Container(
+      padding: EdgeInsets.only(bottom: 10),
+      child: Row(
+        children: [
+          Expanded(
+            flex: 6,
+            child: Padding(
+              padding: EdgeInsets.only(right: 5),
+              child: BuildPlainTextField(
+                initialValue: '',
+                validator: (String value) {
+                  _currentMenu.name = value;
+                },
+              ),
+            ),
           ),
-        ),
-        Expanded(
-          flex: 2,
-          child: BuildPlainTextField(
-            initialValue: '',
-            validator: name,
+          Expanded(
+            flex: 2,
+            child: BuildPlainTextField(
+              initialValue: '',
+              validator: (String value) {
+                _currentMenu.name = value;
+              },
+            ),
           ),
-        ),
-      ],
+          Expanded(
+            flex: 3,
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+              child: BuildSwitch(
+                width: 80,
+                activeText: 'มี',
+                inactiveText: 'หมด',
+                value: testSwitch,
+                onToggle: (val) {
+                  setState() {}
+                },
+              ),
+            ),
+          ),
+          Expanded(
+            flex: 1,
+            child: IconButton(
+              onPressed: () {
+                _removeList();
+              },
+              icon: Icon(
+                Icons.delete,
+                color: Colors.black,
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
