@@ -223,7 +223,14 @@ class _AddMenuPageState extends State<AddMenuPage> {
               padding: EdgeInsets.symmetric(vertical: 10),
               child: buildButton(
                 'แก้ไขหมวดหมู่',
-                () {},
+                () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return buildAlertDialog();
+                    },
+                  );
+                },
               ),
             ),
           ],
@@ -419,6 +426,9 @@ class _AddMenuPageState extends State<AddMenuPage> {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
         primary: Theme.of(context).buttonColor,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10)
+        ),
       ),
       onPressed: handleClick,
       child: Text(
@@ -619,6 +629,81 @@ class _AddMenuPageState extends State<AddMenuPage> {
               icon: Icon(
                 Icons.delete,
                 color: Colors.black,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget buildAlertDialog() {
+    return AlertDialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(30),
+      ),
+      title: Text(
+        'หมวดหมู่อาหาร',
+        style: FontCollection.bodyTextStyle,
+      ),
+      content: Container(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height / 2,
+        child: Column(
+          children: [
+            ListView.builder(
+              itemCount: 2,
+              shrinkWrap: true,
+              itemBuilder: (context, index) {
+                return catalogLists();
+              },
+            ),
+            Container(
+              padding: EdgeInsets.only(bottom: 10),
+              alignment: Alignment.topLeft,
+              child: TextButton(
+                onPressed: () {},
+                child: Text('เพิ่มหมวดหมู่', style: FontCollection.underlineButtonTextStyle,),
+              ),
+            ),
+            Container(
+              alignment: Alignment.topRight,
+              child: buildButton('บันทึก', () { }),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  TextEditingController test;
+
+  Widget catalogLists() {
+    return Container(
+      child: Row(
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          Expanded(
+            flex: 10,
+            child: Padding(
+              padding: EdgeInsets.only(bottom: 20),
+              child: BuildPlainTextField(
+                validator: (value) {},
+                initialValue: 'โตเกียว',
+                textEditingController: test,
+              ),
+            ),
+          ),
+          Expanded(
+            flex: 2,
+            child: Container(
+              alignment: Alignment.topCenter,
+              child: InkWell(
+                onTap: () {},
+                child: Icon(
+                    Icons.delete,
+                    color: Colors.black,
+                ),
               ),
             ),
           ),
