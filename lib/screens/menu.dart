@@ -21,7 +21,7 @@ class MenuPage extends StatefulWidget {
 class _MenuPageState extends State<MenuPage> {
   final controller = ScrollController();
 
-  List categories = [];
+  List<String> categories = [];
 
   @override
   void initState() {
@@ -99,7 +99,13 @@ class _MenuPageState extends State<MenuPage> {
           onPressed: () {
             menuNotfier.currentMenu = null;
             Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => AddMenuPage(isUpdating: false)));
+              builder: (context) => AddMenuPage(
+                isUpdating: false,
+                categories: menuNotfier.menuList.length == 0
+                    ? ['กรุณาเลือกหมวดหมู่']
+                    : categories,
+              ),
+            ));
           },
           backgroundColor: CollectionsColors.orange,
           child: Icon(Icons.add),

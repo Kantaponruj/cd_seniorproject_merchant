@@ -3,16 +3,18 @@ import 'package:cs_senior_project_merchant/asset/text_style.dart';
 import 'package:flutter/material.dart';
 
 class BuildDropdown extends StatelessWidget {
-  BuildDropdown(
-      {Key key,
-      @required this.dropdownValues,
-      @required this.onChanged,
-      this.hintText,
-      this.width,})
-      : super(key: key);
+  BuildDropdown({
+    Key key,
+    @required this.dropdownValues,
+    @required this.onChanged,
+    this.value,
+    this.hintText,
+    this.width,
+  }) : super(key: key);
 
   final List<String> dropdownValues;
   final Function(String) onChanged;
+  final String value;
   final String hintText;
   final double width;
 
@@ -35,11 +37,11 @@ class BuildDropdown extends StatelessWidget {
                   ))
               .toList(),
           onChanged: onChanged,
-          value: dropdownValues.first,
-          hint: Text(
-            hintText,
-            style: FontCollection.smallBodyTextStyle,
-          ),
+          value: value,
+          // hint: Text(
+          //   hintText,
+          //   style: FontCollection.smallBodyTextStyle,
+          // ),
         ),
       ),
     );

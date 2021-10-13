@@ -16,8 +16,10 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 class AddMenuPage extends StatefulWidget {
-  AddMenuPage({Key key, @required this.isUpdating}) : super(key: key);
+  AddMenuPage({Key key, @required this.isUpdating, this.categories})
+      : super(key: key);
   final bool isUpdating;
+  final List<String> categories;
 
   @override
   _AddMenuPageState createState() => _AddMenuPageState();
@@ -32,6 +34,8 @@ class _AddMenuPageState extends State<AddMenuPage> {
   String _imageUrl;
   File _imageFile;
 
+  String _selectedCategory;
+
   @override
   void initState() {
     MenuNotfier menuNotfier = Provider.of<MenuNotfier>(context, listen: false);
@@ -41,6 +45,8 @@ class _AddMenuPageState extends State<AddMenuPage> {
       _currentMenu = Menu();
     }
     _imageUrl = _currentMenu.image;
+
+    _selectedCategory = widget.categories.first;
     super.initState();
   }
 
@@ -286,9 +292,7 @@ class _AddMenuPageState extends State<AddMenuPage> {
     );
   }
 
-  Widget buildDropdown(
-    String headerText,
-  ) {
+  Widget buildDropdown(String headerText) {
     return Container(
       child: Column(
         children: [
@@ -302,13 +306,14 @@ class _AddMenuPageState extends State<AddMenuPage> {
           ),
           BuildDropdown(
             width: MediaQuery.of(context).size.width,
-            dropdownValues: catalog,
-            hintText: 'กรุณาเลือกหมวดหมู่',
+            dropdownValues: widget.categories,
+            // hintText: 'กรุณาเลือกหมวดหมู่',
             onChanged: (String value) {
               setState(() {
-                _chosenValue = value;
+                _selectedCategory = value;
               });
             },
+            value: _selectedCategory,
           ),
         ],
       ),
@@ -559,11 +564,6 @@ class _AddMenuPageState extends State<AddMenuPage> {
   String _chosenValue;
 
   final List<String> type = ['ตัวเลือกเดียว', 'หลายตัวเลือก'];
-  final List<String> catalog = [
-    'โตเกียว',
-    'โตเกียวยักษ์',
-    'อื่น ๆ',
-  ];
   final List<String> number = [
     '1',
     '2',
@@ -652,10 +652,10 @@ class _AddMenuPageState extends State<AddMenuPage> {
         child: Column(
           children: [
             ListView.builder(
-              itemCount: 2,
+              itemCount: widget.categories.length,
               shrinkWrap: true,
               itemBuilder: (context, index) {
-                return catalogLists();
+                return catalogLists(widget.categories[index]);
               },
             ),
             Container(
@@ -681,7 +681,7 @@ class _AddMenuPageState extends State<AddMenuPage> {
 
   TextEditingController test;
 
-  Widget catalogLists() {
+  Widget catalogLists(String menu) {
     return Container(
       child: Row(
         mainAxisSize: MainAxisSize.max,
@@ -692,7 +692,7 @@ class _AddMenuPageState extends State<AddMenuPage> {
               padding: EdgeInsets.only(bottom: 20),
               child: BuildPlainTextField(
                 validator: (value) {},
-                initialValue: 'โตเกียว',
+                initialValue: menu,
                 textEditingController: test,
               ),
             ),
