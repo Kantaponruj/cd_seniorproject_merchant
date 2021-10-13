@@ -16,10 +16,15 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 class AddMenuPage extends StatefulWidget {
-  AddMenuPage({Key key, @required this.isUpdating, this.categories})
+  AddMenuPage(
+      {Key key,
+      @required this.isUpdating,
+      this.categories,
+      this.currentCategory})
       : super(key: key);
   final bool isUpdating;
   final List<String> categories;
+  final String currentCategory;
 
   @override
   _AddMenuPageState createState() => _AddMenuPageState();
@@ -41,12 +46,12 @@ class _AddMenuPageState extends State<AddMenuPage> {
     MenuNotfier menuNotfier = Provider.of<MenuNotfier>(context, listen: false);
     if (menuNotfier.currentMenu != null) {
       _currentMenu = menuNotfier.currentMenu;
+      _selectedCategory = menuNotfier.currentMenu.categoryFood;
     } else {
       _currentMenu = Menu();
+      _selectedCategory = widget.categories.first;
     }
     _imageUrl = _currentMenu.image;
-
-    _selectedCategory = widget.categories.first;
     super.initState();
   }
 
@@ -70,8 +75,7 @@ class _AddMenuPageState extends State<AddMenuPage> {
 
     _formKey.currentState.save();
 
-    _currentMenu.categoryFood = 'test';
-    _currentMenu.haveMenu = false;
+    _currentMenu.categoryFood = _selectedCategory;
 
     updateMenuAndImage(
       _currentMenu,
@@ -491,7 +495,7 @@ class _AddMenuPageState extends State<AddMenuPage> {
                 'ชื่อตัวเลือก',
                 ' ',
                 (String value) {
-                  _currentMenu.name = value;
+                  // _currentMenu.name = value;
                 },
               ),
             ),
@@ -501,7 +505,7 @@ class _AddMenuPageState extends State<AddMenuPage> {
                 'รายละเอียด',
                 ' ',
                 (String value) {
-                  _currentMenu.name = value;
+                  // _currentMenu.name = value;
                 },
               ),
             ),
@@ -591,7 +595,7 @@ class _AddMenuPageState extends State<AddMenuPage> {
               child: BuildPlainTextField(
                 initialValue: '',
                 validator: (String value) {
-                  _currentMenu.name = value;
+                  // _currentMenu.name = value;
                 },
               ),
             ),
@@ -601,7 +605,7 @@ class _AddMenuPageState extends State<AddMenuPage> {
             child: BuildPlainTextField(
               initialValue: '',
               validator: (String value) {
-                _currentMenu.name = value;
+                // _currentMenu.name = value;
               },
             ),
           ),

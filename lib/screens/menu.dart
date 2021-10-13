@@ -172,7 +172,11 @@ class _MenuPageState extends State<MenuPage> {
             menuNotfier.currentMenu = menu;
             Navigator.of(context).push(
               MaterialPageRoute(
-                  builder: (context) => AddMenuPage(isUpdating: true)),
+                builder: (context) => AddMenuPage(
+                  isUpdating: true,
+                  categories: categories,
+                ),
+              ),
             );
           },
           child: Container(
