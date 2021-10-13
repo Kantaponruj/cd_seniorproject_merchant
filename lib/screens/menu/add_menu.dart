@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:cs_senior_project_merchant/asset/color.dart';
 import 'package:cs_senior_project_merchant/asset/text_style.dart';
 import 'package:cs_senior_project_merchant/component/dropdown.dart';
 import 'package:cs_senior_project_merchant/component/orderCard.dart';
@@ -10,11 +9,9 @@ import 'package:cs_senior_project_merchant/component/textformfield.dart';
 import 'package:cs_senior_project_merchant/models/menu.dart';
 import 'package:cs_senior_project_merchant/notifiers/menu_notifier.dart';
 import 'package:cs_senior_project_merchant/notifiers/store_notifier.dart';
-import 'package:cs_senior_project_merchant/screens/menu.dart';
 import 'package:cs_senior_project_merchant/services/menu_service.dart';
 import 'package:cs_senior_project_merchant/widgets/button_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_switch/flutter_switch.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
@@ -240,6 +237,8 @@ class _AddMenuPageState extends State<AddMenuPage> {
   }
 
   Widget buildSwitch() {
+    StoreNotifier store = Provider.of<StoreNotifier>(context);
+
     return SizedBox(
       width: 80,
       child: BuildSwitch(
@@ -249,7 +248,10 @@ class _AddMenuPageState extends State<AddMenuPage> {
         value: _currentMenu.haveMenu ?? status,
         onToggle: (val) {
           setState(
-            () {},
+            () {
+              _currentMenu.haveMenu = val;
+              updateMenuStatus(store.store.storeId, _currentMenu.menuId, val);
+            },
           );
         },
       ),
@@ -426,9 +428,7 @@ class _AddMenuPageState extends State<AddMenuPage> {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
         primary: Theme.of(context).buttonColor,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10)
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       ),
       onPressed: handleClick,
       child: Text(
@@ -663,12 +663,15 @@ class _AddMenuPageState extends State<AddMenuPage> {
               alignment: Alignment.topLeft,
               child: TextButton(
                 onPressed: () {},
-                child: Text('เพิ่มหมวดหมู่', style: FontCollection.underlineButtonTextStyle,),
+                child: Text(
+                  'เพิ่มหมวดหมู่',
+                  style: FontCollection.underlineButtonTextStyle,
+                ),
               ),
             ),
             Container(
               alignment: Alignment.topRight,
-              child: buildButton('บันทึก', () { }),
+              child: buildButton('บันทึก', () {}),
             ),
           ],
         ),
@@ -701,8 +704,8 @@ class _AddMenuPageState extends State<AddMenuPage> {
               child: InkWell(
                 onTap: () {},
                 child: Icon(
-                    Icons.delete,
-                    color: Colors.black,
+                  Icons.delete,
+                  color: Colors.black,
                 ),
               ),
             ),

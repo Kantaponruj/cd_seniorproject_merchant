@@ -104,3 +104,12 @@ deleteMenu(Menu menu, Function menuDeleted, String storeId) async {
 
   menuDeleted(menu);
 }
+
+updateMenuStatus(String storeId, String menuId, bool status) {
+  firebaseFirestore
+      .collection('stores')
+      .doc(storeId)
+      .collection('menu')
+      .doc(menuId)
+      .update({'haveMenu': status});
+}
