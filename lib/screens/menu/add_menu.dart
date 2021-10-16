@@ -102,9 +102,6 @@ class _AddMenuPageState extends State<AddMenuPage> {
     List<Widget> _addOption =
         new List.generate(_count, (int i) => buildAddOption());
 
-    List<Widget> _addNewLists =
-        new List.generate(_count2, (int i) => addList());
-
     return Scaffold(
       appBar: RoundedAppBar(
         appBarTittle: 'รายละเอียดรายการอาหาร',
@@ -447,24 +444,7 @@ class _AddMenuPageState extends State<AddMenuPage> {
     );
   }
 
-  int _count2 = 1;
-
-  void _addNewList() {
-    setState(() {
-      _count2 = _count2 + 1;
-    });
-  }
-
-  void _removeList() {
-    setState(() {
-      _count2 = _count2 - 1;
-    });
-  }
-
   Widget buildAddOption() {
-    List<Widget> _addNewLists =
-        new List.generate(_count2, (int i) => addList());
-
     return new BuildPlainCard(
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
@@ -535,19 +515,17 @@ class _AddMenuPageState extends State<AddMenuPage> {
             ),
             Container(
               padding: EdgeInsets.only(top: 20),
-              child: new ListView(
-                children: _addNewLists,
-                physics: NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-              ),
+              child: addList(),
             ),
+            ///TO-DO Stream builder
+            // Container(
+            //   child: showList(),
+            // ),
             Container(
               alignment: Alignment.centerLeft,
               child: EditButton(
                 editText: 'เพิ่มตัวเลือก',
-                onClicked: () {
-                  _addNewList();
-                },
+                onClicked: () {},
               ),
             ),
             Container(
@@ -582,6 +560,39 @@ class _AddMenuPageState extends State<AddMenuPage> {
   ];
 
   bool testSwitch = false;
+
+  Widget showList() {
+    return Container(
+      child: Row(
+        children: [
+          Expanded(
+            flex: 6,
+            child: Text(
+              'รายการเพิ่มเติม',
+              style: FontCollection.smallBodyTextStyle,
+            ),
+          ),
+          Expanded(
+            flex: 3,
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                'ราคา',
+                style: FontCollection.smallBodyTextStyle,
+              ),
+            ),
+          ),
+          Expanded(
+            flex: 3,
+            child: IconButton(
+              onPressed: () {},
+              icon: Icon(Icons.edit),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 
   Widget addList() {
     return Container(
@@ -627,9 +638,7 @@ class _AddMenuPageState extends State<AddMenuPage> {
           Expanded(
             flex: 1,
             child: IconButton(
-              onPressed: () {
-                _removeList();
-              },
+              onPressed: () {},
               icon: Icon(
                 Icons.delete,
                 color: Colors.black,

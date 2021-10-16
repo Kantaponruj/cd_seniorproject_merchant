@@ -208,7 +208,7 @@ class _StorePageState extends State<StorePage> {
                               ),
                             ),
                             Container(
-                              margin: EdgeInsets.fromLTRB(40, 20, 40, 0),
+                              margin: EdgeInsets.fromLTRB(10, 20, 10, 0),
                               child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
