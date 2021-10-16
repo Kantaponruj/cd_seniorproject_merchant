@@ -456,15 +456,21 @@ class _AddMenuPageState extends State<AddMenuPage> {
         buildButton(
           'เพิ่มตัวเลือกเพิ่มเติม',
           () {
-            _topping.type = _selectedType;
-            _topping.selectedNumberTopping = _selectedNumberTopping;
-            _topping.subTopping = _subtoppingList;
-
             _formKey.currentState.save();
 
-            _toppingList.add(_topping);
+            _toppingList.add(Topping(
+              type: _selectedType,
+              selectedNumberTopping: _selectedNumberTopping,
+              topic: _topping.topic,
+              detail: _topping.detail,
+              subTopping: _subtoppingList,
+            ));
             print(_toppingList);
+
             _addNewOption();
+            _selectedType = type.first;
+            _selectedNumberTopping = number.first;
+            _topping = Topping();
           },
         ),
       ],
