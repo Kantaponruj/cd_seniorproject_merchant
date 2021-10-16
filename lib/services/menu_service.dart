@@ -85,6 +85,24 @@ _uploadMenu(Menu menu, bool isUpdating, Function menuUploaded, String storeId,
   }
 }
 
+// _uploadTopping(
+//     Topping topping, String storeId, String menuId, bool isUpdating) async {
+//   CollectionReference toppingRef = firebaseFirestore
+//       .collection('stores')
+//       .doc(storeId)
+//       .collection('menu')
+//       .doc(menuId)
+//       .collection('topping');
+
+//   if (isUpdating) {
+//     await toppingRef.doc(topping.toppingId).update(topping.toMap());
+//   } else {
+//     DocumentReference documentRef = await toppingRef.add(topping.toMap());
+//     topping.toppingId = documentRef.id;
+//     await documentRef.set(topping.toMap(), SetOptions(merge: true));
+//   }
+// }
+
 deleteMenu(Menu menu, Function menuDeleted, String storeId) async {
   if (menu.image != null) {
     Reference storageRef =

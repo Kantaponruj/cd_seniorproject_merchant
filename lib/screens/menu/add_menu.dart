@@ -40,6 +40,31 @@ class _AddMenuPageState extends State<AddMenuPage> {
   File _imageFile;
 
   String _selectedCategory;
+  String _selectedType;
+  String _selectedNumberTopping;
+
+  List<Topping> _toppingList = [];
+  Topping _topping;
+
+  List<SubTopping> _subtoppingList = [];
+  SubTopping _subTopping;
+  bool statusSubTopping = false;
+  TextEditingController subtoppingName = new TextEditingController();
+  TextEditingController subtoppingPrice = new TextEditingController();
+
+  final List<String> type = ['ตัวเลือกเดียว', 'หลายตัวเลือก'];
+  final List<String> number = [
+    '1',
+    '2',
+    '3',
+    '4',
+    '5',
+    '6',
+    '7',
+    '8',
+    '9',
+    '10',
+  ];
 
   @override
   void initState() {
@@ -49,9 +74,14 @@ class _AddMenuPageState extends State<AddMenuPage> {
       _selectedCategory = menuNotfier.currentMenu.categoryFood;
     } else {
       _currentMenu = Menu();
+      _topping = Topping();
+      _subTopping = SubTopping();
       _selectedCategory = widget.categories.first;
+      _selectedType = type.first;
+      _selectedNumberTopping = number.first;
     }
     _imageUrl = _currentMenu.image;
+    _subTopping.haveSubTopping = statusSubTopping;
     super.initState();
   }
 
@@ -76,6 +106,7 @@ class _AddMenuPageState extends State<AddMenuPage> {
     _formKey.currentState.save();
 
     _currentMenu.categoryFood = _selectedCategory;
+    _currentMenu.haveMenu = status;
 
     updateMenuAndImage(
       _currentMenu,
@@ -191,6 +222,7 @@ class _AddMenuPageState extends State<AddMenuPage> {
               padding: EdgeInsets.symmetric(vertical: 10),
               child: buildTextField(
                 'ชื่อรายการอาหาร',
+                null,
                 _currentMenu.name,
                 (String value) {
                   _currentMenu.name = value;
@@ -201,6 +233,7 @@ class _AddMenuPageState extends State<AddMenuPage> {
               padding: EdgeInsets.symmetric(vertical: 10),
               child: buildTextField(
                 'รายละเอียด',
+                null,
                 _currentMenu.description,
                 (String value) {
                   _currentMenu.description = value;
@@ -265,9 +298,8 @@ class _AddMenuPageState extends State<AddMenuPage> {
     );
   }
 
-  Widget buildTextField(
-      String headerText, String initialValue, Function onSaved,
-      {String hintText}) {
+  Widget buildTextField(String headerText, TextEditingController controller,
+      String initialValue, Function onSaved) {
     return Container(
       child: Column(
         children: [
@@ -281,8 +313,8 @@ class _AddMenuPageState extends State<AddMenuPage> {
           ),
           TextFormField(
             initialValue: initialValue,
+            controller: controller,
             decoration: InputDecoration(
-              hintText: hintText,
               border:
                   OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
             ),
@@ -373,9 +405,10 @@ class _AddMenuPageState extends State<AddMenuPage> {
           hintText: 'จำนวน',
           onChanged: (String value) {
             setState(() {
-              _chosenValue = value;
+              _selectedNumberTopping = value;
             });
           },
+          value: _selectedNumberTopping,
         )),
         Container(
           alignment: Alignment.centerLeft,
@@ -423,6 +456,14 @@ class _AddMenuPageState extends State<AddMenuPage> {
         buildButton(
           'เพิ่มตัวเลือกเพิ่มเติม',
           () {
+            _topping.type = _selectedType;
+            _topping.selectedNumberTopping = _selectedNumberTopping;
+            _topping.subTopping = _subtoppingList;
+
+            _formKey.currentState.save();
+
+            _toppingList.add(_topping);
+            print(_toppingList);
             _addNewOption();
           },
         ),
@@ -453,14 +494,22 @@ class _AddMenuPageState extends State<AddMenuPage> {
             Container(
               child: Row(
                 children: [
+                  Container(
+                    alignment: Alignment.centerLeft,
+                    margin: EdgeInsets.only(right: 20),
+                    child: Text(
+                      'ประเภท',
+                      style: FontCollection.bodyTextStyle,
+                    ),
+                  ),
                   BuildDropdown(
                     dropdownValues: type,
-                    hintText: 'กรุณาเลือกประเภท',
                     onChanged: (String value) {
                       setState(() {
-                        _chosenValue = value;
+                        _selectedType = value;
                       });
                     },
+                    value: _selectedType,
                   ),
                 ],
               ),
@@ -473,9 +522,10 @@ class _AddMenuPageState extends State<AddMenuPage> {
               margin: EdgeInsets.only(top: 20),
               child: buildTextField(
                 'ชื่อตัวเลือก',
-                ' ',
+                null,
+                _topping.topic,
                 (String value) {
-                  // _currentMenu.name = value;
+                  _topping.topic = value;
                 },
               ),
             ),
@@ -483,9 +533,10 @@ class _AddMenuPageState extends State<AddMenuPage> {
               margin: EdgeInsets.only(top: 10),
               child: buildTextField(
                 'รายละเอียด',
-                ' ',
+                null,
+                _topping.detail,
                 (String value) {
-                  // _currentMenu.name = value;
+                  _topping.detail = value;
                 },
               ),
             ),
@@ -517,15 +568,38 @@ class _AddMenuPageState extends State<AddMenuPage> {
               padding: EdgeInsets.only(top: 20),
               child: addList(),
             ),
-            ///TO-DO Stream builder
-            // Container(
-            //   child: showList(),
-            // ),
+            Container(
+              alignment: Alignment.centerLeft,
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemBuilder: (context, index) {
+                  return Row(
+                    children: [
+                      Text(_subtoppingList[index].name),
+                      SizedBox(width: 10),
+                      Text(_subtoppingList[index].price),
+                    ],
+                  );
+                },
+                itemCount: _subtoppingList.length,
+              ),
+            ),
             Container(
               alignment: Alignment.centerLeft,
               child: EditButton(
                 editText: 'เพิ่มตัวเลือก',
-                onClicked: () {},
+                onClicked: () {
+                  setState(() {
+                    _subtoppingList.add(SubTopping(
+                      name: subtoppingName.text.trim(),
+                      price: subtoppingPrice.text.trim(),
+                      haveSubTopping: statusSubTopping,
+                    ));
+                  });
+                  subtoppingName.clear();
+                  subtoppingPrice.clear();
+                  print(_subtoppingList);
+                },
               ),
             ),
             Container(
@@ -542,24 +616,6 @@ class _AddMenuPageState extends State<AddMenuPage> {
       ),
     );
   }
-
-  String _chosenValue;
-
-  final List<String> type = ['ตัวเลือกเดียว', 'หลายตัวเลือก'];
-  final List<String> number = [
-    '1',
-    '2',
-    '3',
-    '4',
-    '5',
-    '6',
-    '7',
-    '8',
-    '9',
-    '10',
-  ];
-
-  bool testSwitch = false;
 
   Widget showList() {
     return Container(
@@ -604,9 +660,12 @@ class _AddMenuPageState extends State<AddMenuPage> {
             child: Padding(
               padding: EdgeInsets.only(right: 5),
               child: BuildPlainTextField(
-                initialValue: '',
+                textEditingController: subtoppingName,
                 validator: (String value) {
-                  // _currentMenu.name = value;
+                  if (value.isEmpty) {
+                    return 'โปรดกรอก';
+                  }
+                  return null;
                 },
               ),
             ),
@@ -614,9 +673,12 @@ class _AddMenuPageState extends State<AddMenuPage> {
           Expanded(
             flex: 2,
             child: BuildPlainTextField(
-              initialValue: '',
+              textEditingController: subtoppingPrice,
               validator: (String value) {
-                // _currentMenu.name = value;
+                if (value.isEmpty) {
+                  return 'โปรดกรอก';
+                }
+                return null;
               },
             ),
           ),
@@ -628,9 +690,9 @@ class _AddMenuPageState extends State<AddMenuPage> {
                 width: 80,
                 activeText: 'มี',
                 inactiveText: 'หมด',
-                value: testSwitch,
+                value: statusSubTopping,
                 onToggle: (val) {
-                  setState() {}
+                  statusSubTopping = val;
                 },
               ),
             ),

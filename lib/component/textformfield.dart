@@ -137,6 +137,7 @@ class BuildPlainTextField extends StatefulWidget {
     this.initialValue,
     this.errorText,
     @required this.validator,
+    this.onSaved,
   }) : super(key: key);
 
   final TextEditingController textEditingController;
@@ -144,6 +145,7 @@ class BuildPlainTextField extends StatefulWidget {
   final String initialValue;
   final String errorText;
   final Function(String) validator;
+  final Function(String) onSaved;
 
   @override
   _BuildPlainTextFieldState createState() => _BuildPlainTextFieldState();
@@ -159,7 +161,8 @@ class _BuildPlainTextFieldState extends State<BuildPlainTextField> {
         hintText: widget.hintText,
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
       ),
-      onSaved: widget.validator,
+      validator: widget.validator,
+      onSaved: widget.onSaved,
     );
   }
 }

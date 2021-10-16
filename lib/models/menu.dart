@@ -31,3 +31,67 @@ class Menu {
     haveMenu = data['haveMenu'];
   }
 }
+
+class Topping {
+  // String toppingId;
+  String type;
+  String selectedNumberTopping;
+  String topic;
+  String detail;
+  List<SubTopping> subTopping;
+
+  Topping({
+    this.type,
+    this.selectedNumberTopping,
+    this.topic,
+    this.detail,
+    this.subTopping,
+  });
+
+  @override
+  String toString() {
+    return '{ ${this.type}, ${this.selectedNumberTopping}, ${this.topic}, ${this.detail}, ${this.subTopping} }';
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      // 'toppingId': toppingId,
+      'type': type,
+      'selectedNumberTopping': selectedNumberTopping,
+      'topic': topic,
+      'detail': detail,
+      'subTopping': subTopping
+    };
+  }
+
+  Topping.fromMap(Map<String, dynamic> data) {
+    // toppingId = data['toppingId'];
+    type = data['type'];
+    selectedNumberTopping = data['selectedNumberTopping'];
+    topic = data['topic'];
+    detail = data['detail'];
+  }
+}
+
+class SubTopping {
+  // String subToppingId;
+  String name;
+  String price;
+  bool haveSubTopping;
+
+  SubTopping({this.name, this.price, this.haveSubTopping});
+
+  @override
+  String toString() {
+    return '{ ${this.name}, ${this.price}, ${this.haveSubTopping} }';
+  }
+
+  // Map<String, dynamic> toMap() {
+  //   return {
+  //     // 'subToppingId': subToppingId,
+  //     'name': name,
+  //     'price': price,
+  //     'haveSubTopping': haveSubTopping
+  //   };
+  // }
+}
