@@ -2,10 +2,12 @@ import 'package:cs_senior_project_merchant/asset/color.dart';
 import 'package:cs_senior_project_merchant/asset/text_style.dart';
 import 'package:cs_senior_project_merchant/component/storeCard.dart';
 import 'package:cs_senior_project_merchant/component/switch.dart';
+import 'package:cs_senior_project_merchant/component/textformfield.dart';
 import 'package:cs_senior_project_merchant/notifiers/dateTime_notifier.dart';
 import 'package:cs_senior_project_merchant/notifiers/store_notifier.dart';
 import 'package:cs_senior_project_merchant/screens/store/address.dart';
 import 'package:cs_senior_project_merchant/screens/store/opening_hours.dart';
+import 'package:cs_senior_project_merchant/screens/store/store_profile.dart';
 import 'package:cs_senior_project_merchant/services/store_service.dart';
 import 'package:cs_senior_project_merchant/models/dateTime.dart';
 import 'package:cs_senior_project_merchant/widgets/button_widget.dart';
@@ -170,7 +172,14 @@ class _StorePageState extends State<StorePage> {
                                             flex: 3,
                                             child: EditButton(
                                               editText: 'แก้ไขข้อมูล',
-                                              onClicked: () {},
+                                              onClicked: () {
+                                                Navigator.of(context).push(
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        StoreProfilePage(),
+                                                  ),
+                                                );
+                                              },
                                             ),
                                           ),
                                         ],
@@ -243,7 +252,13 @@ class _StorePageState extends State<StorePage> {
                               ),
                             ),
                             storeCard(
-                              onClicked: () {},
+                              onClicked: () {
+                                showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return buildEditStoreDes();
+                                    });
+                              },
                               headerText: 'รายละเอียดร้านค้า',
                               child: Center(
                                 child: Container(
@@ -495,6 +510,49 @@ class _StorePageState extends State<StorePage> {
                 style: isPressed
                     ? FontCollection.smallBodyTextStyle
                     : TextStyle(fontSize: 14, color: Colors.grey),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget buildEditStoreDes() {
+    TextEditingController controller;
+
+    return AlertDialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(30),
+      ),
+      content: Container(
+        padding: EdgeInsets.symmetric(vertical: 40),
+        width: MediaQuery.of(context).size.width,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              alignment: Alignment.topLeft,
+              child: Text(
+                'รายละเอียดร้านค้า',
+                style: FontCollection.bodyTextStyle,
+              ),
+            ),
+            Container(
+              padding: EdgeInsets.only(top: 20),
+              child: BuildTextField(
+                textEditingController: controller,
+                hintText: 'กรุณากรอกรายละเอียดร้านค้า',
+                maxLine: 5,
+                textInputType: TextInputType.multiline,
+              ),
+            ),
+            Container(
+              alignment: Alignment.topRight,
+              padding: EdgeInsets.only(top: 20),
+              child: NoShapeButton(
+                text: 'บันทึก',
+                onClicked: () {},
               ),
             ),
           ],

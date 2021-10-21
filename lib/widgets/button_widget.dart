@@ -115,3 +115,32 @@ class EditButton extends StatelessWidget {
     );
   }
 }
+
+class NoShapeButton extends StatelessWidget {
+  final String text;
+  final VoidCallback onClicked;
+  final Color color;
+
+  const NoShapeButton({
+    @required this.text,
+    @required this.onClicked,
+    this.color,
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      onPressed: onClicked,
+      style: ElevatedButton.styleFrom(
+          primary: (color == null) ? Theme.of(context).buttonColor : color),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 15),
+        child: Text(
+          text,
+          style: FontCollection.smallBodyTextStyle,
+        ),
+      ),
+    );
+  }
+}

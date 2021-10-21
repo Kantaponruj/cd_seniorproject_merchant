@@ -6,7 +6,7 @@ import 'package:flutter/services.dart';
 class BuildTextField extends StatefulWidget {
   BuildTextField({
     Key key,
-    @required this.labelText,
+    this.labelText,
     @required this.textEditingController,
     @required this.hintText,
     this.errorText,
