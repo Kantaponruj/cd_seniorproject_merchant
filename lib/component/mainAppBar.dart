@@ -5,12 +5,18 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class MainAppbar extends StatefulWidget implements PreferredSizeWidget {
-  MainAppbar({Key key, this.appBarTitle})
-      : preferredSize = Size.fromHeight(150),
+  MainAppbar({
+    Key key,
+    this.appBarTitle,
+    this.map,
+    this.history,
+  })  : preferredSize = Size.fromHeight(150),
         super(key: key);
 
   final Size preferredSize;
   final String appBarTitle;
+  final VoidCallback map;
+  final VoidCallback history;
 
   @override
   _MainAppbarState createState() => _MainAppbarState();
@@ -29,14 +35,14 @@ class _MainAppbarState extends State<MainAppbar> {
           title: titleText(),
           actions: [
             IconButton(
-              onPressed: () {},
+              onPressed: widget.map,
               icon: Icon(
                 Icons.map_outlined,
                 color: Colors.black,
               ),
             ),
             IconButton(
-              onPressed: () {},
+              onPressed: widget.history,
               icon: Icon(
                 Icons.history,
                 color: Colors.black,

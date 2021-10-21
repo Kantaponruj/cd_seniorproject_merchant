@@ -575,15 +575,45 @@ class _AddMenuPageState extends State<AddMenuPage> {
               child: addList(),
             ),
             Container(
+              padding: EdgeInsets.only(top: 20),
+              alignment: Alignment.topLeft,
+              child: Text(
+                'รายการทั้งหมด',
+                style: FontCollection.smallBodyTextStyle,
+              ),
+            ),
+            Container(
+              padding: EdgeInsets.fromLTRB(0, 20, 0, 20),
               alignment: Alignment.centerLeft,
               child: ListView.builder(
                 shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
                 itemBuilder: (context, index) {
                   return Row(
                     children: [
-                      Text(_subtoppingList[index].name),
-                      SizedBox(width: 10),
-                      Text(_subtoppingList[index].price),
+                      Expanded(
+                        flex: 6,
+                        child: Text(
+                          _subtoppingList[index].name,
+                          style: FontCollection.smallBodyTextStyle,
+                        ),
+                      ),
+                      Expanded(
+                        flex: 6,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              '${_subtoppingList[index].price}   บาท',
+                              style: FontCollection.smallBodyTextStyle,
+                            ),
+                            IconButton(
+                              onPressed: () {},
+                              icon: Icon(Icons.more_vert_outlined),
+                            ),
+                          ],
+                        ),
+                      ),
                     ],
                   );
                 },
@@ -689,7 +719,7 @@ class _AddMenuPageState extends State<AddMenuPage> {
             ),
           ),
           Expanded(
-            flex: 3,
+            flex: 4,
             child: Padding(
               padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
               child: BuildSwitch(
@@ -700,16 +730,6 @@ class _AddMenuPageState extends State<AddMenuPage> {
                 onToggle: (val) {
                   statusSubTopping = val;
                 },
-              ),
-            ),
-          ),
-          Expanded(
-            flex: 1,
-            child: IconButton(
-              onPressed: () {},
-              icon: Icon(
-                Icons.delete,
-                color: Colors.black,
               ),
             ),
           ),

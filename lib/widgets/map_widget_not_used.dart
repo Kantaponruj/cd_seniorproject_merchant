@@ -11,17 +11,17 @@ import 'package:provider/provider.dart';
 
 // const _marker = 350.0;
 
-class MapWidget extends StatefulWidget {
-  const MapWidget({Key key, @required this.mapController, @required this.order})
+class OriginalMapWidget extends StatefulWidget {
+  OriginalMapWidget({Key key, @required this.mapController, this.order})
       : super(key: key);
   final Completer<GoogleMapController> mapController;
   final order;
 
   @override
-  _MapWidgetState createState() => _MapWidgetState();
+  _OriginalMapWidgetState createState() => _OriginalMapWidgetState();
 }
 
-class _MapWidgetState extends State<MapWidget> {
+class _OriginalMapWidgetState extends State<OriginalMapWidget> {
   Set<Marker> _markers = Set<Marker>();
   LatLng customerLocation;
   LatLng storeLocation;

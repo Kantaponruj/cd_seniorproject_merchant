@@ -5,10 +5,12 @@ import 'package:cs_senior_project_merchant/asset/text_style.dart';
 import 'package:cs_senior_project_merchant/component/mainAppBar.dart';
 import 'package:cs_senior_project_merchant/notifiers/location_notifier.dart';
 import 'package:cs_senior_project_merchant/notifiers/store_notifier.dart';
+import 'package:cs_senior_project_merchant/screens/allDes_map.dart';
 import 'package:cs_senior_project_merchant/screens/order/customer_map.dart';
 import 'package:cs_senior_project_merchant/screens/order/orderDetail.dart';
 import 'package:cs_senior_project_merchant/widgets/icontext_widget.dart';
 import 'package:cs_senior_project_merchant/widgets/loading_widget.dart';
+import 'package:cs_senior_project_merchant/widgets/map_widget_not_used.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
@@ -74,6 +76,9 @@ class _OrderPageState extends State<OrderPage> {
         backgroundColor: CollectionsColors.grey,
         appBar: MainAppbar(
           appBarTitle: 'คำสั่งซื้อ',
+          map: () {
+            Navigator.push(context, MaterialPageRoute(builder: (context) => AllDestinationPage()));
+          },
         ),
         body: SingleChildScrollView(
           child: StreamBuilder(
