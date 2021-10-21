@@ -58,6 +58,7 @@ class _AddressPageState extends State<AddressPage> {
                           addressNotifier.addressList[index].address,
                           maxLines: 2,
                         ),
+                        onTap: () {},
                       );
                     },
                     separatorBuilder: (BuildContext context, int index) {
