@@ -33,14 +33,15 @@ class Menu {
 }
 
 class Topping {
-  // String toppingId;
+  String toppingId;
   String type;
   String selectedNumberTopping;
   String topic;
   String detail;
-  List<SubTopping> subTopping;
+  List<dynamic> subTopping;
 
   Topping({
+    this.toppingId,
     this.type,
     this.selectedNumberTopping,
     this.topic,
@@ -50,12 +51,12 @@ class Topping {
 
   @override
   String toString() {
-    return '{ ${this.type}, ${this.selectedNumberTopping}, ${this.topic}, ${this.detail}, ${this.subTopping} }';
+    return '{ ${this.toppingId}, ${this.type}, ${this.selectedNumberTopping}, ${this.topic}, ${this.detail}, ${this.subTopping} }';
   }
 
   Map<String, dynamic> toMap() {
     return {
-      // 'toppingId': toppingId,
+      'toppingId': toppingId,
       'type': type,
       'selectedNumberTopping': selectedNumberTopping,
       'topic': topic,
@@ -65,33 +66,34 @@ class Topping {
   }
 
   Topping.fromMap(Map<String, dynamic> data) {
-    // toppingId = data['toppingId'];
+    toppingId = data['toppingId'];
     type = data['type'];
     selectedNumberTopping = data['selectedNumberTopping'];
     topic = data['topic'];
     detail = data['detail'];
+    subTopping = data['subTopping'];
   }
 }
 
-class SubTopping {
-  // String subToppingId;
-  String name;
-  String price;
-  bool haveSubTopping;
+// class SubTopping {
+//   String subToppingId;
+//   String name;
+//   String price;
+//   bool haveSubTopping;
 
-  SubTopping({this.name, this.price, this.haveSubTopping});
+//   SubTopping({this.name, this.price, this.haveSubTopping});
 
-  @override
-  String toString() {
-    return '{ ${this.name}, ${this.price}, ${this.haveSubTopping} }';
-  }
+//   @override
+//   String toString() {
+//     return '{ ${this.name}, ${this.price}, ${this.haveSubTopping} }';
+//   }
 
-  // Map<String, dynamic> toMap() {
-  //   return {
-  //     // 'subToppingId': subToppingId,
-  //     'name': name,
-  //     'price': price,
-  //     'haveSubTopping': haveSubTopping
-  //   };
-  // }
-}
+//   Map<String, dynamic> toMap() {
+//     return {
+//       'subToppingId': subToppingId,
+//       'name': name,
+//       'price': price,
+//       'haveSubTopping': haveSubTopping
+//     };
+//   }
+// }

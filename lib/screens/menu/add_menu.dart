@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cs_senior_project_merchant/asset/constant.dart';
 import 'package:cs_senior_project_merchant/asset/text_style.dart';
 import 'package:cs_senior_project_merchant/component/dropdown.dart';
 import 'package:cs_senior_project_merchant/component/orderCard.dart';
@@ -16,15 +18,13 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 class AddMenuPage extends StatefulWidget {
-  AddMenuPage(
-      {Key key,
-      @required this.isUpdating,
-      this.categories,
-      this.currentCategory})
-      : super(key: key);
+  AddMenuPage({
+    Key key,
+    @required this.isUpdating,
+    this.categories,
+  }) : super(key: key);
   final bool isUpdating;
   final List<String> categories;
-  final String currentCategory;
 
   @override
   _AddMenuPageState createState() => _AddMenuPageState();
@@ -33,7 +33,9 @@ class AddMenuPage extends StatefulWidget {
 class _AddMenuPageState extends State<AddMenuPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool status = false;
-  TextEditingController controller = new TextEditingController();
+  bool onClickAddOptionalButton = false;
+  bool isUpdatingTopping = false;
+  int toppingIndex;
 
   Menu _currentMenu;
   String _imageUrl;
@@ -44,11 +46,11 @@ class _AddMenuPageState extends State<AddMenuPage> {
   String _selectedNumberTopping;
 
   List<Topping> _toppingList = [];
-  Topping _topping;
+  TextEditingController toppingName = new TextEditingController();
+  TextEditingController toppingDetail = new TextEditingController();
 
-  List<SubTopping> _subtoppingList = [];
-  SubTopping _subTopping;
-  bool statusSubTopping = false;
+  List<Map<String, dynamic>> _subtoppingList = [];
+  bool statusSubTopping;
   TextEditingController subtoppingName = new TextEditingController();
   TextEditingController subtoppingPrice = new TextEditingController();
 
@@ -69,20 +71,43 @@ class _AddMenuPageState extends State<AddMenuPage> {
   @override
   void initState() {
     MenuNotfier menuNotfier = Provider.of<MenuNotfier>(context, listen: false);
+    if (widget.isUpdating) {
+      _getToppingFromFirebase(menuNotfier);
+    }
+
     if (menuNotfier.currentMenu != null) {
       _currentMenu = menuNotfier.currentMenu;
       _selectedCategory = menuNotfier.currentMenu.categoryFood;
     } else {
       _currentMenu = Menu();
-      _topping = Topping();
-      _subTopping = SubTopping();
       _selectedCategory = widget.categories.first;
-      _selectedType = type.first;
-      _selectedNumberTopping = number.first;
     }
+    _selectedType = type.first;
+    _selectedNumberTopping = number.first;
     _imageUrl = _currentMenu.image;
-    _subTopping.haveSubTopping = statusSubTopping;
+    statusSubTopping = false;
     super.initState();
+  }
+
+  Future<void> _getToppingFromFirebase(MenuNotfier menu) async {
+    StoreNotifier store = Provider.of<StoreNotifier>(context, listen: false);
+
+    QuerySnapshot snapshot = await firebaseFirestore
+        .collection('stores')
+        .doc(store.store.storeId)
+        .collection('menu')
+        .doc(menu.currentMenu.menuId)
+        .collection('topping')
+        .get();
+
+    setState(() {
+      snapshot.docs.forEach((document) {
+        Topping topping = Topping.fromMap(document.data());
+        _toppingList.add(topping);
+      });
+    });
+
+    print(_toppingList);
   }
 
   _menuUploaded(Menu menu) {
@@ -110,6 +135,7 @@ class _AddMenuPageState extends State<AddMenuPage> {
 
     updateMenuAndImage(
       _currentMenu,
+      _toppingList,
       widget.isUpdating,
       _imageFile,
       _menuUploaded,
@@ -130,8 +156,8 @@ class _AddMenuPageState extends State<AddMenuPage> {
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> _addOption =
-        new List.generate(_count, (int i) => buildAddOption());
+    // List<Widget> _addOption =
+    //     new List.generate(_count, (int i) => buildAddOption());
 
     return Scaffold(
       appBar: RoundedAppBar(
@@ -147,12 +173,74 @@ class _AddMenuPageState extends State<AddMenuPage> {
                 mainCard(),
                 Container(
                   padding: EdgeInsets.only(top: 20),
-                  child: new ListView(
-                    children: _addOption,
-                    physics: NeverScrollableScrollPhysics(),
+                  child: ListView.separated(
                     shrinkWrap: true,
+                    itemCount: _toppingList.length,
+                    itemBuilder: (context, index) {
+                      return ListTile(
+                        title: Column(
+                          children: [
+                            Text(_toppingList[index].type),
+                            Text(_toppingList[index].selectedNumberTopping),
+                            Text(_toppingList[index].topic),
+                            Text(_toppingList[index].detail),
+                            Container(
+                              child: Column(
+                                children: _toppingList[index]
+                                    .subTopping
+                                    .map(
+                                      (subtopping) => Text(
+                                          '${subtopping['name']} ${subtopping['price']}'),
+                                    )
+                                    .toList(),
+                              ),
+                            )
+                          ],
+                        ),
+                        onTap: () {
+                          _subtoppingList.clear();
+                          setState(() {
+                            _selectedType = _toppingList[index].type;
+                            _selectedNumberTopping =
+                                _toppingList[index].selectedNumberTopping;
+                            toppingName.text = _toppingList[index].topic;
+                            toppingDetail.text = _toppingList[index].detail;
+                            _toppingList[index]
+                                .subTopping
+                                .forEach((subtopping) {
+                              _subtoppingList.add({
+                                'name': subtopping['name'],
+                                'price': subtopping['price'],
+                                'haveSubTopping':
+                                    subtopping['haveSubTopping'].toString(),
+                              });
+                            });
+                          });
+                          toppingIndex = index;
+                          isUpdatingTopping = true;
+                          onClickAddOptionalButton = true;
+                        },
+                      );
+                    },
+                    separatorBuilder: (BuildContext context, int index) {
+                      return Divider();
+                    },
                   ),
                 ),
+                onClickAddOptionalButton
+                    ? Container(
+                        padding: EdgeInsets.only(top: 20),
+                        child: new ListView(
+                          children: <Widget>[
+                            isUpdatingTopping
+                                ? buildAddOption(toppingIndex)
+                                : buildAddOption(null),
+                          ],
+                          physics: NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                        ),
+                      )
+                    : Container(),
                 Container(
                   padding: EdgeInsets.only(top: 20),
                   child: cardOption(),
@@ -340,7 +428,6 @@ class _AddMenuPageState extends State<AddMenuPage> {
           BuildDropdown(
             width: MediaQuery.of(context).size.width,
             dropdownValues: widget.categories,
-            // hintText: 'กรุณาเลือกหมวดหมู่',
             onChanged: (String value) {
               setState(() {
                 _selectedCategory = value;
@@ -422,19 +509,19 @@ class _AddMenuPageState extends State<AddMenuPage> {
     );
   }
 
-  int _count = 1;
+  // int _count = 1;
 
-  void _addNewOption() {
-    setState(() {
-      _count = _count + 1;
-    });
-  }
+  // void _addNewOption() {
+  //   setState(() {
+  //     _count = _count + 1;
+  //   });
+  // }
 
-  void _removeOption() {
-    setState(() {
-      _count = _count - 1;
-    });
-  }
+  // void _removeOption() {
+  //   setState(() {
+  //     _count = _count - 1;
+  //   });
+  // }
 
   Widget cardOption() {
     StoreNotifier storeNotifier = Provider.of<StoreNotifier>(context);
@@ -456,21 +543,10 @@ class _AddMenuPageState extends State<AddMenuPage> {
         buildButton(
           'เพิ่มตัวเลือกเพิ่มเติม',
           () {
-            _formKey.currentState.save();
-
-            _toppingList.add(Topping(
-              type: _selectedType,
-              selectedNumberTopping: _selectedNumberTopping,
-              topic: _topping.topic,
-              detail: _topping.detail,
-              subTopping: _subtoppingList,
-            ));
-            print(_toppingList);
-
-            _addNewOption();
-            _selectedType = type.first;
-            _selectedNumberTopping = number.first;
-            _topping = Topping();
+            setState(() {
+              onClickAddOptionalButton = true;
+              isUpdatingTopping = false;
+            });
           },
         ),
       ],
@@ -491,7 +567,7 @@ class _AddMenuPageState extends State<AddMenuPage> {
     );
   }
 
-  Widget buildAddOption() {
+  Widget buildAddOption(int index) {
     return new BuildPlainCard(
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
@@ -528,22 +604,18 @@ class _AddMenuPageState extends State<AddMenuPage> {
               margin: EdgeInsets.only(top: 20),
               child: buildTextField(
                 'ชื่อตัวเลือก',
+                toppingName,
                 null,
-                _topping.topic,
-                (String value) {
-                  _topping.topic = value;
-                },
+                (String value) {},
               ),
             ),
             Container(
               margin: EdgeInsets.only(top: 10),
               child: buildTextField(
                 'รายละเอียด',
+                toppingDetail,
                 null,
-                _topping.detail,
-                (String value) {
-                  _topping.detail = value;
-                },
+                (String value) {},
               ),
             ),
             Container(
@@ -594,7 +666,7 @@ class _AddMenuPageState extends State<AddMenuPage> {
                       Expanded(
                         flex: 6,
                         child: Text(
-                          _subtoppingList[index].name,
+                          _subtoppingList[index]['name'],
                           style: FontCollection.smallBodyTextStyle,
                         ),
                       ),
@@ -604,7 +676,7 @@ class _AddMenuPageState extends State<AddMenuPage> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              '${_subtoppingList[index].price}   บาท',
+                              '${_subtoppingList[index]['price']}   บาท',
                               style: FontCollection.smallBodyTextStyle,
                             ),
                             IconButton(
@@ -626,11 +698,11 @@ class _AddMenuPageState extends State<AddMenuPage> {
                 editText: 'เพิ่มตัวเลือก',
                 onClicked: () {
                   setState(() {
-                    _subtoppingList.add(SubTopping(
-                      name: subtoppingName.text.trim(),
-                      price: subtoppingPrice.text.trim(),
-                      haveSubTopping: statusSubTopping,
-                    ));
+                    _subtoppingList.add({
+                      'name': subtoppingName.text.trim(),
+                      'price': subtoppingPrice.text.trim(),
+                      'haveSubTopping': statusSubTopping,
+                    });
                   });
                   subtoppingName.clear();
                   subtoppingPrice.clear();
@@ -638,14 +710,56 @@ class _AddMenuPageState extends State<AddMenuPage> {
                 },
               ),
             ),
-            Container(
-              alignment: Alignment.bottomRight,
-              child: EditButton(
-                editText: 'ลบตัวเลือกเพิ่มเติมนี้',
-                onClicked: () {
-                  _removeOption();
-                },
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  child: EditButton(
+                    editText: 'ลบตัวเลือกเพิ่มเติมนี้',
+                    onClicked: () {
+                      setState(() {
+                        _toppingList.removeAt(index);
+                        onClickAddOptionalButton = false;
+                      });
+                      print(_toppingList);
+                    },
+                  ),
+                ),
+                Container(
+                  child: EditButton(
+                    editText: 'เพิ่มตัวเลือกนี้',
+                    onClicked: () {
+                      setState(() {
+                        if (isUpdatingTopping) {
+                          _toppingList[index] = Topping(
+                            toppingId: _toppingList[index].toppingId,
+                            type: _selectedType,
+                            selectedNumberTopping: _selectedNumberTopping,
+                            topic: toppingName.text.trim(),
+                            detail: toppingDetail.text.trim(),
+                            subTopping: _subtoppingList,
+                          );
+                        } else {
+                          _toppingList.add(Topping(
+                            type: _selectedType,
+                            selectedNumberTopping: _selectedNumberTopping,
+                            topic: toppingName.text.trim(),
+                            detail: toppingDetail.text.trim(),
+                            subTopping: _subtoppingList,
+                          ));
+                        }
+                      });
+                      print(_toppingList);
+
+                      _selectedType = type.first;
+                      _selectedNumberTopping = number.first;
+                      toppingName.clear();
+                      toppingDetail.clear();
+                      onClickAddOptionalButton = false;
+                    },
+                  ),
+                ),
+              ],
             ),
           ],
         ),
