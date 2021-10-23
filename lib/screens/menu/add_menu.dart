@@ -199,19 +199,7 @@ class _AddMenuPageState extends State<AddMenuPage> {
                         ),
                         onTap: () {
                           setState(() {
-                            // if (_toppingList[index].toppingId != null) {
-                            //   // _subtoppingList.clear();
-                            //   _toppingList[index]
-                            //       .subTopping
-                            //       .forEach((subtopping) {
-                            //     _subtoppingList.add({
-                            //       'name': subtopping['name'],
-                            //       'price': subtopping['price'],
-                            //       'haveSubTopping':
-                            //           subtopping['haveSubTopping'].toString(),
-                            //     });
-                            //   });
-                            // }
+                            _subtoppingList.clear();
                             _selectedType = _toppingList[index].type;
                             _selectedNumberTopping =
                                 _toppingList[index].selectedNumberTopping;
