@@ -541,10 +541,12 @@ class _AddMenuPageState extends State<AddMenuPage> {
           ),
         ),
         buildButton(
-          'เพิ่มตัวเลือกเพิ่มเติม',
+          onClickAddOptionalButton
+              ? 'ปิดเพิ่มตัวเลือกเพิ่มเติม'
+              : 'เพิ่มตัวเลือกเพิ่มเติม',
           () {
             setState(() {
-              onClickAddOptionalButton = true;
+              onClickAddOptionalButton = !onClickAddOptionalButton;
               isUpdatingTopping = false;
             });
           },
