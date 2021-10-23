@@ -178,7 +178,7 @@ deleteMenu(Menu menu, Function menuDeleted, String storeId) async {
     print('image deleted');
   }
 
-  await FirebaseFirestore.instance
+  await firebaseFirestore
       .collection('stores')
       .doc(storeId)
       .collection('menu')
@@ -186,6 +186,17 @@ deleteMenu(Menu menu, Function menuDeleted, String storeId) async {
       .delete();
 
   menuDeleted(menu);
+}
+
+deleteTopping(String storeId, String menuId, String toppingId) async {
+  await firebaseFirestore
+      .collection('stores')
+      .doc(storeId)
+      .collection('menu')
+      .doc(menuId)
+      .collection('topping')
+      .doc(toppingId)
+      .delete();
 }
 
 updateMenuStatus(String storeId, String menuId, bool status) {

@@ -198,8 +198,20 @@ class _AddMenuPageState extends State<AddMenuPage> {
                           ],
                         ),
                         onTap: () {
-                          _subtoppingList.clear();
                           setState(() {
+                            // if (_toppingList[index].toppingId != null) {
+                            //   // _subtoppingList.clear();
+                            //   _toppingList[index]
+                            //       .subTopping
+                            //       .forEach((subtopping) {
+                            //     _subtoppingList.add({
+                            //       'name': subtopping['name'],
+                            //       'price': subtopping['price'],
+                            //       'haveSubTopping':
+                            //           subtopping['haveSubTopping'].toString(),
+                            //     });
+                            //   });
+                            // }
                             _selectedType = _toppingList[index].type;
                             _selectedNumberTopping =
                                 _toppingList[index].selectedNumberTopping;
@@ -568,6 +580,9 @@ class _AddMenuPageState extends State<AddMenuPage> {
   }
 
   Widget buildAddOption(int index) {
+    StoreNotifier storeNotifier = Provider.of<StoreNotifier>(context);
+    MenuNotfier menuNotfier = Provider.of<MenuNotfier>(context);
+
     return new BuildPlainCard(
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
@@ -718,6 +733,11 @@ class _AddMenuPageState extends State<AddMenuPage> {
                     editText: 'ลบตัวเลือกเพิ่มเติมนี้',
                     onClicked: () {
                       setState(() {
+                        deleteTopping(
+                          storeNotifier.store.storeId,
+                          menuNotfier.currentMenu.menuId,
+                          _toppingList[index].toppingId,
+                        );
                         _toppingList.removeAt(index);
                         onClickAddOptionalButton = false;
                       });
@@ -729,6 +749,14 @@ class _AddMenuPageState extends State<AddMenuPage> {
                   child: EditButton(
                     editText: 'เพิ่มตัวเลือกนี้',
                     onClicked: () {
+                      List<dynamic> _temporaryList = [];
+                      _subtoppingList.forEach((element) {
+                        _temporaryList.add({
+                          'name': element['name'],
+                          'price': element['price'],
+                          'haveSubTopping': element['haveSubTopping']
+                        });
+                      });
                       setState(() {
                         if (isUpdatingTopping) {
                           _toppingList[index] = Topping(
@@ -737,7 +765,7 @@ class _AddMenuPageState extends State<AddMenuPage> {
                             selectedNumberTopping: _selectedNumberTopping,
                             topic: toppingName.text.trim(),
                             detail: toppingDetail.text.trim(),
-                            subTopping: _subtoppingList,
+                            subTopping: _temporaryList,
                           );
                         } else {
                           _toppingList.add(Topping(
@@ -745,7 +773,7 @@ class _AddMenuPageState extends State<AddMenuPage> {
                             selectedNumberTopping: _selectedNumberTopping,
                             topic: toppingName.text.trim(),
                             detail: toppingDetail.text.trim(),
-                            subTopping: _subtoppingList,
+                            subTopping: _temporaryList,
                           ));
                         }
                       });
@@ -755,6 +783,7 @@ class _AddMenuPageState extends State<AddMenuPage> {
                       _selectedNumberTopping = number.first;
                       toppingName.clear();
                       toppingDetail.clear();
+                      _subtoppingList.clear();
                       onClickAddOptionalButton = false;
                     },
                   ),
