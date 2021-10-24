@@ -135,13 +135,20 @@ class _MenuPageState extends State<MenuPage> {
         headerText: categoryName,
         child: Container(
           margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-          child: gridView(),
+          child: gridView(categoryName),
         ),
         canEdit: false,
       );
 
-  Widget gridView() {
+  Widget gridView(String categoryName) {
     MenuNotfier menuNotfier = Provider.of<MenuNotfier>(context);
+    List<dynamic> menuCategory = [];
+
+    menuNotfier.menuList.forEach((menu) {
+      if (menu.categoryFood == categoryName) {
+        menuCategory.add(menu);
+      }
+    });
 
     return Container(
       child: GridView.builder(
@@ -155,10 +162,10 @@ class _MenuPageState extends State<MenuPage> {
         ),
         padding: EdgeInsets.fromLTRB(20, 20, 20, 0),
         controller: controller,
-        itemCount: menuNotfier.menuList.length,
+        itemCount: menuCategory.length,
         itemBuilder: (context, index) {
-          // final item = items[index];
-          return menuData(menuNotfier.menuList[index], menuNotfier);
+          Menu menu = menuCategory[index];
+          return menuData(menu, menuNotfier);
         },
       ),
     );
