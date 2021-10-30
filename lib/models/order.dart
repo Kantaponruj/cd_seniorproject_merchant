@@ -9,7 +9,7 @@ class OrderDetail {
   String address;
   // String addressName;
   String addressDetail;
-  // GeoPoint geoPoint;
+  GeoPoint geoPoint;
   String message;
   String dateOrdered;
   String timeOrdered;
@@ -27,7 +27,7 @@ class OrderDetail {
     address = data['address'];
     // addressName = data['addressName'];
     addressDetail = data['addressDetail'];
-    // geoPoint = data['geoPoint'];
+    geoPoint = data['geoPoint'];
     message = data['message'];
     dateOrdered = data['dateOrdered'];
     timeOrdered = data['timeOrdered'];
@@ -45,7 +45,7 @@ class OrderDetail {
       'address': address,
       // 'addressName': addressName,
       'addressDetail': addressDetail,
-      // 'geoPoint': geoPoint,
+      'geoPoint': geoPoint,
       'message': message,
       'dateOrdered': dateOrdered,
       'timeOrdered': timeOrdered,
