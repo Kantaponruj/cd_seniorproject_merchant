@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cs_senior_project_merchant/asset/color.dart';
 import 'package:cs_senior_project_merchant/asset/text_style.dart';
 import 'package:cs_senior_project_merchant/component/checkBox.dart';
@@ -7,6 +9,7 @@ import 'package:cs_senior_project_merchant/notifiers/store_notifier.dart';
 import 'package:cs_senior_project_merchant/screens/login.dart';
 import 'package:cs_senior_project_merchant/widgets/button_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 class StoreProfilePage extends StatefulWidget {
@@ -17,6 +20,36 @@ class StoreProfilePage extends StatefulWidget {
 }
 
 class _StoreProfilePageState extends State<StoreProfilePage> {
+  List kindOfFood = ['ของคาว', 'ของหวาน', 'เครื่องดื่ม', 'อื่น ๆ'];
+  List isSelectedKindOfFood = [false, false, false, false];
+
+  List typeOfStore = ['Food Truck', 'ร้านค้ารถเข็น'];
+  List isSelectedTypeOfStore = [false, false];
+
+  String _imageUrl;
+  File _imageFile;
+
+  @override
+  void initState() {
+    StoreNotifier store = Provider.of<StoreNotifier>(context, listen: false);
+    store.store.kindOfFood.forEach((kind) {
+      for (int i = 0; i < kindOfFood.length; i++) {
+        if (kind == kindOfFood[i]) {
+          isSelectedKindOfFood[i] = true;
+        }
+      }
+    });
+
+    for (int i = 0; i < typeOfStore.length; i++) {
+      if (typeOfStore[i] == store.store.typeOfStore) {
+        isSelectedTypeOfStore[i] = true;
+      }
+    }
+
+    _imageUrl = store.store.image;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     StoreNotifier storeNotifier = Provider.of<StoreNotifier>(context);
@@ -64,6 +97,30 @@ class _StoreProfilePageState extends State<StoreProfilePage> {
     );
   }
 
+  void getLocalImage() async {
+    PickedFile imageFile =
+        await ImagePicker().getImage(source: ImageSource.gallery);
+
+    if (imageFile != null) {
+      setState(() {
+        _imageFile = File(imageFile.path);
+      });
+    }
+  }
+
+  Widget showImage() {
+    if (_imageUrl == null && _imageFile == null) {
+      return Image.network(
+        'https://www.testingxperts.com/wp-content/uploads/2019/02/placeholder-img.jpg',
+        fit: BoxFit.cover,
+      );
+    } else if (_imageFile != null) {
+      return Image.file(_imageFile, fit: BoxFit.cover);
+    } else if (_imageUrl != null) {
+      return Image.network(_imageUrl, fit: BoxFit.cover);
+    }
+  }
+
   Widget storeSection(StoreNotifier storeNotifier) {
     return Card(
       shape: RoundedRectangleBorder(
@@ -86,14 +143,13 @@ class _StoreProfilePageState extends State<StoreProfilePage> {
               width: 200,
               height: 200,
               color: CollectionsColors.grey,
-
-              ///TODO picture
+              child: showImage(),
             ),
             Center(
               child: Padding(
                 padding: EdgeInsets.only(top: 20),
                 child: NoShapeButton(
-                  onClicked: () {},
+                  onClicked: () => getLocalImage(),
                   text: 'อัปโหลดรูปภาพใหม่',
                 ),
               ),
@@ -119,15 +175,14 @@ class _StoreProfilePageState extends State<StoreProfilePage> {
               ),
             ),
             Container(
-                alignment: Alignment.centerLeft,
-                padding: EdgeInsets.only(top: 20),
-                child: salesType('ประเภทสินค้า',)
+              alignment: Alignment.centerLeft,
+              padding: EdgeInsets.only(top: 20),
+              child: salesType('ประเภทสินค้า'),
             ),
             Container(
                 alignment: Alignment.centerLeft,
                 padding: EdgeInsets.only(top: 20),
-                child: storeType('ประเภทร้านค้า',)
-            ),
+                child: storeType('ประเภทร้านค้า')),
           ],
         ),
       ),
@@ -168,7 +223,7 @@ class _StoreProfilePageState extends State<StoreProfilePage> {
 
   bool value = false;
 
-  Widget salesType(String headerText,) {
+  Widget salesType(String headerText) {
     return Column(
       children: [
         Container(
@@ -179,26 +234,29 @@ class _StoreProfilePageState extends State<StoreProfilePage> {
             style: FontCollection.bodyTextStyle,
           ),
         ),
-        BuildCheckBox(
-          title: 'ของคาว',
-          value: value,
-          onChanged: (value) {},
-        ),
-        BuildCheckBox(
-          title: 'ของหวาน',
-          value: value,
-          onChanged: (value) {},
-        ),
-        BuildCheckBox(
-          title: 'เครื่องดื่ม',
-          value: value,
-          onChanged: (value) {},
+        ListView.builder(
+          shrinkWrap: true,
+          itemCount: kindOfFood.length,
+          itemBuilder: (context, index) {
+            return BuildCheckBox(
+              title: kindOfFood[index],
+              value: isSelectedKindOfFood[index],
+              onChanged: (value) {
+                setState(() {
+                  isSelectedKindOfFood[index] = value;
+                });
+                print(isSelectedKindOfFood);
+              },
+            );
+          },
         ),
       ],
     );
   }
 
-  Widget storeType(String headerText,) {
+  Widget storeType(
+    String headerText,
+  ) {
     return Column(
       children: [
         Container(
@@ -214,17 +272,14 @@ class _StoreProfilePageState extends State<StoreProfilePage> {
     );
   }
 
-  List<String> text = ['Food Truck', 'Food Stall'];
-  List<bool> _isSelected = [true, false];
-
   Widget chip() {
     List<Widget> chips = [];
 
-    for (int i = 0; i < text.length; i++) {
+    for (int i = 0; i < typeOfStore.length; i++) {
       FilterChip filterChip = FilterChip(
-        selected: _isSelected[i],
+        selected: isSelectedTypeOfStore[i],
         label: Text(
-          text[i],
+          typeOfStore[i],
           style: FontCollection.smallBodyTextStyle,
         ),
         pressElevation: 5,
@@ -232,12 +287,14 @@ class _StoreProfilePageState extends State<StoreProfilePage> {
         selectedColor: CollectionsColors.yellow,
         onSelected: (bool selected) {
           setState(() {
-            _isSelected[i] = selected;
+            isSelectedTypeOfStore[i] = selected;
           });
         },
       );
-      chips.add(Padding(
-          padding: EdgeInsets.symmetric(horizontal: 10), child: filterChip));
+      chips.add(
+        Padding(
+            padding: EdgeInsets.symmetric(horizontal: 10), child: filterChip),
+      );
     }
 
     return Wrap(
@@ -246,5 +303,4 @@ class _StoreProfilePageState extends State<StoreProfilePage> {
       children: chips,
     );
   }
-
 }

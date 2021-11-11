@@ -11,7 +11,6 @@ import 'package:cs_senior_project_merchant/screens/store/store_profile.dart';
 import 'package:cs_senior_project_merchant/services/store_service.dart';
 import 'package:cs_senior_project_merchant/models/dateTime.dart';
 import 'package:cs_senior_project_merchant/widgets/button_widget.dart';
-import 'package:flutter_switch/flutter_switch.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -187,8 +186,11 @@ class _StorePageState extends State<StorePage> {
                                     ),
                                     Container(
                                       alignment: Alignment.topLeft,
-                                      child:
-                                          Text(storeNotifier.store.kindOfFood),
+                                      child: Row(
+                                        children: storeNotifier.store.kindOfFood
+                                            .map((kind) => Text(kind))
+                                            .toList(),
+                                      ),
                                     ),
                                     Container(
                                       alignment: Alignment.centerLeft,
