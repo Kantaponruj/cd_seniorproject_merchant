@@ -123,6 +123,11 @@ class _StoreProfilePageState extends State<StoreProfilePage> {
                 padding: EdgeInsets.only(top: 20),
                 child: salesType('ประเภทสินค้า',)
             ),
+            Container(
+                alignment: Alignment.centerLeft,
+                padding: EdgeInsets.only(top: 20),
+                child: storeType('ประเภทร้านค้า',)
+            ),
           ],
         ),
       ),
@@ -192,4 +197,54 @@ class _StoreProfilePageState extends State<StoreProfilePage> {
       ],
     );
   }
+
+  Widget storeType(String headerText,) {
+    return Column(
+      children: [
+        Container(
+          alignment: Alignment.centerLeft,
+          margin: EdgeInsets.only(bottom: 10),
+          child: Text(
+            headerText,
+            style: FontCollection.bodyTextStyle,
+          ),
+        ),
+        chip(),
+      ],
+    );
+  }
+
+  List<String> text = ['Food Truck', 'Food Stall'];
+  List<bool> _isSelected = [true, false];
+
+  Widget chip() {
+    List<Widget> chips = [];
+
+    for (int i = 0; i < text.length; i++) {
+      FilterChip filterChip = FilterChip(
+        selected: _isSelected[i],
+        label: Text(
+          text[i],
+          style: FontCollection.smallBodyTextStyle,
+        ),
+        pressElevation: 5,
+        backgroundColor: CollectionsColors.grey,
+        selectedColor: CollectionsColors.yellow,
+        onSelected: (bool selected) {
+          setState(() {
+            _isSelected[i] = selected;
+          });
+        },
+      );
+      chips.add(Padding(
+          padding: EdgeInsets.symmetric(horizontal: 10), child: filterChip));
+    }
+
+    return Wrap(
+      spacing: 10.0,
+      runSpacing: 5.0,
+      children: chips,
+    );
+  }
+
 }
