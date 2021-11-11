@@ -139,7 +139,7 @@ class _StoreProfilePageState extends State<StoreProfilePage> {
               ),
             ),
             Container(
-              padding: EdgeInsets.only(top: 20),
+              // padding: EdgeInsets.only(top: 20),
               width: 200,
               height: 200,
               color: CollectionsColors.grey,
@@ -237,6 +237,7 @@ class _StoreProfilePageState extends State<StoreProfilePage> {
         ListView.builder(
           shrinkWrap: true,
           itemCount: kindOfFood.length,
+          physics: NeverScrollableScrollPhysics(),
           itemBuilder: (context, index) {
             return BuildCheckBox(
               title: kindOfFood[index],
@@ -267,40 +268,23 @@ class _StoreProfilePageState extends State<StoreProfilePage> {
             style: FontCollection.bodyTextStyle,
           ),
         ),
-        chip(),
+        buildDropdown(),
       ],
     );
   }
 
-  Widget chip() {
-    List<Widget> chips = [];
+  String values;
 
-    for (int i = 0; i < typeOfStore.length; i++) {
-      FilterChip filterChip = FilterChip(
-        selected: isSelectedTypeOfStore[i],
-        label: Text(
-          typeOfStore[i],
-          style: FontCollection.smallBodyTextStyle,
+  Widget buildDropdown() {
+    return DropdownButton<String>(
+        value: values,
+        iconSize: 30,
+        icon: Icon(
+          Icons.keyboard_arrow_down,
+          color: Colors.black,
         ),
-        pressElevation: 5,
-        backgroundColor: CollectionsColors.grey,
-        selectedColor: CollectionsColors.yellow,
-        onSelected: (bool selected) {
-          setState(() {
-            isSelectedTypeOfStore[i] = selected;
-          });
-        },
-      );
-      chips.add(
-        Padding(
-            padding: EdgeInsets.symmetric(horizontal: 10), child: filterChip),
-      );
-    }
-
-    return Wrap(
-      spacing: 10.0,
-      runSpacing: 5.0,
-      children: chips,
-    );
+        isExpanded: true,
+        // items: items.map(buildMenuItem).toList(),
+        onChanged: (value) {});
   }
 }
