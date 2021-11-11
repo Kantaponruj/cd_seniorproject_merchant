@@ -136,7 +136,7 @@ class BuildPlainTextField extends StatefulWidget {
     this.hintText,
     this.initialValue,
     this.errorText,
-    @required this.validator,
+    this.validator,
     this.onSaved,
   }) : super(key: key);
 
@@ -159,7 +159,14 @@ class _BuildPlainTextFieldState extends State<BuildPlainTextField> {
       initialValue: widget.initialValue,
       decoration: InputDecoration(
         hintText: widget.hintText,
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: BorderSide(color: CollectionsColors.orange, width: 2.0),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: BorderSide(color: CollectionsColors.orange, width: 2.0),
+        ),
       ),
       validator: widget.validator,
       onSaved: widget.onSaved,

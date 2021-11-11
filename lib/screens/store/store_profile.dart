@@ -1,6 +1,8 @@
 import 'package:cs_senior_project_merchant/asset/color.dart';
 import 'package:cs_senior_project_merchant/asset/text_style.dart';
+import 'package:cs_senior_project_merchant/component/checkBox.dart';
 import 'package:cs_senior_project_merchant/component/roundAppBar.dart';
+import 'package:cs_senior_project_merchant/component/textformfield.dart';
 import 'package:cs_senior_project_merchant/notifiers/store_notifier.dart';
 import 'package:cs_senior_project_merchant/screens/login.dart';
 import 'package:cs_senior_project_merchant/widgets/button_widget.dart';
@@ -31,16 +33,26 @@ class _StoreProfilePageState extends State<StoreProfilePage> {
               storeSection(storeNotifier),
               Container(
                 padding: EdgeInsets.only(top: 10),
-                child: userSection(storeNotifier),
+                child: Container(
+                  alignment: Alignment.topRight,
+                  padding: EdgeInsets.only(top: 20),
+                  child: EditButton(
+                    onClicked: () {
+                      storeNotifier.signOut();
+                      Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(builder: (context) => LoginPage()),
+                          (route) => false);
+                    },
+                    editText: 'ออกจากระบบ',
+                    textStyle: TextStyle(
+                      color: Colors.grey,
+                      fontSize: 14,
+                      decoration: TextDecoration.underline,
+                    ),
+                  ),
+                ),
               ),
-              // Container(
-              //   alignment: Alignment.centerLeft,
-              //   padding: EdgeInsets.only(top: 20),
-              //   child: EditButton(
-              //     onClicked: () {},
-              //     editText: 'ลบร้านค้านี้',
-              //   ),
-              // ),
               StadiumButtonWidget(
                 text: 'บันทึก',
                 onClicked: () {},
@@ -106,6 +118,11 @@ class _StoreProfilePageState extends State<StoreProfilePage> {
                 },
               ),
             ),
+            Container(
+                alignment: Alignment.centerLeft,
+                padding: EdgeInsets.only(top: 20),
+                child: salesType('ประเภทสินค้า',)
+            ),
           ],
         ),
       ),
@@ -124,11 +141,8 @@ class _StoreProfilePageState extends State<StoreProfilePage> {
             style: FontCollection.bodyTextStyle,
           ),
         ),
-        TextFormField(
+        BuildPlainTextField(
           initialValue: initialValue,
-          decoration: InputDecoration(
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-          ),
           onSaved: onSaved,
         ),
       ],
@@ -147,32 +161,35 @@ class _StoreProfilePageState extends State<StoreProfilePage> {
   //   );
   // }
 
-  Widget userSection(StoreNotifier storeNotifier) {
-    return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-        child: Column(
-          children: [
-            Container(
-              alignment: Alignment.topRight,
-              padding: EdgeInsets.only(top: 20),
-              child: EditButton(
-                onClicked: () {
-                  storeNotifier.signOut();
-                  Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(builder: (context) => LoginPage()),
-                      (route) => false);
-                },
-                editText: 'ออกจากระบบ',
-              ),
-            ),
-          ],
+  bool value = false;
+
+  Widget salesType(String headerText,) {
+    return Column(
+      children: [
+        Container(
+          alignment: Alignment.centerLeft,
+          margin: EdgeInsets.only(bottom: 10),
+          child: Text(
+            headerText,
+            style: FontCollection.bodyTextStyle,
+          ),
         ),
-      ),
+        BuildCheckBox(
+          title: 'ของคาว',
+          value: value,
+          onChanged: (value) {},
+        ),
+        BuildCheckBox(
+          title: 'ของหวาน',
+          value: value,
+          onChanged: (value) {},
+        ),
+        BuildCheckBox(
+          title: 'เครื่องดื่ม',
+          value: value,
+          onChanged: (value) {},
+        ),
+      ],
     );
   }
 }
