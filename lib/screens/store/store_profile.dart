@@ -1,8 +1,11 @@
 import 'package:cs_senior_project_merchant/asset/color.dart';
 import 'package:cs_senior_project_merchant/asset/text_style.dart';
 import 'package:cs_senior_project_merchant/component/roundAppBar.dart';
+import 'package:cs_senior_project_merchant/notifiers/store_notifier.dart';
+import 'package:cs_senior_project_merchant/screens/login.dart';
 import 'package:cs_senior_project_merchant/widgets/button_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class StoreProfilePage extends StatefulWidget {
   StoreProfilePage({Key key}) : super(key: key);
@@ -14,6 +17,8 @@ class StoreProfilePage extends StatefulWidget {
 class _StoreProfilePageState extends State<StoreProfilePage> {
   @override
   Widget build(BuildContext context) {
+    StoreNotifier storeNotifier = Provider.of<StoreNotifier>(context);
+
     return Scaffold(
       appBar: RoundedAppBar(
         appBarTittle: 'ข้อมูลร้านค้า',
@@ -23,20 +28,23 @@ class _StoreProfilePageState extends State<StoreProfilePage> {
           padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
           child: Column(
             children: [
-              storeSection(),
+              storeSection(storeNotifier),
               Container(
                 padding: EdgeInsets.only(top: 10),
-                child: userSection(),
+                child: userSection(storeNotifier),
               ),
-              Container(
-                alignment: Alignment.centerLeft,
-                padding: EdgeInsets.only(top: 20),
-                child: EditButton(
-                  onClicked: () {},
-                  editText: 'ลบร้านค้านี้',
-                ),
+              // Container(
+              //   alignment: Alignment.centerLeft,
+              //   padding: EdgeInsets.only(top: 20),
+              //   child: EditButton(
+              //     onClicked: () {},
+              //     editText: 'ลบร้านค้านี้',
+              //   ),
+              // ),
+              StadiumButtonWidget(
+                text: 'บันทึก',
+                onClicked: () {},
               ),
-              StadiumButtonWidget(text: 'บันทึก', onClicked: () {},),
             ],
           ),
         ),
@@ -44,7 +52,7 @@ class _StoreProfilePageState extends State<StoreProfilePage> {
     );
   }
 
-  Widget storeSection() {
+  Widget storeSection(StoreNotifier storeNotifier) {
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
@@ -82,18 +90,20 @@ class _StoreProfilePageState extends State<StoreProfilePage> {
               padding: EdgeInsets.only(top: 20),
               child: buildTextField(
                 'ชื่อร้านอาหาร',
-                controller,
-                '',
-                (value) {},
+                storeNotifier.store.storeName,
+                (value) {
+                  storeNotifier.store.storeName = value;
+                },
               ),
             ),
             Container(
               padding: EdgeInsets.only(top: 20),
               child: buildTextField(
                 'เบอร์โทรศัพท์',
-                controller,
-                '',
-                (value) {},
+                storeNotifier.store.phone,
+                (value) {
+                  storeNotifier.store.phone = value;
+                },
               ),
             ),
           ],
@@ -102,11 +112,8 @@ class _StoreProfilePageState extends State<StoreProfilePage> {
     );
   }
 
-  TextEditingController controller;
-  String value;
-
-  Widget buildTextField(String headerText, TextEditingController controller,
-      String initialValue, Function onSaved) {
+  Widget buildTextField(
+      String headerText, String initialValue, Function onSaved) {
     return Column(
       children: [
         Container(
@@ -119,7 +126,6 @@ class _StoreProfilePageState extends State<StoreProfilePage> {
         ),
         TextFormField(
           initialValue: initialValue,
-          controller: controller,
           decoration: InputDecoration(
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
           ),
@@ -141,7 +147,7 @@ class _StoreProfilePageState extends State<StoreProfilePage> {
   //   );
   // }
 
-  Widget userSection() {
+  Widget userSection(StoreNotifier storeNotifier) {
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
@@ -150,26 +156,17 @@ class _StoreProfilePageState extends State<StoreProfilePage> {
         padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
         child: Column(
           children: [
-            buildTextField(
-              'อีเมล',
-              controller,
-              '',
-              (value) {},
-            ),
-            Container(
-              padding: EdgeInsets.only(top: 20),
-              child: buildTextField(
-                'รหัสผ่าน',
-                controller,
-                '',
-                (value) {},
-              ),
-            ),
             Container(
               alignment: Alignment.topRight,
               padding: EdgeInsets.only(top: 20),
               child: EditButton(
-                onClicked: () {},
+                onClicked: () {
+                  storeNotifier.signOut();
+                  Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(builder: (context) => LoginPage()),
+                      (route) => false);
+                },
                 editText: 'ออกจากระบบ',
               ),
             ),

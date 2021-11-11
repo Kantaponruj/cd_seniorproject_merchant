@@ -49,18 +49,6 @@ class _MenuPageState extends State<MenuPage> {
         extendBodyBehindAppBar: true,
         appBar: RoundedAppBar(
           appBarTittle: 'เพิ่มรายการอาหารของคุณ',
-          action: [
-            IconButton(
-              onPressed: () {
-                store.signOut();
-                Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(builder: (context) => LoginPage()),
-                    (route) => false);
-              },
-              icon: Icon(Icons.logout),
-            ),
-          ],
         ),
         body: Container(
           margin: EdgeInsets.only(top: 80),
