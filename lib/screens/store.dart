@@ -41,7 +41,7 @@ class _StorePageState extends State<StorePage> {
     _isPickUp = storeNotifier.store.isPickUp;
     _isDelivery = storeNotifier.store.isDelivery;
 
-    storeNotifier.reloadUserModel();
+    // storeNotifier.reloadUserModel();
 
     super.initState();
   }
@@ -174,7 +174,7 @@ class _StorePageState extends State<StorePage> {
                                             child: EditButton(
                                               editText: 'แก้ไขข้อมูล',
                                               onClicked: () {
-                                                storeNotifier.reloadUserModel();
+                                                // storeNotifier.reloadUserModel();
                                                 Navigator.of(context).push(
                                                   MaterialPageRoute(
                                                     builder: (context) =>
@@ -190,9 +190,9 @@ class _StorePageState extends State<StorePage> {
                                     Container(
                                       alignment: Alignment.topLeft,
                                       child: Row(
-                                        children: storeNotifier.store.kindOfFood
-                                            .map((kind) => Text(kind))
-                                            .toList(),
+                                        children: [
+                                          Text(storeNotifier.store.kindOfFood.join(', ')),
+                                        ],
                                       ),
                                     ),
                                     Container(

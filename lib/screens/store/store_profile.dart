@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:cs_senior_project_merchant/asset/color.dart';
 import 'package:cs_senior_project_merchant/asset/text_style.dart';
+import 'package:cs_senior_project_merchant/component/bottomBar.dart';
 import 'package:cs_senior_project_merchant/component/checkBox.dart';
 import 'package:cs_senior_project_merchant/component/roundAppBar.dart';
 import 'package:cs_senior_project_merchant/component/textformfield.dart';
@@ -104,10 +105,11 @@ class _StoreProfilePageState extends State<StoreProfilePage> {
 
                   updateImageStore(storeNotifier.store.storeId, _imageFile);
 
-                  Navigator.of(context).push(
+                  Navigator.of(context).pushAndRemoveUntil(
                     MaterialPageRoute(
-                      builder: (context) => BottomAppBar(),
+                      builder: (context) => BottomBar(),
                     ),
+                    (route) => false,
                   );
                 },
               ),
