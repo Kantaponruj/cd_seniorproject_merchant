@@ -4,10 +4,12 @@ import 'package:cs_senior_project_merchant/asset/constant.dart';
 import 'package:cs_senior_project_merchant/asset/text_style.dart';
 import 'package:cs_senior_project_merchant/component/mainAppBar.dart';
 import 'package:cs_senior_project_merchant/notifiers/location_notifier.dart';
+import 'package:cs_senior_project_merchant/notifiers/order_notifier.dart';
 import 'package:cs_senior_project_merchant/notifiers/store_notifier.dart';
 import 'package:cs_senior_project_merchant/screens/allDes_map.dart';
 import 'package:cs_senior_project_merchant/screens/order/customer_map.dart';
 import 'package:cs_senior_project_merchant/screens/order/orderDetail.dart';
+import 'package:cs_senior_project_merchant/services/order_service.dart';
 import 'package:cs_senior_project_merchant/widgets/icontext_widget.dart';
 import 'package:cs_senior_project_merchant/widgets/loading_widget.dart';
 import 'package:flutter/material.dart';
@@ -32,7 +34,12 @@ class _OrderPageState extends State<OrderPage> {
         Provider.of<LocationNotifier>(context, listen: false);
     locationNotifier.initialization();
 
+    OrderNotifier orderNotifier =
+        Provider.of<OrderNotifier>(context, listen: false);
+
     updateLocation();
+
+    getOrderDelivery(orderNotifier, storeNotifier.store.storeId);
     super.initState();
   }
 
