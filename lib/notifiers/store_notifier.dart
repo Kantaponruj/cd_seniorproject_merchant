@@ -23,6 +23,9 @@ class StoreNotifier with ChangeNotifier {
   TextEditingController password = TextEditingController();
   TextEditingController confirmPassword = TextEditingController();
   TextEditingController displayName = TextEditingController();
+  TextEditingController storeName = TextEditingController();
+  TextEditingController description = TextEditingController();
+  String typeOfStore = '';
 
   StoreNotifier.initialize() {
     _fireSetUp();
@@ -69,6 +72,9 @@ class StoreNotifier with ChangeNotifier {
         _storeService.createUser(
           storeId: result.user.uid,
           email: email.text.trim(),
+          storeName: storeName.text.trim(),
+          description: description.text.trim(),
+          typeOfStore: typeOfStore,
         );
       });
       return true;

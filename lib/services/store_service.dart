@@ -12,12 +12,18 @@ class StoreService {
   void createUser({
     String storeId,
     String email,
+    String storeName,
+    String description,
+    String typeOfStore,
   }) {
     firebaseFirestore.collection(collection).doc(storeId).set({
       'storeId': storeId,
       'email': email,
+      'storeName': storeName,
+      'description': description,
       'deliveryStatus': false,
-      'storeStatus': false
+      'storeStatus': false,
+      'typeOfStore': typeOfStore,
     });
   }
 

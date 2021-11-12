@@ -9,7 +9,6 @@ import 'package:cs_senior_project_merchant/widgets/button_widget.dart';
 import 'package:cs_senior_project_merchant/widgets/loading_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 import 'login.dart';
@@ -22,9 +21,20 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  final formKey = GlobalKey<ScaffoldState>();
-
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  List<dynamic> typeOfStore = ['Food Truck', 'ร้านค้ารถเข็น'];
+  String selectedTypeOfStore;
   String password = '';
+
+  int currentStep = 0;
+  bool isCompleted = false;
+
+  // @override
+  // void initState() {
+  //   StoreNotifier store = Provider.of<StoreNotifier>(context, listen: false);
+  //   store.typeOfStore = '';
+  //   super.initState();
+  // }
 
   void login(BuildContext context) {
     Navigator.of(context).push(
@@ -35,9 +45,6 @@ class _RegisterPageState extends State<RegisterPage> {
       ),
     );
   }
-
-  int currentStep = 0;
-  bool isCompleted = false;
 
   @override
   Widget build(BuildContext context) {
@@ -55,72 +62,75 @@ class _RegisterPageState extends State<RegisterPage> {
         elevation: 0,
         toolbarHeight: 80,
       ),
-      key: formKey,
+      // key: formKey,
       body: storeNotifier.status == Status.Authenticating
           ? LoadingWidget()
           : Container(
               // padding: EdgeInsets.only(top: 20),
-              child: Theme(
-                data: Theme.of(context).copyWith(
-                  colorScheme: ColorScheme.light(
-                    primary: CollectionsColors.orange,
+              child: Form(
+                child: Theme(
+                  data: Theme.of(context).copyWith(
+                    colorScheme: ColorScheme.light(
+                      primary: CollectionsColors.orange,
+                    ),
                   ),
-                ),
-                child: Stepper(
-                  type: StepperType.horizontal,
-                  steps: getSteps(storeNotifier),
-                  currentStep: currentStep,
-                  onStepContinue: () async {
-                    if (isLastStep) {
-                      setState(() => isCompleted = true);
-                      if (!await storeNotifier.signUp()) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text("Register failed")));
-                        return;
+                  child: Stepper(
+                    type: StepperType.horizontal,
+                    steps: getSteps(storeNotifier),
+                    currentStep: currentStep,
+                    onStepContinue: () async {
+                      if (isLastStep) {
+                        setState(() => isCompleted = true);
+                        if (!await storeNotifier.signUp()) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text("Register failed")));
+                          return;
+                        }
+                        storeNotifier.clearController();
+                        Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => BottomBar()),
+                            (route) => false);
+                        FocusScope.of(context).unfocus();
+                      } else {
+                        setState(() => currentStep += 1);
                       }
-                      storeNotifier.clearController();
-                      Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(builder: (context) => BottomBar()),
-                          (route) => false);
-                      FocusScope.of(context).unfocus();
-                    } else {
-                      setState(() => currentStep += 1);
-                    }
-                  },
-                  onStepCancel: currentStep == 0
-                      ? null
-                      : () => setState(() => currentStep -= 1),
-                  onStepTapped: (step) => setState(() => currentStep = step),
-                  controlsBuilder: (context, {onStepContinue, onStepCancel}) {
-                    return Container(
-                      margin: EdgeInsets.only(top: 50),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: ButtonWidget(
-                              text: isLastStep ? 'ลงทะเบียน' : 'ถัดไป',
-                              onClicked: onStepContinue,
-                            ),
-                          ),
-                          if (currentStep != 0)
+                    },
+                    onStepCancel: currentStep == 0
+                        ? null
+                        : () => setState(() => currentStep -= 1),
+                    onStepTapped: (step) => setState(() => currentStep = step),
+                    controlsBuilder: (context, {onStepContinue, onStepCancel}) {
+                      return Container(
+                        margin: EdgeInsets.only(top: 50),
+                        child: Row(
+                          children: [
                             Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.only(left: 20),
-                                child: TextButton(
-                                  child: Text(
-                                    'ย้อนกลับ',
-                                    style:
-                                        FontCollection.underlineButtonTextStyle,
-                                  ),
-                                  onPressed: onStepCancel,
-                                ),
+                              child: ButtonWidget(
+                                text: isLastStep ? 'ลงทะเบียน' : 'ถัดไป',
+                                onClicked: onStepContinue,
                               ),
                             ),
-                        ],
-                      ),
-                    );
-                  },
+                            if (currentStep != 0)
+                              Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 20),
+                                  child: TextButton(
+                                    child: Text(
+                                      'ย้อนกลับ',
+                                      style: FontCollection
+                                          .underlineButtonTextStyle,
+                                    ),
+                                    onPressed: onStepCancel,
+                                  ),
+                                ),
+                              ),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
                 ),
               ),
             ),
@@ -140,9 +150,9 @@ class _RegisterPageState extends State<RegisterPage> {
           return null;
         }
       },
+      // onSaved: (value) => setState(() => userName = value),
       maxLength: 30,
     );
-    // onSaved: (value) => setState(() => username = value),
   }
 
   Widget buildEmail(StoreNotifier storeNotifier) {
@@ -164,7 +174,6 @@ class _RegisterPageState extends State<RegisterPage> {
         }
       },
     );
-    // onSaved: (value) => setState(() => email = value),
   }
 
   Widget buildPassword(StoreNotifier storeNotifier) {
@@ -188,7 +197,6 @@ class _RegisterPageState extends State<RegisterPage> {
       labelText: 'รหัสผ่านอีกครั้ง',
       textEditingController: storeNotifier.confirmPassword,
       hintText: 'กรุณากยืนยันรหัสผ่าน',
-      // textInputType: TextInputType.emailAddress,
       validator: (value) {
         if (value != storeNotifier.password.text) {
           return 'รหัสผ่านไม่ตรงกัน';
@@ -196,13 +204,14 @@ class _RegisterPageState extends State<RegisterPage> {
           return null;
         }
       },
+      onSaved: (value) => setState(() => password = value),
     );
   }
 
-  Widget buildStoreName() {
+  Widget buildStoreName(StoreNotifier storeNotifier) {
     return BuildTextField(
       labelText: 'ชื่อร้านค้า',
-      // textEditingController: storeNotifier.displayName,
+      textEditingController: storeNotifier.storeName,
       hintText: 'กรุณากรอกชื่อร้านค้า',
       textInputType: TextInputType.text,
       validator: (value) {
@@ -214,13 +223,12 @@ class _RegisterPageState extends State<RegisterPage> {
       },
       maxLength: 30,
     );
-    // onSaved: (value) => setState(() => username = value),
   }
 
-  Widget buildStoreDes() {
+  Widget buildStoreDes(StoreNotifier storeNotifier) {
     return BuildTextField(
       labelText: 'คำอธิบายร้านค้า',
-      // textEditingController: storeNotifier.displayName,
+      textEditingController: storeNotifier.description,
       hintText: 'กรุณากรอกคำอธิบายร้านค้า',
       textInputType: TextInputType.multiline,
       validator: (value) {
@@ -232,7 +240,6 @@ class _RegisterPageState extends State<RegisterPage> {
       },
       maxLine: null,
     );
-    // onSaved: (value) => setState(() => username = value),
   }
 
   List<Step> getSteps(StoreNotifier storeNotifier) => [
@@ -290,7 +297,17 @@ class _RegisterPageState extends State<RegisterPage> {
         Step(
           isActive: currentStep >= 2,
           title: Text('เรียบร้อย'),
-          content: Container(),
+          content: Container(
+            child: Column(
+              children: [
+                Text(storeNotifier.displayName.text.trim()),
+                Text(storeNotifier.email.text.trim()),
+                Text(storeNotifier.storeName.text.trim()),
+                Text(storeNotifier.description.text.trim()),
+                Text(storeNotifier.typeOfStore),
+              ],
+            ),
+          ),
         ),
       ];
 
@@ -302,6 +319,8 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   Widget storePart() {
+    StoreNotifier storeNotifier = Provider.of<StoreNotifier>(context);
+
     return Container(
       child: buildForm(
         Column(
@@ -326,11 +345,11 @@ class _RegisterPageState extends State<RegisterPage> {
             // ),
             Container(
               margin: EdgeInsets.only(top: 20),
-              child: buildStoreName(),
+              child: buildStoreName(storeNotifier),
             ),
             Container(
               margin: EdgeInsets.only(top: 10),
-              child: buildStoreDes(),
+              child: buildStoreDes(storeNotifier),
             ),
             Container(
               alignment: Alignment.topLeft,
@@ -340,58 +359,39 @@ class _RegisterPageState extends State<RegisterPage> {
                 style: FontCollection.bodyBoldTextStyle,
               ),
             ),
-            Container(child: saleType('จัดส่ง'),),
-            Container(child: saleType('รับเอง'),),
+            Container(
+              child: buildDropdown(storeNotifier),
+            ),
           ],
         ),
       ),
     );
   }
 
-  bool checkbox = false;
-
-  Widget saleType(String text) {
-    return Container(
-      padding: EdgeInsets.zero,
-      child: CheckboxListTile(
-        title: Text(text, style: FontCollection.bodyTextStyle,),
-        controlAffinity: ListTileControlAffinity.leading,
-        value: checkbox,
-        onChanged: (bool value) {
-        },
-        activeColor: CollectionsColors.yellow,
-        checkColor: CollectionsColors.white,
+  Widget buildDropdown(StoreNotifier storeNotifier) {
+    return DropdownButton(
+      value: selectedTypeOfStore,
+      hint: Text('เลือกรูปแบบการขาย'),
+      iconSize: 30,
+      icon: Icon(
+        Icons.keyboard_arrow_down,
+        color: Colors.black,
       ),
+      isExpanded: true,
+      items: typeOfStore
+          .map(
+            (type) => DropdownMenuItem(
+              value: type,
+              child: Text(type),
+            ),
+          )
+          .toList(),
+      onChanged: (value) {
+        setState(() {
+          selectedTypeOfStore = value;
+          storeNotifier.typeOfStore = value;
+        });
+      },
     );
   }
-  //
-  // File image;
-  //
-  // Future pickImage() async {
-  //   try {
-  //     final image = await ImagePicker().pickImage(source: ImageSource.gallery);
-  //     if(image == null) return;
-  //
-  //     final imageTemporary = File(image.path);
-  //     setState(() => this.image = imageTemporary);
-  //   } on PlatformException catch (e) {
-  //     print('Failed to pick image: $e');
-  //   }
-  // }
-
-  // Widget buildImage() {
-  //   return InkWell(
-  //     onTap: () => pickImage(),
-  //     child: Container(
-  //       width: MediaQuery.of(context).size.width,
-  //       height: 200,
-  //       // decoration: BoxDecoration(
-  //       //   borderRadius: BorderRadius.circular(20),
-  //       //   color: CollectionsColors.yellow,
-  //       // ),
-  //       // child: Image.file(image, fit: BoxFit.cover,),
-  //     ),
-  //   );
-  // }
-
 }

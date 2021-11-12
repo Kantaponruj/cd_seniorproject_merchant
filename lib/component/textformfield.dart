@@ -1,5 +1,4 @@
 import 'package:cs_senior_project_merchant/asset/color.dart';
-import 'package:cs_senior_project_merchant/asset/text_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -15,6 +14,7 @@ class BuildTextField extends StatefulWidget {
     this.obscureText = false,
     this.maxLength,
     this.maxLine,
+    this.onSaved,
   }) : super(key: key);
 
   final String labelText;
@@ -26,6 +26,7 @@ class BuildTextField extends StatefulWidget {
   final bool obscureText;
   final int maxLength;
   final int maxLine;
+  final Function onSaved;
 
   @override
   _BuildTextFieldState createState() => _BuildTextFieldState();
@@ -55,11 +56,13 @@ class _BuildTextFieldState extends State<BuildTextField> {
           borderSide: BorderSide(color: CollectionsColors.red, width: 2.0),
         ),
       ),
+      controller: widget.textEditingController,
       keyboardType: widget.textInputType,
       validator: widget.validator,
       obscureText: widget.obscureText,
       maxLength: widget.maxLength,
       maxLines: widget.maxLine,
+      onSaved: widget.onSaved,
     );
   }
 }
@@ -72,6 +75,7 @@ class BuildPasswordField extends StatefulWidget {
     @required this.hintText,
     this.errorText,
     this.validator,
+    this.onSaved,
   }) : super(key: key);
 
   final String labelText;
@@ -79,6 +83,7 @@ class BuildPasswordField extends StatefulWidget {
   final String hintText;
   final String errorText;
   final String Function(String) validator;
+  final Function onSaved;
 
   @override
   _BuildPasswordFieldState createState() => _BuildPasswordFieldState();
@@ -123,6 +128,7 @@ class _BuildPasswordFieldState extends State<BuildPasswordField> {
       keyboardType: TextInputType.visiblePassword,
       autofillHints: [AutofillHints.password],
       onEditingComplete: () => TextInput.finishAutofillContext(),
+      onSaved: widget.onSaved,
     );
   }
 
