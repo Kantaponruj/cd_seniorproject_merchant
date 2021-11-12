@@ -1,14 +1,16 @@
 import 'package:cs_senior_project_merchant/asset/color.dart';
 import 'package:cs_senior_project_merchant/asset/text_style.dart';
 import 'package:cs_senior_project_merchant/component/storeCard.dart';
+import 'package:cs_senior_project_merchant/component/switch.dart';
+import 'package:cs_senior_project_merchant/component/textformfield.dart';
 import 'package:cs_senior_project_merchant/notifiers/dateTime_notifier.dart';
 import 'package:cs_senior_project_merchant/notifiers/store_notifier.dart';
 import 'package:cs_senior_project_merchant/screens/store/address.dart';
 import 'package:cs_senior_project_merchant/screens/store/opening_hours.dart';
+import 'package:cs_senior_project_merchant/screens/store/store_profile.dart';
 import 'package:cs_senior_project_merchant/services/store_service.dart';
 import 'package:cs_senior_project_merchant/models/dateTime.dart';
 import 'package:cs_senior_project_merchant/widgets/button_widget.dart';
-import 'package:flutter_switch/flutter_switch.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -26,6 +28,8 @@ class _StorePageState extends State<StorePage> {
   bool _isPickUp;
   bool _isDelivery;
 
+  // TextEditingController detail = TextEditingController();
+
   @override
   void initState() {
     StoreNotifier storeNotifier =
@@ -38,6 +42,10 @@ class _StorePageState extends State<StorePage> {
     _storeStatus = storeNotifier.store.storeStatus;
     _isPickUp = storeNotifier.store.isPickUp;
     _isDelivery = storeNotifier.store.isDelivery;
+
+    // detail.text = storeNotifier.store.description;
+
+    // storeNotifier.reloadUserModel();
 
     super.initState();
   }
@@ -169,7 +177,15 @@ class _StorePageState extends State<StorePage> {
                                             flex: 3,
                                             child: EditButton(
                                               editText: 'แก้ไขข้อมูล',
-                                              onClicked: () {},
+                                              onClicked: () {
+                                                // storeNotifier.reloadUserModel();
+                                                Navigator.of(context).push(
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        StoreProfilePage(),
+                                                  ),
+                                                );
+                                              },
                                             ),
                                           ),
                                         ],
@@ -177,8 +193,12 @@ class _StorePageState extends State<StorePage> {
                                     ),
                                     Container(
                                       alignment: Alignment.topLeft,
-                                      child:
-                                          Text(storeNotifier.store.kindOfFood),
+                                      child: Row(
+                                        children: [
+                                          Text(storeNotifier.store.kindOfFood
+                                              .join(', ')),
+                                        ],
+                                      ),
                                     ),
                                     Container(
                                       alignment: Alignment.centerLeft,
@@ -207,7 +227,7 @@ class _StorePageState extends State<StorePage> {
                               ),
                             ),
                             Container(
-                              margin: EdgeInsets.fromLTRB(40, 20, 40, 0),
+                              margin: EdgeInsets.fromLTRB(10, 20, 10, 0),
                               child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
@@ -242,7 +262,14 @@ class _StorePageState extends State<StorePage> {
                               ),
                             ),
                             storeCard(
-                              onClicked: () {},
+                              onClicked: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return buildEditStoreDes(storeNotifier);
+                                  },
+                                );
+                              },
                               headerText: 'รายละเอียดร้านค้า',
                               child: Center(
                                 child: Container(
@@ -257,11 +284,13 @@ class _StorePageState extends State<StorePage> {
                             storeCard(
                               onClicked: () {
                                 Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => OpeningHoursPage(
-                                            storeId:
-                                                storeNotifier.store.storeId)));
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => OpeningHoursPage(
+                                      storeId: storeNotifier.store.storeId,
+                                    ),
+                                  ),
+                                );
                               },
                               headerText: 'เวลาทำการ',
                               child: dateTimeNotifier.dateTimeList.isNotEmpty
@@ -451,16 +480,10 @@ class _StorePageState extends State<StorePage> {
               ),
               SizedBox(
                 width: 100,
-                child: FlutterSwitch(
+                child: BuildSwitch(
                   width: 100,
-                  showOnOff: true,
-                  activeTextColor: CollectionsColors.white,
-                  activeColor: CollectionsColors.orange,
-                  inactiveTextColor: CollectionsColors.white,
                   activeText: 'เปิด',
                   inactiveText: 'ปิด',
-                  activeTextFontWeight: FontWeight.w400,
-                  inactiveTextFontWeight: FontWeight.w400,
                   value: status,
                   onToggle: handleToggle,
                 ),
@@ -500,6 +523,54 @@ class _StorePageState extends State<StorePage> {
                 style: isPressed
                     ? FontCollection.smallBodyTextStyle
                     : TextStyle(fontSize: 14, color: Colors.grey),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget buildEditStoreDes(StoreNotifier storeNotifier) {
+    TextEditingController detail = TextEditingController();
+
+    return AlertDialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(30),
+      ),
+      content: Container(
+        padding: EdgeInsets.symmetric(vertical: 40),
+        width: MediaQuery.of(context).size.width,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              alignment: Alignment.topLeft,
+              child: Text(
+                'รายละเอียดร้านค้า',
+                style: FontCollection.bodyTextStyle,
+              ),
+            ),
+            Container(
+              padding: EdgeInsets.only(top: 20),
+              child: BuildTextField(
+                textEditingController: detail,
+                hintText: 'กรุณากรอกรายละเอียดร้านค้า',
+                maxLine: 5,
+                textInputType: TextInputType.multiline,
+              ),
+            ),
+            Container(
+              alignment: Alignment.topRight,
+              padding: EdgeInsets.only(top: 20),
+              child: NoShapeButton(
+                text: 'บันทึก',
+                onClicked: () {
+                  // storeNotifier
+                  //     .updateUserData({'description': controller.text.trim()});
+                  print(detail.text.trim());
+                  Navigator.pop(context);
+                },
               ),
             ),
           ],

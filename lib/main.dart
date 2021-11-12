@@ -3,9 +3,11 @@ import 'package:cs_senior_project_merchant/asset/constant.dart';
 import 'package:cs_senior_project_merchant/notifiers/address_notifier.dart';
 import 'package:cs_senior_project_merchant/notifiers/dateTime_notifier.dart';
 import 'package:cs_senior_project_merchant/notifiers/location_notifier.dart';
+import 'package:cs_senior_project_merchant/notifiers/menu_notifier.dart';
 import 'package:cs_senior_project_merchant/notifiers/order_notifier.dart';
 import 'package:cs_senior_project_merchant/notifiers/store_notifier.dart';
 import 'package:cs_senior_project_merchant/screens/login.dart';
+import 'package:cs_senior_project_merchant/screens/menu.dart';
 import 'package:cs_senior_project_merchant/widgets/loading_widget.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -23,7 +25,8 @@ void main() async {
       ChangeNotifierProvider(create: (context) => OrderNotifier()),
       ChangeNotifierProvider(create: (context) => DateTimeNotifier()),
       ChangeNotifierProvider(create: (context) => AddressNotifier()),
-      ChangeNotifierProvider(create: (context) => LocationNotifier())
+      ChangeNotifierProvider(create: (context) => LocationNotifier()),
+      ChangeNotifierProvider(create: (context) => MenuNotfier())
     ],
     child: MaterialApp(
       theme: ThemeData(
@@ -40,6 +43,7 @@ void main() async {
         // '/': (context) => BottomBar(),
         // '/address': (context) => AddressPage(),
         // '/openingHours': (context) => OpeningHoursPage(),
+        '/menu': (context) => MenuPage(),
       },
     ),
   ));

@@ -29,6 +29,7 @@ dependencies:
   sliding_up_panel: ^2.0.0+1
   provider: ^5.0.0
   http: ^0.13.0
+  uuid: ^3.0.5
 
   #firebase
   cloud_firestore: ^1.0.7
@@ -36,6 +37,7 @@ dependencies:
   firebase_core: ^1.4.0
   shared_preferences: ^2.0.5
   firebase_messaging: ^10.0.2
+  firebase_storage: ^10.0.4
 
   #map
   google_maps_flutter: ^2.0.3

@@ -52,8 +52,7 @@ class StadiumButtonWidget extends StatelessWidget {
         child: ElevatedButton(
           onPressed: onClicked,
           style: ElevatedButton.styleFrom(
-              shape: StadiumBorder(),
-              primary: Theme.of(context).buttonColor),
+              shape: StadiumBorder(), primary: Theme.of(context).buttonColor),
           child: Text(
             text,
             style: FontCollection.buttonTextStyle,
@@ -81,7 +80,7 @@ class SmallStadiumButtonWidget extends StatelessWidget {
     return Center(
       child: Container(
         margin: EdgeInsets.fromLTRB(0, 20, 0, 10),
-        padding: EdgeInsets.symmetric(vertical: 10,horizontal: 40),
+        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 40),
         height: 60,
         child: ElevatedButton(
           onPressed: onClicked,
@@ -99,10 +98,12 @@ class SmallStadiumButtonWidget extends StatelessWidget {
 }
 
 class EditButton extends StatelessWidget {
-  EditButton({Key key, @required this.onClicked, @required this.editText}) : super(key: key);
+  EditButton({Key key, @required this.onClicked, @required this.editText, this.textStyle})
+      : super(key: key);
 
   final VoidCallback onClicked;
   final String editText;
+  final TextStyle textStyle;
 
   @override
   Widget build(BuildContext context) {
@@ -110,7 +111,36 @@ class EditButton extends StatelessWidget {
       onPressed: onClicked,
       child: Text(
         editText,
-        style: FontCollection.underlineButtonTextStyle,
+        style: textStyle == null ? FontCollection.underlineButtonTextStyle : textStyle,
+      ),
+    );
+  }
+}
+
+class NoShapeButton extends StatelessWidget {
+  final String text;
+  final VoidCallback onClicked;
+  final Color color;
+
+  const NoShapeButton({
+    @required this.text,
+    @required this.onClicked,
+    this.color,
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      onPressed: onClicked,
+      style: ElevatedButton.styleFrom(
+          primary: (color == null) ? Theme.of(context).buttonColor : color),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 15),
+        child: Text(
+          text,
+          style: FontCollection.smallBodyTextStyle,
+        ),
       ),
     );
   }

@@ -4,9 +4,12 @@ import 'package:cs_senior_project_merchant/asset/constant.dart';
 import 'package:cs_senior_project_merchant/asset/text_style.dart';
 import 'package:cs_senior_project_merchant/component/mainAppBar.dart';
 import 'package:cs_senior_project_merchant/notifiers/location_notifier.dart';
+import 'package:cs_senior_project_merchant/notifiers/order_notifier.dart';
 import 'package:cs_senior_project_merchant/notifiers/store_notifier.dart';
+import 'package:cs_senior_project_merchant/screens/allDes_map.dart';
 import 'package:cs_senior_project_merchant/screens/order/customer_map.dart';
 import 'package:cs_senior_project_merchant/screens/order/orderDetail.dart';
+import 'package:cs_senior_project_merchant/services/order_service.dart';
 import 'package:cs_senior_project_merchant/widgets/icontext_widget.dart';
 import 'package:cs_senior_project_merchant/widgets/loading_widget.dart';
 import 'package:flutter/material.dart';
@@ -31,7 +34,12 @@ class _OrderPageState extends State<OrderPage> {
         Provider.of<LocationNotifier>(context, listen: false);
     locationNotifier.initialization();
 
+    OrderNotifier orderNotifier =
+        Provider.of<OrderNotifier>(context, listen: false);
+
     updateLocation();
+
+    getOrderDelivery(orderNotifier, storeNotifier.store.storeId);
     super.initState();
   }
 
@@ -74,6 +82,10 @@ class _OrderPageState extends State<OrderPage> {
         backgroundColor: CollectionsColors.grey,
         appBar: MainAppbar(
           appBarTitle: 'คำสั่งซื้อ',
+          map: () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => AllDestinationPage()));
+          },
         ),
         body: SingleChildScrollView(
           child: StreamBuilder(
@@ -101,8 +113,9 @@ class _OrderPageState extends State<OrderPage> {
                       ),
                       ListView(
                         children: snapshot.data.docs.map((order) {
-                          return orderCard(
-                              order, storeNotifier.store.storeId);
+                          return order['orderStatus'] == 'กำลังดำเนินการ'
+                              ? orderCard(order, storeNotifier.store.storeId)
+                              : Container();
                         }).toList(),
                         shrinkWrap: true,
                         physics: NeverScrollableScrollPhysics(),
@@ -118,7 +131,10 @@ class _OrderPageState extends State<OrderPage> {
                       ),
                       ListView(
                         children: snapshot.data.docs.map((order) {
-                          return orderCard(order, storeNotifier.store.storeId);
+                          return order['orderStatus'] == 'ยืนยันคำสั่งซื้อ' ||
+                                  order['orderStatus'] == 'ยืนยันการจัดส่ง'
+                              ? orderCard(order, storeNotifier.store.storeId)
+                              : Container();
                         }).toList(),
                         shrinkWrap: true,
                         physics: NeverScrollableScrollPhysics(),
@@ -182,7 +198,10 @@ class _OrderPageState extends State<OrderPage> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      buildName(order['customerName'][0].toUpperCase(),order['customerName'],),
+                      buildName(
+                        order['customerName'][0].toUpperCase(),
+                        order['customerName'],
+                      ),
                       Container(
                         padding: EdgeInsets.all(5),
                         decoration: BoxDecoration(
@@ -222,7 +241,9 @@ class _OrderPageState extends State<OrderPage> {
                                 style: FontCollection.smallBodyTextStyle,
                               ),
                             ),
-                            SizedBox(width: 10,),
+                            SizedBox(
+                              width: 10,
+                            ),
                             BuildIconText(
                               icon: Icons.access_time,
                               child: Row(
@@ -234,7 +255,7 @@ class _OrderPageState extends State<OrderPage> {
                                       style: FontCollection.smallBodyTextStyle,
                                     ),
                                   ),
-                                  priceText('12.30'),
+                                  priceText(order['timeOrdered']),
                                 ],
                               ),
                             ),
@@ -247,7 +268,10 @@ class _OrderPageState extends State<OrderPage> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              bottomLeft('7', order['netPrice'],),
+                              bottomLeft(
+                                order['amountOfMenu'],
+                                order['netPrice'],
+                              ),
                               Container(
                                 child: Text(
                                   'รายละเอียด',
@@ -271,7 +295,7 @@ class _OrderPageState extends State<OrderPage> {
     );
   }
 
-  Widget bottomLeft(String orderNumber,String price) {
+  Widget bottomLeft(String orderNumber, String price) {
     return Container(
       child: Row(
         children: [
@@ -281,10 +305,11 @@ class _OrderPageState extends State<OrderPage> {
           ),
           SizedBox(
             height: 20,
-              child: VerticalDivider(
-            thickness: 2,
-                width: 20,
-          ),),
+            child: VerticalDivider(
+              thickness: 2,
+              width: 20,
+            ),
+          ),
           priceText(price),
           Container(
             padding: EdgeInsets.only(left: 10),

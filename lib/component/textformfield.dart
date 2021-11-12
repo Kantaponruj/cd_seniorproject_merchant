@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 class BuildTextField extends StatefulWidget {
   BuildTextField({
     Key key,
-    @required this.labelText,
+    this.labelText,
     @required this.textEditingController,
     @required this.hintText,
     this.errorText,
@@ -133,4 +133,52 @@ class _BuildPasswordFieldState extends State<BuildPasswordField> {
   }
 
   void togglePasswordVisibility() => setState(() => isHidden = !isHidden);
+}
+
+class BuildPlainTextField extends StatefulWidget {
+  BuildPlainTextField({
+    Key key,
+    this.textEditingController,
+    this.hintText,
+    this.initialValue,
+    this.keyboardType,
+    this.errorText,
+    this.validator,
+    this.onSaved,
+  }) : super(key: key);
+
+  final TextEditingController textEditingController;
+  final String hintText;
+  final String initialValue;
+  final TextInputType keyboardType;
+  final String errorText;
+  final Function(String) validator;
+  final Function(String) onSaved;
+
+  @override
+  _BuildPlainTextFieldState createState() => _BuildPlainTextFieldState();
+}
+
+class _BuildPlainTextFieldState extends State<BuildPlainTextField> {
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      controller: widget.textEditingController,
+      initialValue: widget.initialValue,
+      keyboardType: widget.keyboardType,
+      decoration: InputDecoration(
+        hintText: widget.hintText,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: BorderSide(color: CollectionsColors.orange, width: 2.0),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: BorderSide(color: CollectionsColors.orange, width: 2.0),
+        ),
+      ),
+      validator: widget.validator,
+      onSaved: widget.onSaved,
+    );
+  }
 }

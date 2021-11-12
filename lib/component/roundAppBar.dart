@@ -5,12 +5,13 @@ import 'package:cs_senior_project_merchant/screens/order.dart';
 import 'package:flutter/material.dart';
 
 class RoundedAppBar extends StatefulWidget implements PreferredSizeWidget {
-  RoundedAppBar({Key key,this.appBarTittle})
+  RoundedAppBar({Key key,this.appBarTittle, this.action})
       : preferredSize = Size.fromHeight(80),
         super(key: key);
 
   final Size preferredSize;
   final String appBarTittle;
+  final List<Widget> action;
   // final String appBarSubTittle;
 
 
@@ -45,6 +46,7 @@ class _RoundedAppBarState extends State<RoundedAppBar> {
           ),
           elevation: 10,
           titleSpacing: 20,
+          actions: widget.action
         )
     );
   }elseif(){

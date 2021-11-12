@@ -9,7 +9,6 @@ import 'package:cs_senior_project_merchant/screens/order/customer_map.dart';
 import 'package:cs_senior_project_merchant/screens/order/cutomer_map.dart';
 import 'package:cs_senior_project_merchant/services/order_service.dart';
 import 'package:cs_senior_project_merchant/widgets/bottomOrder_widget.dart';
-import 'package:cs_senior_project_merchant/widgets/map_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -30,6 +29,7 @@ class OrderDetailPage extends StatefulWidget {
 
 class _OrderDetailPageState extends State<OrderDetailPage> {
   String orderStatus;
+  OrderMenu menu = OrderMenu();
 
   @override
   void initState() {
@@ -194,7 +194,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                           shrinkWrap: true,
                           itemCount: orderNotifier.orderMenuList.length,
                           itemBuilder: (context, index) {
-                            final menu = orderNotifier.orderMenuList[index];
+                            menu = orderNotifier.orderMenuList[index];
                             return listOrder(menu);
                           },
                         ),
@@ -303,8 +303,10 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                   );
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (context) =>
-                          CustomerMapPage(order: widget.order),
+                      builder: (context) => CustomerMapPage(
+                        order: widget.order,
+                        orderMenu: menu,
+                      ),
                     ),
                   );
                 });

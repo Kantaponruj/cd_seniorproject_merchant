@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cs_senior_project_merchant/asset/constant.dart';
 import 'package:cs_senior_project_merchant/models/address.dart';
@@ -5,6 +7,9 @@ import 'package:cs_senior_project_merchant/models/dateTime.dart';
 import 'package:cs_senior_project_merchant/models/store.dart';
 import 'package:cs_senior_project_merchant/notifiers/address_notifier.dart';
 import 'package:cs_senior_project_merchant/notifiers/dateTime_notifier.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:uuid/uuid.dart';
+import 'package:path/path.dart' as path;
 
 class StoreService {
   String collection = "stores";
@@ -37,6 +42,46 @@ class StoreService {
       .get()
       .then((doc) => Store.fromSnapshot(doc));
 }
+
+updateImageStore(String storeId, File localFile) async {
+  CollectionReference storeRef = firebaseFirestore.collection('stores');
+
+  if (localFile != null) {
+    print("uploading image");
+
+    var fileExtension = path.extension(localFile.path);
+    print(fileExtension);
+
+    var uudid = Uuid().v4();
+
+    final Reference firebaseStorageRef =
+        FirebaseStorage.instance.ref().child('store_img/$uudid$fileExtension');
+
+    await firebaseStorageRef.putFile(localFile).catchError((onError) {
+      print(onError);
+      return false;
+    });
+
+    String url = await firebaseStorageRef.getDownloadURL();
+    await storeRef.doc(storeId).update({'image': url});
+    print("download url: $url");
+  }
+  // else {
+  //   await storeRef.doc(store.storeId).update(value);
+  //   print("...skipping image upload");
+  // }
+}
+
+// _updateStoreProfile(Store store, Map<String, dynamic> value,
+//     {String imageUrl}) async {
+//   CollectionReference storeRef = firebaseFirestore.collection('stores');
+
+//   if (imageUrl != null) {
+//     store.image = imageUrl;
+//   }
+
+//   await storeRef.doc(store.storeId).update(value);
+// }
 
 addDateAndTime(
   DateTime dateTime,

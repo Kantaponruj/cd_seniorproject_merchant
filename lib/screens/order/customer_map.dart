@@ -1,6 +1,7 @@
 import 'package:cs_senior_project_merchant/asset/color.dart';
 import 'package:cs_senior_project_merchant/asset/text_style.dart';
 import 'package:cs_senior_project_merchant/component/bottomBar.dart';
+import 'package:cs_senior_project_merchant/models/order.dart';
 import 'package:cs_senior_project_merchant/notifiers/store_notifier.dart';
 import 'package:cs_senior_project_merchant/screens/order/orderDetail.dart';
 import 'package:cs_senior_project_merchant/widgets/button_widget.dart';
@@ -13,8 +14,10 @@ import 'package:provider/provider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class CustomerMapPage extends StatefulWidget {
-  CustomerMapPage({Key key, @required this.order}) : super(key: key);
+  CustomerMapPage({Key key, @required this.order, @required this.orderMenu})
+      : super(key: key);
   final order;
+  final OrderMenu orderMenu;
 
   @override
   _CustomerMapPageState createState() => _CustomerMapPageState();
@@ -22,6 +25,7 @@ class CustomerMapPage extends StatefulWidget {
 
 class _CustomerMapPageState extends State<CustomerMapPage> {
   final panelController = PanelController();
+  OrderDetail _orderDetail = OrderDetail();
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +37,10 @@ class _CustomerMapPageState extends State<CustomerMapPage> {
         onPressed: () {
           Navigator.of(context).pop();
         },
-        child: Icon(Icons.arrow_back, color: Colors.black,),
+        child: Icon(
+          Icons.arrow_back,
+          color: Colors.black,
+        ),
       ),
       body: Stack(
         // fit: StackFit.expand,
@@ -166,6 +173,21 @@ class _CustomerMapPageState extends State<CustomerMapPage> {
               child: StadiumButtonWidget(
                 text: 'จัดส่งเรียบร้อยแล้ว',
                 onClicked: () {
+                  setState(() {
+                    // _orderDetail.documentId = widget.order['documentId'];
+                    _orderDetail.orderId = widget.order['orderId'];
+                    _orderDetail.customerId = widget.order['customerId'];
+                    _orderDetail.customerName = widget.order['customerName'];
+                    _orderDetail.phone = widget.order['phone'];
+                    _orderDetail.address = widget.order['address'];
+                    _orderDetail.addressDetail = widget.order['addressDetail'];
+                    _orderDetail.message = widget.order['message'];
+                    _orderDetail.netPrice = widget.order['netPrice'];
+                    _orderDetail.dateOrdered = widget.order['dateOrdered'];
+                    _orderDetail.timeOrdered = widget.order['timeOrdered'];
+                    _orderDetail.amountOfMenu = widget.order['amountOfMenu'];
+                  });
+
                   updateStatusOrder(
                     widget.order['customerId'],
                     widget.order['storeId'],
@@ -174,6 +196,11 @@ class _CustomerMapPageState extends State<CustomerMapPage> {
                     orderStatus,
                   );
 
+                  saveOrderToHistory(storeNotifier.store.storeId, _orderDetail);
+                  saveOrderMenuToHistory(
+                    storeNotifier.store.storeId,
+                    widget.orderMenu,
+                  );
                   completedOrder(
                     storeNotifier.store.storeId,
                     widget.order['documentId'],
