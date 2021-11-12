@@ -135,6 +135,7 @@ class BuildPlainTextField extends StatefulWidget {
     this.textEditingController,
     this.hintText,
     this.initialValue,
+    this.keyboardType,
     this.errorText,
     this.validator,
     this.onSaved,
@@ -143,6 +144,7 @@ class BuildPlainTextField extends StatefulWidget {
   final TextEditingController textEditingController;
   final String hintText;
   final String initialValue;
+  final TextInputType keyboardType;
   final String errorText;
   final Function(String) validator;
   final Function(String) onSaved;
@@ -157,6 +159,7 @@ class _BuildPlainTextFieldState extends State<BuildPlainTextField> {
     return TextFormField(
       controller: widget.textEditingController,
       initialValue: widget.initialValue,
+      keyboardType: widget.keyboardType,
       decoration: InputDecoration(
         hintText: widget.hintText,
         border: OutlineInputBorder(

@@ -7,6 +7,7 @@ import 'package:cs_senior_project_merchant/component/roundAppBar.dart';
 import 'package:cs_senior_project_merchant/component/textformfield.dart';
 import 'package:cs_senior_project_merchant/notifiers/store_notifier.dart';
 import 'package:cs_senior_project_merchant/screens/login.dart';
+import 'package:cs_senior_project_merchant/services/store_service.dart';
 import 'package:cs_senior_project_merchant/widgets/button_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -23,11 +24,14 @@ class _StoreProfilePageState extends State<StoreProfilePage> {
   List kindOfFood = ['ของคาว', 'ของหวาน', 'เครื่องดื่ม', 'อื่น ๆ'];
   List isSelectedKindOfFood = [false, false, false, false];
 
-  List typeOfStore = ['Food Truck', 'ร้านค้ารถเข็น'];
-  List isSelectedTypeOfStore = [false, false];
+  List<dynamic> typeOfStore = ['Food Truck', 'ร้านค้ารถเข็น'];
+  String selectedTypeOfStore;
 
   String _imageUrl;
   File _imageFile;
+
+  TextEditingController storeName = TextEditingController();
+  TextEditingController phone = TextEditingController();
 
   @override
   void initState() {
@@ -39,13 +43,9 @@ class _StoreProfilePageState extends State<StoreProfilePage> {
         }
       }
     });
-
-    for (int i = 0; i < typeOfStore.length; i++) {
-      if (typeOfStore[i] == store.store.typeOfStore) {
-        isSelectedTypeOfStore[i] = true;
-      }
-    }
-
+    storeName.text = store.store.storeName;
+    phone.text = store.store.phone;
+    selectedTypeOfStore = store.store.typeOfStore;
     _imageUrl = store.store.image;
     super.initState();
   }
@@ -88,7 +88,28 @@ class _StoreProfilePageState extends State<StoreProfilePage> {
               ),
               StadiumButtonWidget(
                 text: 'บันทึก',
-                onClicked: () {},
+                onClicked: () {
+                  List selectedKindOfFood = [];
+                  for (int i = 0; i < isSelectedKindOfFood.length; i++) {
+                    if (isSelectedKindOfFood[i]) {
+                      selectedKindOfFood.add(kindOfFood[i]);
+                    }
+                  }
+                  storeNotifier.updateUserData({
+                    'storeName': storeName.text.trim(),
+                    'phone': phone.text.trim(),
+                    'kindOfFood': selectedKindOfFood,
+                    'typeOfStore': selectedTypeOfStore
+                  });
+
+                  updateImageStore(storeNotifier.store.storeId, _imageFile);
+
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => BottomAppBar(),
+                    ),
+                  );
+                },
               ),
             ],
           ),
@@ -158,20 +179,16 @@ class _StoreProfilePageState extends State<StoreProfilePage> {
               padding: EdgeInsets.only(top: 20),
               child: buildTextField(
                 'ชื่อร้านอาหาร',
-                storeNotifier.store.storeName,
-                (value) {
-                  storeNotifier.store.storeName = value;
-                },
+                storeName,
+                TextInputType.text,
               ),
             ),
             Container(
               padding: EdgeInsets.only(top: 20),
               child: buildTextField(
                 'เบอร์โทรศัพท์',
-                storeNotifier.store.phone,
-                (value) {
-                  storeNotifier.store.phone = value;
-                },
+                phone,
+                TextInputType.phone,
               ),
             ),
             Container(
@@ -189,8 +206,8 @@ class _StoreProfilePageState extends State<StoreProfilePage> {
     );
   }
 
-  Widget buildTextField(
-      String headerText, String initialValue, Function onSaved) {
+  Widget buildTextField(String headerText, TextEditingController controller,
+      TextInputType keyboardType) {
     return Column(
       children: [
         Container(
@@ -202,26 +219,14 @@ class _StoreProfilePageState extends State<StoreProfilePage> {
           ),
         ),
         BuildPlainTextField(
-          initialValue: initialValue,
-          onSaved: onSaved,
+          // initialValue: initialValue,
+          keyboardType: keyboardType,
+          textEditingController: controller,
+          // onSaved: onSaved,
         ),
       ],
     );
   }
-
-  // Widget storeType() {
-  //   return Column(
-  //     children: [
-  //       Text(
-  //         'รูปภาพร้านของคุณ',
-  //         style: FontCollection.bodyTextStyle,
-  //       ),
-  //
-  //     ],
-  //   );
-  // }
-
-  bool value = false;
 
   Widget salesType(String headerText) {
     return Column(
@@ -246,7 +251,7 @@ class _StoreProfilePageState extends State<StoreProfilePage> {
                 setState(() {
                   isSelectedKindOfFood[index] = value;
                 });
-                print(isSelectedKindOfFood);
+                // print(isSelectedKindOfFood);
               },
             );
           },
@@ -255,9 +260,7 @@ class _StoreProfilePageState extends State<StoreProfilePage> {
     );
   }
 
-  Widget storeType(
-    String headerText,
-  ) {
+  Widget storeType(String headerText) {
     return Column(
       children: [
         Container(
@@ -273,18 +276,28 @@ class _StoreProfilePageState extends State<StoreProfilePage> {
     );
   }
 
-  String values;
-
   Widget buildDropdown() {
-    return DropdownButton<String>(
-        value: values,
-        iconSize: 30,
-        icon: Icon(
-          Icons.keyboard_arrow_down,
-          color: Colors.black,
-        ),
-        isExpanded: true,
-        // items: items.map(buildMenuItem).toList(),
-        onChanged: (value) {});
+    return DropdownButton(
+      value: selectedTypeOfStore,
+      iconSize: 30,
+      icon: Icon(
+        Icons.keyboard_arrow_down,
+        color: Colors.black,
+      ),
+      isExpanded: true,
+      items: typeOfStore
+          .map(
+            (type) => DropdownMenuItem(
+              value: type,
+              child: Text(type),
+            ),
+          )
+          .toList(),
+      onChanged: (value) {
+        setState(() {
+          selectedTypeOfStore = value;
+        });
+      },
+    );
   }
 }

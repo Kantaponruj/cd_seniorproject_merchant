@@ -41,6 +41,8 @@ class _StorePageState extends State<StorePage> {
     _isPickUp = storeNotifier.store.isPickUp;
     _isDelivery = storeNotifier.store.isDelivery;
 
+    storeNotifier.reloadUserModel();
+
     super.initState();
   }
 
@@ -172,6 +174,7 @@ class _StorePageState extends State<StorePage> {
                                             child: EditButton(
                                               editText: 'แก้ไขข้อมูล',
                                               onClicked: () {
+                                                storeNotifier.reloadUserModel();
                                                 Navigator.of(context).push(
                                                   MaterialPageRoute(
                                                     builder: (context) =>
