@@ -85,7 +85,7 @@ class _MyAppState extends State<MyApp> {
             case Status.Authenticating:
               return LoginPage();
             case Status.Authenticated:
-              return BottomBar();
+              return MainBottombar(selectedIndex: 1,);
             default:
               return LoginPage();
           }

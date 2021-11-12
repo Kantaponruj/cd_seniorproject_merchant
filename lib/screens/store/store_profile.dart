@@ -107,7 +107,7 @@ class _StoreProfilePageState extends State<StoreProfilePage> {
 
                   Navigator.of(context).pushAndRemoveUntil(
                     MaterialPageRoute(
-                      builder: (context) => BottomBar(),
+                      builder: (context) => MainBottombar(),
                     ),
                     (route) => false,
                   );

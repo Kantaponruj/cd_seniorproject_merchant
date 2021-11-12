@@ -207,7 +207,7 @@ class _CustomerMapPageState extends State<CustomerMapPage> {
                   );
 
                   Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(builder: (context) => BottomBar()),
+                    MaterialPageRoute(builder: (context) => MainBottombar()),
                     (route) => false,
                   );
                 },

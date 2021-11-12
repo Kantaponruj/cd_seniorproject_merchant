@@ -211,7 +211,7 @@ class _RegisterPageState extends State<RegisterPage> {
         storeNotifier.clearController();
         Navigator.pushAndRemoveUntil(
             context,
-            MaterialPageRoute(builder: (context) => BottomBar()),
+            MaterialPageRoute(builder: (context) => MainBottombar()),
             (route) => false);
         FocusScope.of(context).unfocus();
       },

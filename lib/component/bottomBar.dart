@@ -10,14 +10,17 @@ import '../screens/store.dart';
 import '../screens/menu.dart';
 import '../screens/order/notification.dart';
 
-class BottomBar extends StatefulWidget {
+class MainBottombar extends StatefulWidget {
+  MainBottombar({Key key, @required this.selectedIndex,}) : super(key: key);
+
+  int selectedIndex;
+
   @override
   _State createState() => _State();
 }
 
-class _State extends State<BottomBar> {
+class _State extends State<MainBottombar> {
   int _selectedIndex = 1;
-  int selectedIndex = 1;
   List<Widget> _pageWidget = <Widget>[
     StorePage(),
     OrderPage(),
@@ -91,7 +94,7 @@ class _State extends State<BottomBar> {
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
-      selectedIndex = _selectedIndex;
+      // selectedIndex = _selectedIndex;
     });
   }
 
