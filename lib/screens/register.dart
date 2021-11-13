@@ -9,6 +9,7 @@ import 'package:cs_senior_project_merchant/widgets/button_widget.dart';
 import 'package:cs_senior_project_merchant/widgets/loading_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 import 'login.dart';
@@ -21,7 +22,7 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  final formKey = GlobalKey<ScaffoldState>();
   List<dynamic> typeOfStore = ['Food Truck', 'ร้านค้ารถเข็น'];
   String selectedTypeOfStore;
   String password = '';
@@ -29,12 +30,8 @@ class _RegisterPageState extends State<RegisterPage> {
   int currentStep = 0;
   bool isCompleted = false;
 
-  // @override
-  // void initState() {
-  //   StoreNotifier store = Provider.of<StoreNotifier>(context, listen: false);
-  //   store.typeOfStore = '';
-  //   super.initState();
-  // }
+  String _imageUrl;
+  File _imageFile;
 
   void login(BuildContext context) {
     Navigator.of(context).push(
@@ -44,6 +41,17 @@ class _RegisterPageState extends State<RegisterPage> {
         },
       ),
     );
+  }
+
+  void getLocalImage() async {
+    PickedFile imageFile =
+        await ImagePicker().getImage(source: ImageSource.gallery);
+
+    if (imageFile != null) {
+      setState(() {
+        _imageFile = File(imageFile.path);
+      });
+    }
   }
 
   @override
@@ -62,79 +70,90 @@ class _RegisterPageState extends State<RegisterPage> {
         elevation: 0,
         toolbarHeight: 80,
       ),
-      // key: formKey,
+      key: formKey,
       body: storeNotifier.status == Status.Authenticating
           ? LoadingWidget()
           : Container(
               // padding: EdgeInsets.only(top: 20),
-              child: Form(
-                child: Theme(
-                  data: Theme.of(context).copyWith(
-                    colorScheme: ColorScheme.light(
-                      primary: CollectionsColors.orange,
-                    ),
+              child: Theme(
+                data: Theme.of(context).copyWith(
+                  colorScheme: ColorScheme.light(
+                    primary: CollectionsColors.orange,
                   ),
-                  child: Stepper(
-                    type: StepperType.horizontal,
-                    steps: getSteps(storeNotifier),
-                    currentStep: currentStep,
-                    onStepContinue: () async {
-                      if (isLastStep) {
-                        setState(() => isCompleted = true);
-                        if (!await storeNotifier.signUp()) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text("Register failed")));
-                          return;
-                        }
-                        storeNotifier.clearController();
-                        Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => BottomBar()),
-                            (route) => false);
-                        FocusScope.of(context).unfocus();
-                      } else {
-                        setState(() => currentStep += 1);
+                ),
+                child: Stepper(
+                  type: StepperType.horizontal,
+                  steps: getSteps(storeNotifier),
+                  currentStep: currentStep,
+                  onStepContinue: () async {
+                    if (isLastStep) {
+                      storeNotifier.localFile = _imageFile;
+                      setState(() => isCompleted = true);
+                      if (!await storeNotifier.signUp()) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text("Register failed")));
+                        return;
                       }
-                    },
-                    onStepCancel: currentStep == 0
-                        ? null
-                        : () => setState(() => currentStep -= 1),
-                    onStepTapped: (step) => setState(() => currentStep = step),
-                    controlsBuilder: (context, {onStepContinue, onStepCancel}) {
-                      return Container(
-                        margin: EdgeInsets.only(top: 50),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: ButtonWidget(
-                                text: isLastStep ? 'ลงทะเบียน' : 'ถัดไป',
-                                onClicked: onStepContinue,
-                              ),
+                      storeNotifier.clearController();
+                      Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(builder: (context) => BottomBar()),
+                          (route) => false);
+                      FocusScope.of(context).unfocus();
+                    } else {
+                      setState(() => currentStep += 1);
+                    }
+                  },
+                  onStepCancel: currentStep == 0
+                      ? null
+                      : () => setState(() => currentStep -= 1),
+                  onStepTapped: (step) => setState(() => currentStep = step),
+                  controlsBuilder: (context, {onStepContinue, onStepCancel}) {
+                    return Container(
+                      margin: EdgeInsets.only(top: 50),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: ButtonWidget(
+                              text: isLastStep ? 'ลงทะเบียน' : 'ถัดไป',
+                              onClicked: onStepContinue,
                             ),
-                            if (currentStep != 0)
-                              Expanded(
-                                child: Padding(
-                                  padding: const EdgeInsets.only(left: 20),
-                                  child: TextButton(
-                                    child: Text(
-                                      'ย้อนกลับ',
-                                      style: FontCollection
-                                          .underlineButtonTextStyle,
-                                    ),
-                                    onPressed: onStepCancel,
+                          ),
+                          if (currentStep != 0)
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 20),
+                                child: TextButton(
+                                  child: Text(
+                                    'ย้อนกลับ',
+                                    style:
+                                        FontCollection.underlineButtonTextStyle,
                                   ),
+                                  onPressed: onStepCancel,
                                 ),
                               ),
-                          ],
-                        ),
-                      );
-                    },
-                  ),
+                            ),
+                        ],
+                      ),
+                    );
+                  },
                 ),
               ),
             ),
     );
+  }
+
+  Widget showImage() {
+    if (_imageUrl == null && _imageFile == null) {
+      return Image.network(
+        'https://www.testingxperts.com/wp-content/uploads/2019/02/placeholder-img.jpg',
+        fit: BoxFit.cover,
+      );
+    } else if (_imageFile != null) {
+      return Image.file(_imageFile, fit: BoxFit.cover);
+    } else if (_imageUrl != null) {
+      return Image.network(_imageUrl, fit: BoxFit.cover);
+    }
   }
 
   Widget buildUsername(StoreNotifier storeNotifier) {
@@ -150,7 +169,6 @@ class _RegisterPageState extends State<RegisterPage> {
           return null;
         }
       },
-      // onSaved: (value) => setState(() => userName = value),
       maxLength: 30,
     );
   }
@@ -242,6 +260,23 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
+  Widget buildStorePhone(StoreNotifier storeNotifier) {
+    return BuildTextField(
+      labelText: 'เบอร์โทรศัพท์',
+      textEditingController: storeNotifier.phone,
+      hintText: 'กรุณาระบุเบอรืโทรศัพท์',
+      textInputType: TextInputType.phone,
+      validator: (value) {
+        if (value.length != 10) {
+          return 'โปรดระบุเบอร์โทรศัพท์ให้ถูกต้อง';
+        } else {
+          return null;
+        }
+      },
+      maxLine: null,
+    );
+  }
+
   List<Step> getSteps(StoreNotifier storeNotifier) => [
         Step(
           state: currentStep > 0 ? StepState.complete : StepState.indexed,
@@ -291,7 +326,26 @@ class _RegisterPageState extends State<RegisterPage> {
           isActive: currentStep >= 1,
           title: Text('ร้านค้า'),
           content: Container(
-            child: storePart(),
+            child: Column(
+              children: [
+                Container(
+                  width: 200,
+                  height: 200,
+                  color: CollectionsColors.grey,
+                  child: showImage(),
+                ),
+                Center(
+                  child: Padding(
+                    padding: EdgeInsets.only(top: 20),
+                    child: NoShapeButton(
+                      onClicked: () => getLocalImage(),
+                      text: 'อัปโหลดรูปภาพใหม่',
+                    ),
+                  ),
+                ),
+                storePart(),
+              ],
+            ),
           ),
         ),
         Step(
@@ -300,10 +354,17 @@ class _RegisterPageState extends State<RegisterPage> {
           content: Container(
             child: Column(
               children: [
+                Container(
+                  width: 200,
+                  height: 200,
+                  color: CollectionsColors.grey,
+                  child: showImage(),
+                ),
                 Text(storeNotifier.displayName.text.trim()),
                 Text(storeNotifier.email.text.trim()),
                 Text(storeNotifier.storeName.text.trim()),
                 Text(storeNotifier.description.text.trim()),
+                Text(storeNotifier.phone.text.trim()),
                 Text(storeNotifier.typeOfStore),
               ],
             ),
@@ -339,10 +400,6 @@ class _RegisterPageState extends State<RegisterPage> {
                 thickness: 2,
               ),
             ),
-            // Container(
-            //   margin: EdgeInsets.only(bottom: 10),
-            //   child: buildImage(),
-            // ),
             Container(
               margin: EdgeInsets.only(top: 20),
               child: buildStoreName(storeNotifier),
@@ -350,6 +407,10 @@ class _RegisterPageState extends State<RegisterPage> {
             Container(
               margin: EdgeInsets.only(top: 10),
               child: buildStoreDes(storeNotifier),
+            ),
+            Container(
+              margin: EdgeInsets.only(top: 20),
+              child: buildStorePhone(storeNotifier),
             ),
             Container(
               alignment: Alignment.topLeft,

@@ -19,7 +19,9 @@ class StoreService {
     String email,
     String storeName,
     String description,
+    String phone,
     String typeOfStore,
+    File localFile,
   }) {
     firebaseFirestore.collection(collection).doc(storeId).set({
       'storeId': storeId,
@@ -29,7 +31,19 @@ class StoreService {
       'deliveryStatus': false,
       'storeStatus': false,
       'typeOfStore': typeOfStore,
+      'image': '',
+      'phone': phone,
+      'deliveryStatus': false,
+      'isDelivery': false,
+      'isPickUp': false,
+      'kindOfFood': [],
+      'realtimeLocation': GeoPoint(0, 0),
+      'selectedAddress': 'โปรดระบุสถานที่จำหน่ายสินค้า',
+      'selectedAddressName': '',
+      'selectedLocation': GeoPoint(0, 0),
+      'storeStatus': false
     });
+    updateImageStore(storeId, localFile);
   }
 
   void updateUserData(String storeId, Map<String, dynamic> value) {

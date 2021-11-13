@@ -39,7 +39,7 @@ class _OrderPageState extends State<OrderPage> {
 
     updateLocation();
 
-    getOrderDelivery(orderNotifier, storeNotifier.store.storeId);
+    getOrderDelivery(orderNotifier, storeNotifier.user.uid);
     super.initState();
   }
 

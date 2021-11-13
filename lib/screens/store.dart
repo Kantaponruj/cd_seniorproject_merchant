@@ -43,9 +43,7 @@ class _StorePageState extends State<StorePage> {
     _isPickUp = storeNotifier.store.isPickUp;
     _isDelivery = storeNotifier.store.isDelivery;
 
-    // detail.text = storeNotifier.store.description;
-
-    // storeNotifier.reloadUserModel();
+    storeNotifier.reloadUserModel();
 
     super.initState();
   }
