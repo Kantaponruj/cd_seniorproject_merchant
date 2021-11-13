@@ -216,39 +216,104 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                         ),
                       ),
                       Container(
-                        margin: EdgeInsets.only(top: 20),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              flex: 7,
-                              child: Text(
-                                'ราคาสุทธิ',
-                                style: FontCollection.bodyTextStyle,
+                          margin: EdgeInsets.only(top: 20),
+                          child: Column(
+                            children: [
+                              Row(
+                                children: [
+                                  Expanded(
+                                    flex: 7,
+                                    child: Text(
+                                      'ราคาอาหารทั้งหมด',
+                                      style: FontCollection.bodyTextStyle,
+                                    ),
+                                  ),
+                                  Expanded(
+                                    flex: 3,
+                                    child: Container(
+                                      alignment: Alignment.centerRight,
+                                      child: Text(
+                                        widget.order['subTotal'].toString(),
+                                        style: FontCollection.bodyTextStyle,
+                                      ),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    flex: 2,
+                                    child: Container(
+                                      alignment: Alignment.centerRight,
+                                      child: Text(
+                                        'บาท',
+                                        style: FontCollection.bodyTextStyle,
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ),
-                            Expanded(
-                              flex: 3,
-                              child: Container(
-                                alignment: Alignment.centerRight,
-                                child: Text(
-                                  widget.order['netPrice'].toString(),
-                                  style: FontCollection.bodyTextStyle,
-                                ),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    flex: 7,
+                                    child: Text(
+                                      'ค่าส่ง',
+                                      style: FontCollection.bodyTextStyle,
+                                    ),
+                                  ),
+                                  Expanded(
+                                    flex: 3,
+                                    child: Container(
+                                      alignment: Alignment.centerRight,
+                                      child: Text(
+                                        widget.order['shippingFee'].toString(),
+                                        style: FontCollection.bodyTextStyle,
+                                      ),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    flex: 2,
+                                    child: Container(
+                                      alignment: Alignment.centerRight,
+                                      child: Text(
+                                        'บาท',
+                                        style: FontCollection.bodyTextStyle,
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ),
-                            Expanded(
-                              flex: 2,
-                              child: Container(
-                                alignment: Alignment.centerRight,
-                                child: Text(
-                                  'บาท',
-                                  style: FontCollection.bodyTextStyle,
-                                ),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    flex: 7,
+                                    child: Text(
+                                      'ราคาสุทธิ',
+                                      style: FontCollection.bodyTextStyle,
+                                    ),
+                                  ),
+                                  Expanded(
+                                    flex: 3,
+                                    child: Container(
+                                      alignment: Alignment.centerRight,
+                                      child: Text(
+                                        widget.order['netPrice'].toString(),
+                                        style: FontCollection.bodyTextStyle,
+                                      ),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    flex: 2,
+                                    child: Container(
+                                      alignment: Alignment.centerRight,
+                                      child: Text(
+                                        'บาท',
+                                        style: FontCollection.bodyTextStyle,
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ),
-                          ],
-                        ),
-                      ),
+                            ],
+                          )),
                     ],
                   ),
                 ),

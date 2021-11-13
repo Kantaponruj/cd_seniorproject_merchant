@@ -217,7 +217,7 @@ class _OrderPageState extends State<OrderPage> {
                               color: Colors.white,
                             ),
                             Text(
-                              '0.5 กม.',
+                              '${order['distance']} กม.',
                               style:
                                   TextStyle(fontSize: 14, color: Colors.white),
                             ),
