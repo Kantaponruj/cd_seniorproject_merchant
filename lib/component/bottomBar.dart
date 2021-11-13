@@ -1,17 +1,17 @@
 import 'package:cs_senior_project_merchant/asset/color.dart';
-import 'package:cs_senior_project_merchant/asset/text_style.dart';
 import 'package:cs_senior_project_merchant/screens/order.dart';
 import 'package:flutter/material.dart';
 import 'package:bottom_indicator_bar_fork/bottom_indicator_bar_fork.dart';
-import 'package:flutter_icons/flutter_icons.dart';
 
 import '../screens/order.dart';
 import '../screens/store.dart';
 import '../screens/menu.dart';
-import '../screens/order/notification.dart';
 
 class MainBottombar extends StatefulWidget {
-  MainBottombar({Key key, @required this.selectedIndex,}) : super(key: key);
+  MainBottombar({
+    Key key,
+    @required this.selectedIndex,
+  }) : super(key: key);
 
   int selectedIndex;
 
