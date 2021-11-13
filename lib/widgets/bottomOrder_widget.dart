@@ -4,11 +4,12 @@ import 'package:cs_senior_project_merchant/widgets/button_widget.dart';
 import 'package:flutter/material.dart';
 
 class BottomOrder extends StatefulWidget {
-  const BottomOrder({Key key, this.confirmButton, this.deliveryStatus})
+  const BottomOrder({Key key,this.isConfirmed, this.onPressed,})
       : super(key: key);
 
-  final VoidCallback confirmButton;
-  final VoidCallback deliveryStatus;
+  final bool isConfirmed;
+  final VoidCallback onPressed;
+  // final VoidCallback deliveryStatus;
 
   @override
   _BottomOrderState createState() => _BottomOrderState();
@@ -29,9 +30,9 @@ class _BottomOrderState extends State<BottomOrder> {
         children: [
           Container(
             child: StadiumButtonWidget(
-              text: isConfirmed ? 'ยืนยันคำสั่งซื้อ' : 'ยืนยันการจัดส่ง',
+              text: widget.isConfirmed ? 'ยืนยันการจัดส่ง' : 'ยืนยันคำสั่งซื้อ',
               onClicked:
-                  isConfirmed ? widget.confirmButton : widget.deliveryStatus,
+                  widget.onPressed,
             ),
           ),
         ],

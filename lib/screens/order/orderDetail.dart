@@ -30,6 +30,7 @@ class OrderDetailPage extends StatefulWidget {
 class _OrderDetailPageState extends State<OrderDetailPage> {
   String orderStatus;
   OrderMenu menu = OrderMenu();
+  bool check;
 
   @override
   void initState() {
@@ -40,7 +41,22 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
       widget.storeId,
       widget.order['documentId'],
     );
+    checkStatus();
     super.initState();
+  }
+
+  bool checkStatus() {
+    if (orderStatus == 'ยืนยันคำสั่งซื้อ') {
+      print('ยืนยันคำสั่งซื้อ');
+      setState(() {
+        check = true;
+      });
+    } else {
+      setState(() {
+        check = false;
+      });
+    }
+    return check;
   }
 
   @override
@@ -272,28 +288,12 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
           ),
         ),
       ),
-      bottomNavigationBar: widget.isConfirm
-          ? SizedBox.shrink()
-          : BottomOrder(
-              confirmButton: () {
-                orderStatus = 'ยืนยันคำสั่งซื้อ';
-                setState(() {
-                  isConfirmed = false;
-                  isDelivery = false;
-                  updateStatusOrder(
-                    widget.order['customerId'],
-                    widget.order['storeId'],
-                    widget.order['orderId'],
-                    widget.order['documentId'],
-                    orderStatus,
-                  );
-                });
-              },
-              deliveryStatus: () {
+      bottomNavigationBar: checkStatus()
+          ? BottomOrder(
+              isConfirmed: true,
+              onPressed: () {
                 orderStatus = 'ยืนยันการจัดส่ง';
                 setState(() {
-                  isConfirmed = true;
-                  isDelivery = true;
                   updateStatusOrder(
                     widget.order['customerId'],
                     widget.order['storeId'],
@@ -301,13 +301,28 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                     widget.order['documentId'],
                     orderStatus,
                   );
-                  Navigator.of(context).push(
+                  Navigator.of(context).pushReplacement(
                     MaterialPageRoute(
                       builder: (context) => CustomerMapPage(
                         order: widget.order,
                         orderMenu: menu,
                       ),
                     ),
+                  );
+                });
+              },
+            )
+          : BottomOrder(
+              isConfirmed: false,
+              onPressed: () {
+                orderStatus = 'ยืนยันคำสั่งซื้อ';
+                setState(() {
+                  updateStatusOrder(
+                    widget.order['customerId'],
+                    widget.order['storeId'],
+                    widget.order['orderId'],
+                    widget.order['documentId'],
+                    orderStatus,
                   );
                 });
               },
