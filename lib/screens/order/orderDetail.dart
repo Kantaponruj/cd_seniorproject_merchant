@@ -72,6 +72,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
       ),
       body: SingleChildScrollView(
         child: Container(
+          padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
           child: Column(
             // mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -147,8 +148,9 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                 ),
               ),
               // itemBuilder(menuNotifier),
-              OrderCard(
+              BuildCard(
                 headerText: 'รายการอาหารทั้งหมด',
+                canEdit: false,
                 child: Container(
                   margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
                   child: Column(
@@ -236,7 +238,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                                     flex: 7,
                                     child: Text(
                                       'ราคาสุทธิ',
-                                      style: FontCollection.bodyTextStyle,
+                                      style: FontCollection.bodyBoldTextStyle,
                                     ),
                                   ),
                                   Expanded(
@@ -268,7 +270,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                 ),
               ),
               // Add message card
-              OrderCard(
+              BuildCard(
                 headerText: 'ข้อความเพิ่มเติม',
                 child: Container(
                   width: MediaQuery.of(context).size.width,
@@ -344,63 +346,63 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
     );
   }
 
-  Widget listOrder(OrderMenu menu) => Container(
-        child: Column(
-          children: [
-            Row(
-              children: [
-                Expanded(
-                  flex: 2,
-                  child: Container(
-                    alignment: Alignment.center,
-                    child: Text(
-                      menu.amount.toString(),
-                      style: FontCollection.bodyTextStyle,
-                    ),
-                  ),
-                ),
-                Expanded(
-                  flex: 6,
-                  child: Text(
-                    menu.menuName,
-                    style: FontCollection.bodyTextStyle,
-                  ),
-                ),
-                Expanded(
-                  flex: 2,
-                  child: Container(
-                    alignment: Alignment.centerRight,
-                    child: Text(
-                      menu.totalPrice,
-                      style: FontCollection.bodyTextStyle,
-                    ),
-                  ),
-                ),
-                Expanded(
-                  flex: 2,
-                  child: Container(
-                    alignment: Alignment.centerRight,
-                    child: Text(
-                      'บาท',
-                      style: FontCollection.bodyTextStyle,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    menu.topping.join(', '),
-                    style: FontCollection.bodyTextStyle,
-                  ),
-                ),
-              ],
-            )
-          ],
-        ),
-      );
+  // Widget listOrder(OrderMenu menu) => Container(
+  //       child: Column(
+  //         children: [
+  //           Row(
+  //             children: [
+  //               Expanded(
+  //                 flex: 2,
+  //                 child: Container(
+  //                   alignment: Alignment.center,
+  //                   child: Text(
+  //                     menu.amount.toString(),
+  //                     style: FontCollection.bodyTextStyle,
+  //                   ),
+  //                 ),
+  //               ),
+  //               Expanded(
+  //                 flex: 6,
+  //                 child: Text(
+  //                   menu.menuName,
+  //                   style: FontCollection.bodyTextStyle,
+  //                 ),
+  //               ),
+  //               Expanded(
+  //                 flex: 2,
+  //                 child: Container(
+  //                   alignment: Alignment.centerRight,
+  //                   child: Text(
+  //                     menu.totalPrice,
+  //                     style: FontCollection.bodyTextStyle,
+  //                   ),
+  //                 ),
+  //               ),
+  //               Expanded(
+  //                 flex: 2,
+  //                 child: Container(
+  //                   alignment: Alignment.centerRight,
+  //                   child: Text(
+  //                     'บาท',
+  //                     style: FontCollection.bodyTextStyle,
+  //                   ),
+  //                 ),
+  //               ),
+  //             ],
+  //           ),
+  //           Row(
+  //             children: [
+  //               Expanded(
+  //                 child: Text(
+  //                   menu.topping.join(', '),
+  //                   style: FontCollection.bodyTextStyle,
+  //                 ),
+  //               ),
+  //             ],
+  //           )
+  //         ],
+  //       ),
+  //     );
 
   final height = 50.0;
   final width = 50.0;
@@ -467,4 +469,87 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
       ),
     );
   }
+
+  Widget listOrder(OrderMenu menu) {
+    return Container(
+      padding: EdgeInsets.zero,
+      margin: EdgeInsets.zero,
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Expanded(
+                flex: 2,
+                child: Container(
+                  alignment: Alignment.center,
+                  child: Text(
+                    menu.amount.toString(),
+                    style: FontCollection.bodyBoldTextStyle,
+                  ),
+                ),
+              ),
+              Expanded(
+                flex: 6,
+                child: Text(
+                  menu.menuName,
+                  style: FontCollection.bodyTextStyle,
+                ),
+              ),
+              Expanded(
+                flex: 2,
+                child: Container(
+                  alignment: Alignment.centerRight,
+                  child: Text(
+                    menu.totalPrice,
+                    style: FontCollection.bodyTextStyle,
+                  ),
+                ),
+              ),
+              Expanded(
+                flex: 2,
+                child: Container(
+                  alignment: Alignment.centerRight,
+                  child: Text(
+                    'บาท',
+                    style: FontCollection.bodyTextStyle,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          menu.topping.isEmpty
+              ? SizedBox.shrink()
+              : Container(
+            margin: EdgeInsets.only(top: 10),
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                      flex: 2,
+                      child: Container(),
+                    ),
+                    Expanded(
+                      flex: 10,
+                      child: Row(children: [
+                        Text(
+                          menu.topping.join(', '),
+                          style: TextStyle(
+                            fontWeight: FontWeight.w400,
+                            fontSize: smallestSize,
+                            color: Colors.black54,
+                          ),
+                        )
+                      ]),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
 }
