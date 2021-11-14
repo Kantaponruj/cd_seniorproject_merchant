@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cs_senior_project_merchant/asset/color.dart';
 import 'package:cs_senior_project_merchant/asset/text_style.dart';
 import 'package:cs_senior_project_merchant/component/bottomBar.dart';
+import 'package:cs_senior_project_merchant/component/dropdown.dart';
 import 'package:cs_senior_project_merchant/component/textformfield.dart';
 import 'package:cs_senior_project_merchant/notifiers/store_notifier.dart';
 import 'package:cs_senior_project_merchant/widgets/button_widget.dart';
@@ -23,7 +24,7 @@ class RegisterPage extends StatefulWidget {
 
 class _RegisterPageState extends State<RegisterPage> {
   final formKey = GlobalKey<ScaffoldState>();
-  List<dynamic> typeOfStore = ['Food Truck', 'ร้านค้ารถเข็น'];
+  List<String> typeOfStore = ['Food Truck', 'ร้านค้ารถเข็น'];
   String selectedTypeOfStore;
   String password = '';
 
@@ -355,8 +356,8 @@ class _RegisterPageState extends State<RegisterPage> {
             child: Column(
               children: [
                 Container(
-                  width: 200,
-                  height: 200,
+                  width: 300,
+                  height: 300,
                   color: CollectionsColors.grey,
                   child: showImage(),
                 ),
@@ -371,6 +372,8 @@ class _RegisterPageState extends State<RegisterPage> {
           ),
         ),
       ];
+
+  
 
   Widget buildForm(Widget child) {
     return Form(
@@ -430,22 +433,14 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   Widget buildDropdown(StoreNotifier storeNotifier) {
-    return DropdownButton(
+    return BuildDropdown(
       value: selectedTypeOfStore,
-      hint: Text('เลือกรูปแบบการขาย'),
-      iconSize: 30,
-      icon: Icon(
-        Icons.keyboard_arrow_down,
-        color: Colors.black,
-      ),
-      isExpanded: true,
-      items: typeOfStore
-          .map(
-            (type) => DropdownMenuItem(
-              value: type,
-              child: Text(type),
-            ),
-          )
+      hintText: 'เลือกรูปแบบการขาย',
+      dropdownValues: typeOfStore
+          .map((value) => DropdownMenuItem(
+                child: Text(value),
+                value: value,
+              ))
           .toList(),
       onChanged: (value) {
         setState(() {

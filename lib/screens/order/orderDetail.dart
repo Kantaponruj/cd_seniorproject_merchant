@@ -68,57 +68,6 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                   child: Container(
                     padding: EdgeInsets.all(20),
                     child: customerInfo(),
-                    // Row(
-                    //   children: [
-                    //     Expanded(
-                    //       flex: 2,
-                    //       child: Container(
-                    //         height: 40,
-                    //         width: 40,
-                    //         alignment: Alignment.centerLeft,
-                    //         child: CircleAvatar(
-                    //           backgroundColor: CollectionsColors.yellow,
-                    //           radius: 35.0,
-                    //           child: Text(
-                    //             widget.order['customerName'][0].toString(),
-                    //             style: FontCollection.descriptionTextStyle,
-                    //             textAlign: TextAlign.left,
-                    //           ),
-                    //         ),
-                    //       ),
-                    //     ),
-                    //     Expanded(
-                    //       flex: 8,
-                    //       child: Text(
-                    //         widget.order['customerName'],
-                    //         style: FontCollection.bodyTextStyle,
-                    //         textAlign: TextAlign.left,
-                    //       ),
-                    //     ),
-                    //     Expanded(
-                    //       flex: 2,
-                    //       child: Container(
-                    //         width: 40,
-                    //         height: 40,
-                    //         alignment: Alignment.centerRight,
-                    //         child: MaterialButton(
-                    //           color: CollectionsColors.yellow,
-                    //           textColor: Colors.white,
-                    //           child: Icon(
-                    //             Icons.call,
-                    //           ),
-                    //           shape: CircleBorder(),
-                    //           onPressed: () async {
-                    //             String number = widget.order['phone'];
-                    //             // launch('tel://$number');
-                    //             await FlutterPhoneDirectCaller.callNumber(
-                    //                 number);
-                    //           },
-                    //         ),
-                    //       ),
-                    //     ),
-                    //   ],
-                    // ),
                   ),
                 ),
               ),
