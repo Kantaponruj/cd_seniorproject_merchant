@@ -15,7 +15,7 @@ class OrderDetail {
   String timeOrdered;
   String netPrice;
   String amountOfMenu;
-  GeoPoint testPoint;
+  // GeoPoint testPoint;
 
   OrderDetail();
 
@@ -34,7 +34,7 @@ class OrderDetail {
     timeOrdered = data['timeOrdered'];
     netPrice = data['netPrice'];
     amountOfMenu = data['amountOfFood'];
-    testPoint = data['testPoint'];
+    // testPoint = data['testPoint'];
   }
 
   Map<String, dynamic> toMap() {

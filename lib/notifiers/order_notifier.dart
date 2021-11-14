@@ -4,6 +4,7 @@ import 'package:cs_senior_project_merchant/models/order.dart';
 import 'package:flutter/foundation.dart';
 
 class OrderNotifier with ChangeNotifier {
+  List<OrderDetail> _tempOrderList = [];
   List<OrderDetail> _orderList = [];
   List<OrderMenu> _orderMenuList = [];
 
@@ -14,10 +15,13 @@ class OrderNotifier with ChangeNotifier {
   UnmodifiableListView<OrderMenu> get orderMenuList =>
       UnmodifiableListView(_orderMenuList);
 
+  List<OrderDetail> get tempOrderList => _tempOrderList;
+
   OrderDetail get currentOrder => _currentOrder;
 
   set orderList(List<OrderDetail> orderList) {
     _orderList = orderList;
+    _tempOrderList = orderList;
     notifyListeners();
   }
 
