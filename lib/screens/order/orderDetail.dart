@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cs_senior_project_merchant/asset/color.dart';
 import 'package:cs_senior_project_merchant/asset/constant.dart';
 import 'package:cs_senior_project_merchant/asset/text_style.dart';
@@ -9,6 +10,7 @@ import 'package:cs_senior_project_merchant/screens/order/customer_map.dart';
 import 'package:cs_senior_project_merchant/screens/order/cutomer_map.dart';
 import 'package:cs_senior_project_merchant/services/order_service.dart';
 import 'package:cs_senior_project_merchant/widgets/bottomOrder_widget.dart';
+import 'package:flutter/animation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -74,26 +76,38 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
         child: Container(
           padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
           child: Column(
-            // mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Padding(
-                padding: EdgeInsets.fromLTRB(15, 10, 15, 0),
-                child: Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
+                  padding: EdgeInsets.fromLTRB(0, 15, 0, 0),
+                  child: customerDeliCard(
+                    widget.order['customerName'],
+                    widget.order['phone'],
+                    widget.order['address'],
+                          () async {
+                        String number = widget.order['phone'];
+                        // launch('tel://$number');
+                        await FlutterPhoneDirectCaller.callNumber(number);
+                      },
+                          () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (BuildContext context) => CustomerMap(
+                              order: widget.order,
+                            ),
+                          ),
+                        );
+                      },
+                  )
+                  // ),
                   ),
-                  child: Container(
-                    padding: EdgeInsets.all(20),
-                    child: customerInfo(),
-                  ),
-                ),
-              ),
-              OrderCard(
-                headerText: 'เวลาการสั่งซื้อ',
+              BuildCard(
+                headerText: "เวลานัดหมาย",
+                canEdit: false,
                 child: Container(
                   padding: EdgeInsets.all(20),
                   child: Row(
                     children: [
+                      Icon(Icons.calendar_today),
                       Expanded(
                         flex: 7,
                         child: Text(
@@ -114,39 +128,6 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                   ),
                 ),
               ),
-              OrderCard(
-                headerText: 'ที่อยู่',
-                child: Container(
-                  padding: EdgeInsets.all(20),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          widget.order['address'],
-                          style: FontCollection.bodyTextStyle,
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 2,
-                        ),
-                      ),
-                      Container(
-                        child: IconButton(
-                          icon: Icon(Icons.location_on),
-                          onPressed: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (BuildContext context) => CustomerMap(
-                                  order: widget.order,
-                                ),
-                              ),
-                            );
-                          },
-                          color: CollectionsColors.orange,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
               // itemBuilder(menuNotifier),
               BuildCard(
                 headerText: 'รายการอาหารทั้งหมด',
@@ -156,7 +137,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                   child: Column(
                     children: [
                       Container(
-                        child: ListView.builder(
+                        child: ListView.separated(
                           physics: NeverScrollableScrollPhysics(),
                           shrinkWrap: true,
                           itemCount: orderNotifier.orderMenuList.length,
@@ -164,7 +145,11 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                             menu = orderNotifier.orderMenuList[index];
                             return listOrder(menu);
                           },
+                          separatorBuilder: (context, index) => Divider(color: Colors.grey,),
                         ),
+                      ),
+                      Divider(
+                        color: Colors.grey,
                       ),
                       Container(
                           margin: EdgeInsets.only(top: 20),
@@ -247,7 +232,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                                       alignment: Alignment.centerRight,
                                       child: Text(
                                         widget.order['netPrice'].toString(),
-                                        style: FontCollection.bodyTextStyle,
+                                        style: FontCollection.bodyBoldTextStyle,
                                       ),
                                     ),
                                   ),
@@ -257,7 +242,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                                       alignment: Alignment.centerRight,
                                       child: Text(
                                         'บาท',
-                                        style: FontCollection.bodyTextStyle,
+                                        style: FontCollection.bodyBoldTextStyle,
                                       ),
                                     ),
                                   ),
@@ -404,69 +389,89 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
   //       ),
   //     );
 
-  final height = 50.0;
-  final width = 50.0;
+  final height = 80.0;
+  final width = 80.0;
 
-  Widget customerInfo() {
-    return Container(
-      padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          userPicAndName(),
-          Container(
-            width: width,
-            height: height,
-            // alignment: Alignment.centerRight,
-            child: MaterialButton(
-              color: CollectionsColors.yellow,
-              textColor: Colors.white,
-              child: Center(
+  Widget customerDeliCard(
+    String name,
+    String phoneNumber,
+    String address,
+    VoidCallback onClickedContact,
+    VoidCallback onClickedAddress,
+  ) {
+    return BuildCard(
+      headerText: 'ข้อมูลผู้สั่งซื้อ',
+      child: Container(
+        padding: EdgeInsets.fromLTRB(0, 10, 5, 20),
+        child: Column(
+          children: [
+            ListTile(
+              leading: CircleAvatar(
+                backgroundColor: CollectionsColors.navy,
+                radius: 35.0,
                 child: Icon(
-                  Icons.call,
+                  Icons.person,
+                  color: CollectionsColors.white,
                 ),
               ),
-              shape: CircleBorder(),
-              onPressed: () async {
-                String number = widget.order['phone'];
-                // launch('tel://$number');
-                await FlutterPhoneDirectCaller.callNumber(number);
-              },
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget userPicAndName() {
-    return Container(
-      child: Row(
-        children: [
-          Container(
-            width: width,
-            height: height,
-            alignment: Alignment.centerLeft,
-            child: CircleAvatar(
-              backgroundColor: CollectionsColors.yellow,
-              radius: height,
-              child: Text(
-                widget.order['customerName'][0],
-                style: FontCollection.descriptionTextStyle,
+              title: Text(
+                name,
+                style: FontCollection.bodyTextStyle,
                 textAlign: TextAlign.left,
               ),
+              subtitle: Text(
+                phoneNumber,
+                style: FontCollection.bodyTextStyle,
+              ),
+              trailing: Container(
+                width: width,
+                height: height,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color: CollectionsColors.yellow,
+                  shape: BoxShape.circle,
+                  boxShadow: [
+                    BoxShadow(
+                        color: Colors.grey.withOpacity(0.7),
+                        blurRadius: 1,
+                        offset: Offset(-0.5,2)
+                    )
+                  ],
+                ),
+                child: Icon(
+                  Icons.call, color: Colors.white,
+                ),
+              ),
+              onTap: onClickedContact,
             ),
-          ),
-          Container(
-            padding: EdgeInsets.only(left: 20),
-            child: Text(
-              widget.order['customerName'],
-              style: FontCollection.bodyTextStyle,
-              textAlign: TextAlign.left,
+            Container(
+              margin: EdgeInsets.only(top: 10),
+              child: ListTile(
+                leading: CircleAvatar(
+                  backgroundColor: CollectionsColors.navy,
+                  radius: 35.0,
+                  child: Icon(
+                    Icons.location_on,
+                    color: CollectionsColors.white,
+                  ),
+                ),
+                title: AutoSizeText(
+                  address,
+                  style: FontCollection.bodyTextStyle,
+                  textAlign: TextAlign.left,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                trailing: Icon(
+                    Icons.chevron_right_outlined, color: Colors.black,
+                ),
+                onTap: onClickedAddress,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
+      canEdit: false,
     );
   }
 
@@ -520,36 +525,35 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
           menu.topping.isEmpty
               ? SizedBox.shrink()
               : Container(
-            margin: EdgeInsets.only(top: 10),
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    Expanded(
-                      flex: 2,
-                      child: Container(),
-                    ),
-                    Expanded(
-                      flex: 10,
-                      child: Row(children: [
-                        Text(
-                          menu.topping.join(', '),
-                          style: TextStyle(
-                            fontWeight: FontWeight.w400,
-                            fontSize: smallestSize,
-                            color: Colors.black54,
+                  margin: EdgeInsets.only(top: 10),
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          Expanded(
+                            flex: 2,
+                            child: Container(),
                           ),
-                        )
-                      ]),
-                    ),
-                  ],
+                          Expanded(
+                            flex: 10,
+                            child: Row(children: [
+                              Text(
+                                menu.topping.join(', '),
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: smallestSize,
+                                  color: Colors.black54,
+                                ),
+                              )
+                            ]),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-              ],
-            ),
-          ),
         ],
       ),
     );
   }
-
 }

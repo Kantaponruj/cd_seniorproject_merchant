@@ -45,6 +45,13 @@ class FontCollection {
     color: Colors.black,
   );
 
+  static const whiteBodyTextStyle = TextStyle(
+    fontFamily: NotoSansFont,
+    fontWeight: FontWeight.w400,
+    fontSize: mediumSize,
+    color: Colors.white,
+  );
+
   static const bodyBoldTextStyle = TextStyle(
     fontFamily: NotoSansFont,
     fontWeight: FontWeight.w700,
