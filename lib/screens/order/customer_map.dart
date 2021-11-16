@@ -53,8 +53,8 @@ class _CustomerMapPageState extends State<CustomerMapPage> {
             panelBuilder: (scrollController) => ClipRRect(
               borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
               child: buildSlidingPanel(
-                scrollController: scrollController,
-                panelController: panelController,
+                // scrollController: scrollController,
+                // panelController: panelController,
               ),
             ),
             body: Padding(
@@ -83,10 +83,10 @@ class _CustomerMapPageState extends State<CustomerMapPage> {
         ),
       );
 
-  Widget buildSlidingPanel({
-    @required PanelController panelController,
-    @required ScrollController scrollController,
-  }) {
+  Widget buildSlidingPanel(
+    // @required PanelController panelController,
+    // @required ScrollController scrollController,
+  ) {
     StoreNotifier storeNotifier = Provider.of<StoreNotifier>(context);
     String orderStatus = 'จัดส่งเรียบร้อยแล้ว';
 

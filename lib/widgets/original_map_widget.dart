@@ -20,8 +20,6 @@ class OriginalMapWidget extends StatefulWidget {
 }
 
 class _OriginalMapWidgetState extends State<OriginalMapWidget> {
-  List nextStartPoint = [];
-  List allPoints = [];
   List distanceList = [];
   List<LatLng> polylineCoordinates = [];
   PolylinePoints polylinePoints;
@@ -182,62 +180,59 @@ class _OriginalMapWidgetState extends State<OriginalMapWidget> {
           Container(
             // width: double.infinity,
             // height: double.infinity,
-            child: Flexible(
-              flex: 15,
-              child: GoogleMap(
-                myLocationEnabled: true,
-                // polylines: _polylines,
-                initialCameraPosition: CameraPosition(
-                  target: locationNotifier.initialPosition,
-                  zoom: 15,
-                ),
-                onMapCreated: (GoogleMapController controller) {
-                  widget.mapController.complete(controller);
-                },
-                markers: Set.from(_markers),
+            child: GoogleMap(
+              myLocationEnabled: true,
+              // polylines: _polylines,
+              initialCameraPosition: CameraPosition(
+                target: locationNotifier.initialPosition,
+                zoom: 15,
               ),
+              onMapCreated: (GoogleMapController controller) {
+                widget.mapController.complete(controller);
+              },
+              markers: Set.from(_markers),
             ),
           ),
         ],
       ),
-      bottomNavigationBar: Container(
-        alignment: Alignment.bottomCenter,
-        height: 180,
-        margin: EdgeInsets.symmetric(horizontal: 20),
-        child: nextStartPoint.isNotEmpty
-            ? Column(
-                children: [
-                  Row(
-                    children: [
-                      Text('current point'),
-                      Text(' -> '),
-                      Text(nextStartPoint.first['name']),
-                      SizedBox(width: 10),
-                      Text(nextStartPoint.first['distance'].toString())
-                    ],
-                  ),
-                  ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: nextStartPoint.length,
-                    itemBuilder: (context, index) {
-                      return index == nextStartPoint.length - 1
-                          ? Container()
-                          : Row(
-                              children: [
-                                Text(nextStartPoint[index]['name']),
-                                Text(' -> '),
-                                Text(nextStartPoint[index + 1]['name']),
-                                SizedBox(width: 10),
-                                Text(nextStartPoint[index + 1]['distance']
-                                    .toString())
-                              ],
-                            );
-                    },
-                  ),
-                ],
-              )
-            : Container(),
-      ),
+      // bottomNavigationBar: Container(
+      //   alignment: Alignment.bottomCenter,
+      //   height: 180,
+      //   margin: EdgeInsets.symmetric(horizontal: 20),
+      //   child: nextStartPoint.isNotEmpty
+      //       ? Column(
+      //           children: [
+      //             Row(
+      //               children: [
+      //                 Text('current point'),
+      //                 Text(' -> '),
+      //                 Text(nextStartPoint.first['name']),
+      //                 SizedBox(width: 10),
+      //                 Text(nextStartPoint.first['distance'].toString())
+      //               ],
+      //             ),
+      //             ListView.builder(
+      //               shrinkWrap: true,
+      //               itemCount: nextStartPoint.length,
+      //               itemBuilder: (context, index) {
+      //                 return index == nextStartPoint.length - 1
+      //                     ? Container()
+      //                     : Row(
+      //                         children: [
+      //                           Text(nextStartPoint[index]['name']),
+      //                           Text(' -> '),
+      //                           Text(nextStartPoint[index + 1]['name']),
+      //                           SizedBox(width: 10),
+      //                           Text(nextStartPoint[index + 1]['distance']
+      //                               .toString())
+      //                         ],
+      //                       );
+      //               },
+      //             ),
+      //           ],
+      //         )
+      //       : Container(),
+      // ),
     );
   }
 }
