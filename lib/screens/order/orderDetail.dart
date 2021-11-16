@@ -16,13 +16,18 @@ import 'package:provider/provider.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 
 class OrderDetailPage extends StatefulWidget {
-  OrderDetailPage(
-      {Key key, @required this.storeId, @required this.order, this.isConfirm})
-      : super(key: key);
+  OrderDetailPage({
+    Key key,
+    @required this.storeId,
+    @required this.order,
+    this.isConfirm,
+    this.typeOrder,
+  }) : super(key: key);
 
   final String storeId;
   final order;
   final bool isConfirm;
+  final String typeOrder;
 
   @override
   _OrderDetailPageState createState() => _OrderDetailPageState();
@@ -36,12 +41,12 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
 
   @override
   void initState() {
-    OrderNotifier orderNotifier =
-        Provider.of<OrderNotifier>(context, listen: false);
+    OrderNotifier order = Provider.of<OrderNotifier>(context, listen: false);
     getOrderMenu(
-      orderNotifier,
+      order,
       widget.storeId,
       widget.order['documentId'],
+      widget.typeOrder,
     );
     checkStatus();
     topicTime = widget.order['typeOrder'] == 'delivery'

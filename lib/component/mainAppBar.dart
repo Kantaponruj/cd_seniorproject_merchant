@@ -2,7 +2,6 @@ import 'package:cs_senior_project_merchant/asset/color.dart';
 import 'package:cs_senior_project_merchant/asset/text_style.dart';
 import 'package:cs_senior_project_merchant/screens/allDes_map.dart';
 import 'package:cs_senior_project_merchant/screens/order.dart';
-import 'package:cs_senior_project_merchant/widgets/button_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -30,7 +29,6 @@ class _MainAppbarState extends State<MainAppbar>
 
   @override
   void initState() {
-    // TODO: implement
     controller = TabController(length: 3, vsync: this);
     super.initState();
   }
@@ -83,15 +81,9 @@ class _MainAppbarState extends State<MainAppbar>
             labelColor: Colors.black,
             labelStyle: FontCollection.bodyTextStyle,
             tabs: [
-              Tab(
-                text: 'จัดส่ง',
-              ),
-              Tab(
-                text: 'รับเอง',
-              ),
-              Tab(
-                text: 'นัดหมาย',
-              ),
+              Tab(text: 'จัดส่ง'),
+              Tab(text: 'รับเอง'),
+              Tab(text: 'นัดหมาย'),
             ],
             controller: controller,
           ),
@@ -99,9 +91,9 @@ class _MainAppbarState extends State<MainAppbar>
         body: TabBarView(
           controller: controller,
           children: [
-            OrderPage(),
-            OrderPage(),
-            OrderPage(),
+            OrderPage(typeOrder: 'delivery-orders'),
+            OrderPage(typeOrder: 'pickup-orders'),
+            OrderPage(typeOrder: 'delivery-orders'),
           ],
         ),
       ),

@@ -2,11 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cs_senior_project_merchant/asset/color.dart';
 import 'package:cs_senior_project_merchant/asset/constant.dart';
 import 'package:cs_senior_project_merchant/asset/text_style.dart';
-import 'package:cs_senior_project_merchant/component/mainAppBar.dart';
 import 'package:cs_senior_project_merchant/notifiers/location_notifier.dart';
 import 'package:cs_senior_project_merchant/notifiers/order_notifier.dart';
 import 'package:cs_senior_project_merchant/notifiers/store_notifier.dart';
-import 'package:cs_senior_project_merchant/screens/allDes_map.dart';
 import 'package:cs_senior_project_merchant/screens/order/customer_map.dart';
 import 'package:cs_senior_project_merchant/screens/order/orderDetail.dart';
 import 'package:cs_senior_project_merchant/services/order_service.dart';
@@ -17,7 +15,9 @@ import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
 
 class OrderPage extends StatefulWidget {
-  const OrderPage({Key key}) : super(key: key);
+  const OrderPage({Key key, this.typeOrder}) : super(key: key);
+
+  final String typeOrder;
 
   @override
   _OrderPageState createState() => _OrderPageState();
@@ -92,7 +92,7 @@ class _OrderPageState extends State<OrderPage> {
               stream: firebaseFirestore
                   .collection('stores')
                   .doc(storeNotifier.store.storeId)
-                  .collection('delivery-orders')
+                  .collection(widget.typeOrder)
                   .orderBy('timeOrdered')
                   .snapshots(),
               builder: (BuildContext context,
@@ -173,12 +173,18 @@ class _OrderPageState extends State<OrderPage> {
             switch (order['orderStatus']) {
               case 'ยืนยันคำสั่งซื้อ':
                 return OrderDetailPage(
-                    storeId: storeId, order: order, isConfirm: false);
+                    storeId: storeId,
+                    order: order,
+                    isConfirm: false,
+                    typeOrder: widget.typeOrder);
               case 'ยืนยันการจัดส่ง':
                 return CustomerMapPage(order: order);
               default:
                 return OrderDetailPage(
-                    storeId: storeId, order: order, isConfirm: false);
+                    storeId: storeId,
+                    order: order,
+                    isConfirm: false,
+                    typeOrder: widget.typeOrder);
             }
           }
 

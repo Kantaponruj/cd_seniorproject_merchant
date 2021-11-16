@@ -29,11 +29,13 @@ Future<void> getOrderMenu(
   OrderNotifier orderNotifier,
   String storeId,
   String documentId,
+  String typeOrder,
 ) async {
   QuerySnapshot snapshot = await firebaseFirestore
       .collection('stores')
       .doc(storeId)
-      .collection('delivery-orders')
+      .collection(
+          typeOrder == 'delivery-orders' ? 'delivery-orders' : 'pickup-orders')
       .doc(documentId)
       .collection('orders')
       .get();
