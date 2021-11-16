@@ -45,7 +45,7 @@ class _StorePageState extends State<StorePage> {
 
     // detail.text = storeNotifier.store.description;
 
-    // storeNotifier.reloadUserModel();
+    storeNotifier.reloadUserModel();
 
     super.initState();
   }
