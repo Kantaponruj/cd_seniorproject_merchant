@@ -13,9 +13,11 @@ class BuildIconText extends StatelessWidget {
     return Container(
       child: Row(
         children: [
-          Container(
-            child: Icon(icon),
-          ),
+          icon != null
+              ? Container(
+                  child: Icon(icon),
+                )
+              : SizedBox(),
           Container(
             margin: EdgeInsets.only(left: 10),
             alignment: Alignment.centerLeft,

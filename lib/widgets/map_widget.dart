@@ -27,74 +27,66 @@ class _MapWidgetState extends State<MapWidget> {
     final storeIcon = "assets/images/restaurant-marker-icon.png";
     final customerIcon = "assets/images/house-marker-icon.png";
     final driverIcon = "assets/images/driver-marker-icon.png";
-    // final storeLocation = LatLng(
-    //   store.store.realtimeLocation.latitude,
-    //   store.store.realtimeLocation.longitude,
-    // );
-    // final customerLocation = LatLng(
-    //   double.parse(widget.order['geoPoint'].latitude.toString()),
-    //   double.parse(widget.order['geoPoint'].longitude.toString()),
-    // );
 
     return widget.isPreview
-            ? GoogleMapsWidget(
-                apiKey: GOOGLE_MAPS_API_KEY,
-                sourceLatLng: LatLng(
+        ? GoogleMapsWidget(
+            apiKey: GOOGLE_MAPS_API_KEY,
+            sourceLatLng: LatLng(
+              store.store.realtimeLocation.latitude,
+              store.store.realtimeLocation.longitude,
+            ),
+            destinationLatLng: LatLng(
+              double.parse(widget.order['geoPoint'].latitude.toString()),
+              double.parse(widget.order['geoPoint'].longitude.toString()),
+            ),
+            routeWidth: routeWidth,
+            routeColor: routeColor,
+            sourceMarkerIconInfo: MarkerIconInfo(assetPath: storeIcon),
+            destinationMarkerIconInfo: MarkerIconInfo(
+              assetPath: customerIcon,
+            ),
+            sourceName: storeName,
+            destinationName: customerName,
+            totalTimeCallback: (time) => print(time),
+            totalDistanceCallback: (distance) => print(distance),
+          )
+        : GoogleMapsWidget(
+            apiKey: GOOGLE_MAPS_API_KEY,
+            sourceLatLng: LatLng(
+              store.store.realtimeLocation.latitude,
+              store.store.realtimeLocation.longitude,
+            ),
+            destinationLatLng: LatLng(
+              double.parse(widget.order['geoPoint'].latitude.toString()),
+              double.parse(widget.order['geoPoint'].longitude.toString()),
+            ),
+            routeWidth: routeWidth,
+            routeColor: routeColor,
+            sourceMarkerIconInfo: MarkerIconInfo(
+              assetPath: storeIcon,
+              assetMarkerSize: Size.square(125),
+            ),
+            destinationMarkerIconInfo: MarkerIconInfo(
+              assetPath: customerIcon,
+            ),
+            driverMarkerIconInfo: MarkerIconInfo(
+              assetPath: driverIcon,
+            ),
+            driverCoordinatesStream: Stream.periodic(
+              Duration(milliseconds: 500),
+              (i) {
+                store.reloadUserModel();
+                return LatLng(
                   store.store.realtimeLocation.latitude,
                   store.store.realtimeLocation.longitude,
-                ),
-                destinationLatLng: LatLng(
-                  double.parse(widget.order['geoPoint'].latitude.toString()),
-                  double.parse(widget.order['geoPoint'].longitude.toString()),
-                ),
-                routeWidth: routeWidth,
-                routeColor: routeColor,
-                sourceMarkerIconInfo: MarkerIconInfo(assetPath: storeIcon),
-                destinationMarkerIconInfo: MarkerIconInfo(
-                  assetPath: customerIcon,
-                ),
-                sourceName: storeName,
-                destinationName: customerName,
-                totalTimeCallback: (time) => print(time),
-                totalDistanceCallback: (distance) => print(distance),
-              )
-            : GoogleMapsWidget(
-                apiKey: GOOGLE_MAPS_API_KEY,
-                sourceLatLng: LatLng(
-                  store.store.realtimeLocation.latitude,
-                  store.store.realtimeLocation.longitude,
-                ),
-                destinationLatLng: LatLng(
-                  double.parse(widget.order['geoPoint'].latitude.toString()),
-                  double.parse(widget.order['geoPoint'].longitude.toString()),
-                ),
-                routeWidth: routeWidth,
-                routeColor: routeColor,
-                sourceMarkerIconInfo: MarkerIconInfo(
-                  assetPath: storeIcon,
-                  assetMarkerSize: Size.square(125),
-                ),
-                destinationMarkerIconInfo: MarkerIconInfo(
-                  assetPath: customerIcon,
-                ),
-                driverMarkerIconInfo: MarkerIconInfo(
-                  assetPath: driverIcon,
-                ),
-                driverCoordinatesStream: Stream.periodic(
-                  Duration(milliseconds: 500),
-                  (i) {
-                    store.reloadUserModel();
-                    return LatLng(
-                      store.store.realtimeLocation.latitude,
-                      store.store.realtimeLocation.longitude,
-                    );
-                  },
-                ),
-                sourceName: storeName,
-                destinationName: customerName,
-                driverName: driverName,
-                totalTimeCallback: (time) => print(time),
-                totalDistanceCallback: (distance) => print(distance),
-              );
+                );
+              },
+            ),
+            sourceName: storeName,
+            destinationName: customerName,
+            driverName: driverName,
+            totalTimeCallback: (time) => print(time),
+            totalDistanceCallback: (distance) => print(distance),
+          );
   }
 }

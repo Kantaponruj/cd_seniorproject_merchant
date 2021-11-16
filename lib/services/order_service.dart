@@ -96,10 +96,7 @@ saveOrderToHistory(String storeId, OrderDetail orderDetail) {
   documentRef.set(orderDetail.toMap(), SetOptions(merge: true));
 }
 
-saveOrderMenuToHistory(
-  String storeId,
-  OrderMenu orderMenu,
-) async {
+saveOrderMenuToHistory(String storeId, OrderMenu orderMenu) async {
   CollectionReference historyRef = firebaseFirestore
       .collection('stores')
       .doc(storeId)

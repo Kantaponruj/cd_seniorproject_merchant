@@ -185,7 +185,13 @@ class _CustomerMapPageState extends State<CustomerMapPage> {
                     _orderDetail.netPrice = widget.order['netPrice'];
                     _orderDetail.dateOrdered = widget.order['dateOrdered'];
                     _orderDetail.timeOrdered = widget.order['timeOrdered'];
+                    _orderDetail.startWaitingTime =
+                        widget.order['startWaitingTime'];
+                    _orderDetail.endWaitingTime =
+                        widget.order['endWaitingTime'];
                     _orderDetail.amountOfMenu = widget.order['amountOfMenu'];
+                    _orderDetail.geoPoint = widget.order['geoPoint'];
+                    _orderDetail.typeOrder = widget.order['typeOrder'];
                   });
 
                   updateStatusOrder(
