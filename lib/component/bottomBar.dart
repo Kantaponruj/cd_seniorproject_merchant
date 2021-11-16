@@ -1,4 +1,5 @@
 import 'package:cs_senior_project_merchant/asset/color.dart';
+import 'package:cs_senior_project_merchant/component/mainAppBar.dart';
 import 'package:cs_senior_project_merchant/screens/order.dart';
 import 'package:flutter/material.dart';
 import 'package:bottom_indicator_bar_fork/bottom_indicator_bar_fork.dart';
@@ -23,7 +24,7 @@ class _State extends State<MainBottombar> {
   int _selectedIndex = 1;
   List<Widget> _pageWidget = <Widget>[
     StorePage(),
-    OrderPage(),
+    MainAppbar(),
     MenuPage(),
   ];
 

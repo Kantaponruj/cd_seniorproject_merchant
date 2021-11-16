@@ -1,5 +1,7 @@
 import 'package:cs_senior_project_merchant/asset/color.dart';
 import 'package:cs_senior_project_merchant/asset/text_style.dart';
+import 'package:cs_senior_project_merchant/screens/allDes_map.dart';
+import 'package:cs_senior_project_merchant/screens/order.dart';
 import 'package:cs_senior_project_merchant/widgets/button_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +24,17 @@ class MainAppbar extends StatefulWidget implements PreferredSizeWidget {
   _MainAppbarState createState() => _MainAppbarState();
 }
 
-class _MainAppbarState extends State<MainAppbar> {
+class _MainAppbarState extends State<MainAppbar>
+    with SingleTickerProviderStateMixin {
+  TabController controller;
+
+  @override
+  void initState() {
+    // TODO: implement
+    controller = TabController(length: 3, vsync: this);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -35,7 +47,12 @@ class _MainAppbarState extends State<MainAppbar> {
           title: titleText(),
           actions: [
             IconButton(
-              onPressed: widget.map,
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => AllDestinationPage()));
+              },
               icon: Icon(
                 Icons.map_outlined,
                 color: Colors.black,
@@ -76,7 +93,16 @@ class _MainAppbarState extends State<MainAppbar> {
                 text: 'นัดหมาย',
               ),
             ],
+            controller: controller,
           ),
+        ),
+        body: TabBarView(
+          controller: controller,
+          children: [
+            OrderPage(),
+            OrderPage(),
+            OrderPage(),
+          ],
         ),
       ),
     );
@@ -86,7 +112,7 @@ class _MainAppbarState extends State<MainAppbar> {
     return Padding(
       padding: EdgeInsets.only(left: 10),
       child: Text(
-        widget.appBarTitle,
+        'คำสั่งซื้อ',
         style: FontCollection.topicBoldTextStyle,
       ),
     );

@@ -80,13 +80,13 @@ class _OrderPageState extends State<OrderPage> {
     return SafeArea(
       child: Scaffold(
         backgroundColor: CollectionsColors.grey,
-        appBar: MainAppbar(
-          appBarTitle: 'คำสั่งซื้อ',
-          map: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => AllDestinationPage()));
-          },
-        ),
+        // appBar: MainAppbar(
+        //   appBarTitle: 'คำสั่งซื้อ',
+        //   map: () {
+        //     Navigator.push(context,
+        //         MaterialPageRoute(builder: (context) => AllDestinationPage()));
+        //   },
+        // ),
         body: SingleChildScrollView(
           child: StreamBuilder(
               stream: firebaseFirestore
