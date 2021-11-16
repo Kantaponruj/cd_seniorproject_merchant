@@ -103,7 +103,7 @@ class _StoreProfilePageState extends State<StoreProfilePage> {
                     'typeOfStore': selectedTypeOfStore
                   });
 
-                  updateImageStore(storeNotifier.store.storeId, _imageFile);
+                  updateImageStore(_imageFile, storeNotifier);
 
                   Navigator.of(context).pushAndRemoveUntil(
                     MaterialPageRoute(

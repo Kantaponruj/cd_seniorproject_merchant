@@ -7,6 +7,7 @@ import 'package:cs_senior_project_merchant/models/dateTime.dart';
 import 'package:cs_senior_project_merchant/models/store.dart';
 import 'package:cs_senior_project_merchant/notifiers/address_notifier.dart';
 import 'package:cs_senior_project_merchant/notifiers/dateTime_notifier.dart';
+import 'package:cs_senior_project_merchant/notifiers/store_notifier.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:uuid/uuid.dart';
 import 'package:path/path.dart' as path;
@@ -37,7 +38,7 @@ class StoreService {
       .then((doc) => Store.fromSnapshot(doc));
 }
 
-updateImageStore(String storeId, File localFile) async {
+updateImageStore(File localFile, StoreNotifier storeNotifier) async {
   CollectionReference storeRef = firebaseFirestore.collection('stores');
 
   if (localFile != null) {
@@ -57,9 +58,11 @@ updateImageStore(String storeId, File localFile) async {
     });
 
     String url = await firebaseStorageRef.getDownloadURL();
-    await storeRef.doc(storeId).update({'image': url});
+    await storeRef.doc(storeNotifier.store.storeId).update({'image': url});
     print("download url: $url");
   }
+
+  storeNotifier.reloadUserModel();
   // else {
   //   await storeRef.doc(store.storeId).update(value);
   //   print("...skipping image upload");

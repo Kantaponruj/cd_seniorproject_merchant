@@ -1,6 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cs_senior_project_merchant/asset/color.dart';
-import 'package:cs_senior_project_merchant/asset/constant.dart';
 import 'package:cs_senior_project_merchant/asset/text_style.dart';
 import 'package:cs_senior_project_merchant/component/orderCard.dart';
 import 'package:cs_senior_project_merchant/component/roundAppBar.dart';
@@ -11,7 +10,6 @@ import 'package:cs_senior_project_merchant/screens/order/cutomer_map.dart';
 import 'package:cs_senior_project_merchant/services/order_service.dart';
 import 'package:cs_senior_project_merchant/widgets/bottomOrder_widget.dart';
 import 'package:cs_senior_project_merchant/widgets/icontext_widget.dart';
-import 'package:flutter/animation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -32,6 +30,7 @@ class OrderDetailPage extends StatefulWidget {
 
 class _OrderDetailPageState extends State<OrderDetailPage> {
   String orderStatus;
+  String topicTime;
   OrderMenu menu = OrderMenu();
   bool check;
 
@@ -45,6 +44,9 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
       widget.order['documentId'],
     );
     checkStatus();
+    topicTime = widget.order['typeOrder'] == 'delivery'
+        ? 'ระยะเวลาการจัดส่ง'
+        : 'เวลานัดหมาย';
     super.initState();
   }
 
@@ -102,7 +104,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                   // ),
                   ),
               BuildCard(
-                headerText: "เวลานัดหมาย",
+                headerText: topicTime,
                 canEdit: false,
                 child: Container(
                   padding: EdgeInsets.all(20),
@@ -115,11 +117,20 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                       Divider(
                         color: Colors.white,
                       ),
-                      BuildIconText(
-                        icon: Icons.schedule,
-                        text:
-                            '${widget.order['timeOrdered']} น. จนถึง ${widget.order['timeOrdered']} น.',
-                      )
+                      Row(
+                        children: [
+                          BuildIconText(
+                            icon: Icons.schedule,
+                            text: '${widget.order['startWaitingTime']}',
+                          ),
+                          widget.order['endWaitingTime'] != null
+                              ? BuildIconText(
+                                  text:
+                                      ' จนถึง   ${widget.order['endWaitingTime']} น.',
+                                )
+                              : SizedBox(),
+                        ],
+                      ),
                     ],
                   ),
                 ),
