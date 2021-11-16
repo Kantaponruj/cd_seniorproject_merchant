@@ -10,6 +10,7 @@ import 'package:cs_senior_project_merchant/screens/order/customer_map.dart';
 import 'package:cs_senior_project_merchant/screens/order/cutomer_map.dart';
 import 'package:cs_senior_project_merchant/services/order_service.dart';
 import 'package:cs_senior_project_merchant/widgets/bottomOrder_widget.dart';
+import 'package:cs_senior_project_merchant/widgets/icontext_widget.dart';
 import 'package:flutter/animation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -83,20 +84,20 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                     widget.order['customerName'],
                     widget.order['phone'],
                     widget.order['address'],
-                          () async {
-                        String number = widget.order['phone'];
-                        // launch('tel://$number');
-                        await FlutterPhoneDirectCaller.callNumber(number);
-                      },
-                          () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (BuildContext context) => CustomerMap(
-                              order: widget.order,
-                            ),
+                    () async {
+                      String number = widget.order['phone'];
+                      // launch('tel://$number');
+                      await FlutterPhoneDirectCaller.callNumber(number);
+                    },
+                    () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (BuildContext context) => CustomerMap(
+                            order: widget.order,
                           ),
-                        );
-                      },
+                        ),
+                      );
+                    },
                   )
                   // ),
                   ),
@@ -105,25 +106,20 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                 canEdit: false,
                 child: Container(
                   padding: EdgeInsets.all(20),
-                  child: Row(
+                  child: Column(
                     children: [
-                      Icon(Icons.calendar_today),
-                      Expanded(
-                        flex: 7,
-                        child: Text(
-                          widget.order['dateOrdered'],
-                          style: FontCollection.bodyTextStyle,
-                          textAlign: TextAlign.left,
-                        ),
+                      BuildIconText(
+                        icon: Icons.calendar_today,
+                        text: widget.order['dateOrdered'],
                       ),
-                      Expanded(
-                        flex: 5,
-                        child: Text(
-                          '${widget.order['timeOrdered']} น.',
-                          style: FontCollection.bodyTextStyle,
-                          textAlign: TextAlign.right,
-                        ),
+                      Divider(
+                        color: Colors.white,
                       ),
+                      BuildIconText(
+                        icon: Icons.schedule,
+                        text:
+                            '${widget.order['timeOrdered']} น. จนถึง ${widget.order['timeOrdered']} น.',
+                      )
                     ],
                   ),
                 ),
@@ -145,7 +141,9 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                             menu = orderNotifier.orderMenuList[index];
                             return listOrder(menu);
                           },
-                          separatorBuilder: (context, index) => Divider(color: Colors.grey,),
+                          separatorBuilder: (context, index) => Divider(
+                            color: Colors.grey,
+                          ),
                         ),
                       ),
                       Divider(
@@ -434,12 +432,12 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                     BoxShadow(
                         color: Colors.grey.withOpacity(0.7),
                         blurRadius: 1,
-                        offset: Offset(-0.5,2)
-                    )
+                        offset: Offset(-0.5, 2))
                   ],
                 ),
                 child: Icon(
-                  Icons.call, color: Colors.white,
+                  Icons.call,
+                  color: Colors.white,
                 ),
               ),
               onTap: onClickedContact,
@@ -463,7 +461,8 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                   overflow: TextOverflow.ellipsis,
                 ),
                 trailing: Icon(
-                    Icons.chevron_right_outlined, color: Colors.black,
+                  Icons.chevron_right_outlined,
+                  color: Colors.black,
                 ),
                 onTap: onClickedAddress,
               ),
