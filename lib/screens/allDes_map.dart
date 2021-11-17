@@ -200,7 +200,7 @@ class _AllDestinationPageState extends State<AllDestinationPage> {
                                 children: [
                                   Container(
                                     child: Text(
-                                      'First points is ' +
+                                      '1. First points is ' +
                                           nextStartPoint.first['name'],
                                       style: FontCollection.bodyTextStyle,
                                     ),
@@ -228,6 +228,7 @@ class _AllDestinationPageState extends State<AllDestinationPage> {
                                           nextStartPoint[index + 1]['name'],
                                           nextStartPoint[index + 1]['distance']
                                               .toString(),
+                                    index + 2,
                                         );
                                 },
                               ),
@@ -242,12 +243,12 @@ class _AllDestinationPageState extends State<AllDestinationPage> {
         ));
   }
 
-  Widget showOrder(String startPoint, String stopPoint, String distance) {
+  Widget showOrder(String startPoint, String stopPoint, String distance, int index) {
     return Row(
       children: [
         Container(
           child: Text(
-            startPoint + ' to ',
+            index.toString() + '. ' + startPoint + ' to ',
             style: FontCollection.bodyTextStyle,
           ),
         ),
