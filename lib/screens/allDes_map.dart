@@ -24,7 +24,6 @@ class AllDestinationPage extends StatefulWidget {
 }
 
 class _AllDestinationPageState extends State<AllDestinationPage> {
-  GoogleMapController mapController;
   final panelController = PanelController();
 
   List allPoints = [];
@@ -32,9 +31,11 @@ class _AllDestinationPageState extends State<AllDestinationPage> {
   List distanceList = [];
   List<LatLng> polylineCoordinates = [];
   PolylinePoints polylinePoints;
+
   // Set<Polyline> _polylines = Set<Polyline>();
 
   String _placeDistance;
+
   double _coordinateDistance(lat1, lon1, lat2, lon2) {
     var p = 0.017453292519943295;
     var c = cos;
@@ -159,24 +160,6 @@ class _AllDestinationPageState extends State<AllDestinationPage> {
     OrderNotifier orderNotifier = Provider.of<OrderNotifier>(context);
     LocationNotifier locationNotifier = Provider.of<LocationNotifier>(context);
 
-    Iterable _markers = Iterable.generate(
-      orderNotifier.orderList.length,
-      (index) {
-        return Marker(
-          markerId: MarkerId(orderNotifier.orderList[index].orderId),
-          icon: BitmapDescriptor.defaultMarkerWithHue(_marker),
-          position: LatLng(
-            orderNotifier.orderList[index].geoPoint.latitude,
-            orderNotifier.orderList[index].geoPoint.longitude,
-          ),
-          infoWindow: InfoWindow(
-            title: orderNotifier.orderList[index].customerName,
-            snippet: orderNotifier.orderList[index].address,
-          ),
-        );
-      },
-    );
-
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: RoundedAppBar(
@@ -184,198 +167,80 @@ class _AllDestinationPageState extends State<AllDestinationPage> {
         ),
         body: Stack(
           children: [
-            Container(
-              // width: double.infinity,
-              // height: double.infinity,
-              child: GoogleMap(
-                myLocationEnabled: true,
-                // polylines: _polylines,
-                initialCameraPosition: CameraPosition(
-                  target: locationNotifier.initialPosition,
-                  zoom: 15,
-                ),
-                onMapCreated: (GoogleMapController controller) {
-                  mapController = controller;
-                },
-                markers: Set.from(_markers),
-              ),
-            ),
+            // Container(
+            //   // width: double.infinity,
+            //   // height: double.infinity,
+            //   child: GoogleMap(
+            //     myLocationEnabled: true,
+            //     // polylines: _polylines,
+            //     initialCameraPosition: CameraPosition(
+            //       target: locationNotifier.initialPosition,
+            //       zoom: 15,
+            //     ),
+            //     onMapCreated: (GoogleMapController controller) {
+            //       mapController = controller;
+            //     },
+            //     markers: Set.from(_markers),
+            //   ),
+            // ),
             Column(
               children: [
-                // Container(
-                //   height: MediaQuery.of(context).size.height / 2,
-                //   child: OriginalMapWidget(
-                //     mapController: _mapController,
-                //   ),
-                // ),
+                Container(
+                  height: MediaQuery.of(context).size.height / 2,
+                  child: OriginalMapWidget(),
+                ),
                 Container(
                   alignment: Alignment.bottomCenter,
                   margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
                   child: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        // Row(
-                        //   children: [
-                        //     Container(
-                        //       child: Text(
-                        //         'First points ' + nextStartPoint.first['name'],
-                        //         style: FontCollection.bodyTextStyle,
-                        //       ),
-                        //     ),
-                        //     Container(
-                        //       padding: EdgeInsets.only(left: 20),
-                        //       child: Text(
-                        //         'Distance: ' +
-                        //             nextStartPoint.first['distance'].toString(),
-                        //         style: FontCollection.bodyTextStyle,
-                        //       ),
-                        //     ),
-                        //   ],
-                        // ),
-                        Row(
-                          children: [
-                            Text('current point'),
-                            Text(' -> '),
-                            Text(nextStartPoint.first['name']),
-                            SizedBox(width: 10),
-                            Text(nextStartPoint.first['distance'].toString())
-                          ],
-                        ),
-                        ListView.builder(
-                          shrinkWrap: true,
-                          physics: NeverScrollableScrollPhysics(),
-                          itemCount: nextStartPoint.length,
-                          itemBuilder: (context, index) {
-                            return index == nextStartPoint.length - 1
-                                ? Container()
-                                : showOrder(
-                                    nextStartPoint[index]['name'],
-                                    nextStartPoint[index + 1]['name'],
-                                    nextStartPoint[index + 1]['distance']
-                                        .toString(),
-                                  );
-                          },
-                        ),
-                        // nextStartPoint.isNotEmpty
-                        //     ? ListView.builder(
-                        //         shrinkWrap: true,
-                        //         physics: NeverScrollableScrollPhysics(),
-                        //         itemCount: nextStartPoint.length,
-                        //         itemBuilder: (context, index) {
-                        //           return index == nextStartPoint.length - 1
-                        //               ? Container()
-                        //               : showOrder(
-                        //                   nextStartPoint[index]['name'],
-                        //                   nextStartPoint[index + 1]['name'],
-                        //                   nextStartPoint[index + 1]['distance']
-                        //                       .toString(),
-                        //                 );
-                        //         },
-                        //       )
-                        //     : SizedBox.shrink(),
-                      ],
-                    ),
+                    child: nextStartPoint.isNotEmpty
+                        ? Column(
+                            children: [
+                              Row(
+                                children: [
+                                  Container(
+                                    child: Text(
+                                      'First points is ' +
+                                          nextStartPoint.first['name'],
+                                      style: FontCollection.bodyTextStyle,
+                                    ),
+                                  ),
+                                  Container(
+                                    padding: EdgeInsets.only(left: 20),
+                                    child: Text(
+                                      'Distance: ' +
+                                          nextStartPoint.first['distance']
+                                              .toString(),
+                                      style: FontCollection.bodyTextStyle,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              ListView.builder(
+                                shrinkWrap: true,
+                                physics: NeverScrollableScrollPhysics(),
+                                itemCount: nextStartPoint.length,
+                                itemBuilder: (context, index) {
+                                  return index == nextStartPoint.length - 1
+                                      ? Container()
+                                      : showOrder(
+                                          nextStartPoint[index]['name'],
+                                          nextStartPoint[index + 1]['name'],
+                                          nextStartPoint[index + 1]['distance']
+                                              .toString(),
+                                        );
+                                },
+                              ),
+                            ],
+                          )
+                        : SizedBox.shrink(),
                   ),
                 ),
               ],
             ),
           ],
-        )
-
-        // Stack(
-        //   // fit: StackFit.expand,
-        //   children: [
-        //     SlidingUpPanel(
-        //       color: Theme.of(context).backgroundColor,
-        //       controller: panelController,
-        //       borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
-        //       maxHeight: 420,
-        //       panelBuilder: (scrollController) => ClipRRect(
-        //         borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
-        //         child: buildSlidingPanel(),
-        //       ),
-        //       body: Padding(
-        //         padding: EdgeInsets.fromLTRB(0, 0, 0, 200),
-        //         child: OriginalMapWidget(
-        //           mapController: _mapController,
-        //         ),
-        //       ),
-        //     ),
-        //   ],
-        // ),
-        );
+        ));
   }
-
-  // Widget buildDragHandle() => GestureDetector(
-  //       child: Column(
-  //         children: [
-  //           Center(
-  //             child: Container(
-  //               width: 30,
-  //               height: 5,
-  //               decoration: BoxDecoration(
-  //                 color: Colors.black54,
-  //                 borderRadius: BorderRadius.circular(30),
-  //               ),
-  //             ),
-  //           ),
-  //           Container(
-  //             padding: EdgeInsets.only(top: 20),
-  //             alignment: Alignment.centerLeft,
-  //             child: Text(
-  //               'ลำดับการจัดส่ง',
-  //               style: FontCollection.topicTextStyle,
-  //             ),
-  //           ),
-  //         ],
-  //       ),
-  //     );
-
-  // Widget buildSlidingPanel() {
-  //   return Scaffold(
-  //     backgroundColor: Colors.white,
-  //     appBar: AppBar(
-  //       toolbarHeight: 100,
-  //       backgroundColor: Colors.white,
-  //       automaticallyImplyLeading: false,
-  //       title: buildDragHandle(),
-  //       centerTitle: true,
-  //     ),
-  //     body: SingleChildScrollView(
-  //       child: Container(
-  //         alignment: Alignment.bottomCenter,
-  //         margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-  //         child: Column(
-  //           children: [
-  //             // Row(
-  //             //   children: [
-  //             //     Text('current point'),
-  //             //     Text(' -> '),
-  //             //     Text(nextStartPoint.first['name']),
-  //             //     SizedBox(width: 10),
-  //             //     Text(nextStartPoint.first['distance'].toString())
-  //             //   ],
-  //             // ),
-  //             ListView.builder(
-  //               shrinkWrap: true,
-  //               physics: NeverScrollableScrollPhysics(),
-  //               itemCount: nextStartPoint.length,
-  //               itemBuilder: (context, index) {
-  //                 return index == nextStartPoint.length - 1
-  //                     ? Container()
-  //                     : showOrder(
-  //                         nextStartPoint[index]['name'],
-  //                         nextStartPoint[index + 1]['name'],
-  //                         nextStartPoint[index + 1]['distance'].toString(),
-  //                       );
-  //               },
-  //             ),
-  //           ],
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
 
   Widget showOrder(String startPoint, String stopPoint, String distance) {
     return Row(
