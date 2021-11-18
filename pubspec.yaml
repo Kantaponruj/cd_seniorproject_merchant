@@ -30,6 +30,7 @@ dependencies:
   provider: ^5.0.0
   http: ^0.13.0
   uuid: ^3.0.5
+  splashscreen: any
 
   #firebase
   cloud_firestore: ^1.0.7
