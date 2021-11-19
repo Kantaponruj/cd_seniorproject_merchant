@@ -30,6 +30,7 @@ void main() async {
       ChangeNotifierProvider(create: (context) => MenuNotfier())
     ],
     child: MaterialApp(
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         fontFamily: NotoSansFont,
         backgroundColor: Colors.white,

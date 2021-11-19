@@ -349,18 +349,22 @@ class _AddMenuPageState extends State<AddMenuPage> {
               child: buildButton(
                 'แก้ไขหมวดหมู่',
                 () {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return buildAlertDialog();
-                    },
-                  );
+                  displayShowDialog(context);
                 },
               ),
             ),
           ],
         ),
       ),
+    );
+  }
+
+  Future<void> displayShowDialog(BuildContext context) async {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return buildAlertDialog();
+      },
     );
   }
 
@@ -385,6 +389,8 @@ class _AddMenuPageState extends State<AddMenuPage> {
       ),
     );
   }
+
+  String test;
 
   Widget buildTextField(String headerText, TextEditingController controller,
       String initialValue, Function onSaved) {
@@ -893,18 +899,20 @@ class _AddMenuPageState extends State<AddMenuPage> {
               },
             ),
             Container(
-              padding: EdgeInsets.only(bottom: 10),
+              padding: EdgeInsets.symmetric(vertical: 10),
               alignment: Alignment.topLeft,
-              child: TextButton(
-                onPressed: () {},
-                child: Text(
-                  'เพิ่มหมวดหมู่',
-                  style: FontCollection.underlineButtonTextStyle,
-                ),
+              child: Text(
+                'เพิ่มหมวดหมู่เพิ่มเติม',
+                style: FontCollection.bodyTextStyle,
               ),
             ),
             Container(
-              alignment: Alignment.topRight,
+              padding: EdgeInsets.only(bottom: 10),
+              alignment: Alignment.topLeft,
+              child: addCatalog(),
+            ),
+            Container(
+              alignment: Alignment.center,
               child: buildButton('บันทึก', () {}),
             ),
           ],
@@ -913,7 +921,8 @@ class _AddMenuPageState extends State<AddMenuPage> {
     );
   }
 
-  TextEditingController test;
+  TextEditingController test1;
+  TextEditingController test2;
 
   Widget catalogLists(String menu) {
     return Container(
@@ -927,7 +936,7 @@ class _AddMenuPageState extends State<AddMenuPage> {
               child: BuildPlainTextField(
                 validator: (value) {},
                 initialValue: menu,
-                textEditingController: test,
+                textEditingController: test1,
               ),
             ),
           ),
@@ -941,6 +950,44 @@ class _AddMenuPageState extends State<AddMenuPage> {
                   Icons.delete,
                   color: Colors.black,
                 ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget addCatalog() {
+    return Container(
+      child: Row(
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          Expanded(
+            flex: 10,
+            child: Padding(
+              padding: EdgeInsets.only(bottom: 20),
+              child: BuildPlainTextField(
+                validator: (value) {},
+                initialValue: '',
+                textEditingController: test2,
+                onChanged: (value) {
+                  setState(() {
+                    test = value;
+                  });
+                },
+              ),
+            ),
+          ),
+          Expanded(
+            flex: 2,
+            child: Container(
+              alignment: Alignment.topCenter,
+              child: EditButton(
+                onClicked: () {
+                  print(test);
+                },
+                editText: 'เพิ่ม',
               ),
             ),
           ),

@@ -166,10 +166,8 @@ class _AllDestinationPageState extends State<AllDestinationPage> {
                   height: MediaQuery.of(context).size.height / 2,
                   child: OriginalMapWidget(),
                 ),
-                Container(
-                  alignment: Alignment.bottomCenter,
-                  margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                  child: SingleChildScrollView(
+                SingleChildScrollView(
+                  child: Expanded(
                     child: nextStartPoint.isNotEmpty
                         ? Column(
                             children: [
