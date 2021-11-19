@@ -1,7 +1,5 @@
-import 'dart:async';
 import 'dart:math';
 
-import 'package:cs_senior_project_merchant/asset/color.dart';
 import 'package:cs_senior_project_merchant/asset/constant.dart';
 import 'package:cs_senior_project_merchant/asset/text_style.dart';
 import 'package:cs_senior_project_merchant/component/roundAppBar.dart';
@@ -13,8 +11,6 @@ import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
-
-const _marker = 350.0;
 
 class AllDestinationPage extends StatefulWidget {
   AllDestinationPage({Key key}) : super(key: key);
@@ -31,7 +27,6 @@ class _AllDestinationPageState extends State<AllDestinationPage> {
   List distanceList = [];
   List<LatLng> polylineCoordinates = [];
   PolylinePoints polylinePoints;
-
   // Set<Polyline> _polylines = Set<Polyline>();
 
   String _placeDistance;
@@ -75,6 +70,7 @@ class _AllDestinationPageState extends State<AllDestinationPage> {
       GOOGLE_MAPS_API_KEY,
       PointLatLng(startPoint.latitude, startPoint.longitude),
       PointLatLng(endPoint.latitude, endPoint.longitude),
+      // travelMode: TravelMode.bicycling,
     );
 
     if (result.status == 'OK') {
@@ -157,9 +153,6 @@ class _AllDestinationPageState extends State<AllDestinationPage> {
 
   @override
   Widget build(BuildContext context) {
-    OrderNotifier orderNotifier = Provider.of<OrderNotifier>(context);
-    LocationNotifier locationNotifier = Provider.of<LocationNotifier>(context);
-
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: RoundedAppBar(
@@ -167,22 +160,6 @@ class _AllDestinationPageState extends State<AllDestinationPage> {
         ),
         body: Stack(
           children: [
-            // Container(
-            //   // width: double.infinity,
-            //   // height: double.infinity,
-            //   child: GoogleMap(
-            //     myLocationEnabled: true,
-            //     // polylines: _polylines,
-            //     initialCameraPosition: CameraPosition(
-            //       target: locationNotifier.initialPosition,
-            //       zoom: 15,
-            //     ),
-            //     onMapCreated: (GoogleMapController controller) {
-            //       mapController = controller;
-            //     },
-            //     markers: Set.from(_markers),
-            //   ),
-            // ),
             Column(
               children: [
                 Container(
@@ -228,7 +205,7 @@ class _AllDestinationPageState extends State<AllDestinationPage> {
                                           nextStartPoint[index + 1]['name'],
                                           nextStartPoint[index + 1]['distance']
                                               .toString(),
-                                    index + 2,
+                                          index + 2,
                                         );
                                 },
                               ),
@@ -243,7 +220,8 @@ class _AllDestinationPageState extends State<AllDestinationPage> {
         ));
   }
 
-  Widget showOrder(String startPoint, String stopPoint, String distance, int index) {
+  Widget showOrder(
+      String startPoint, String stopPoint, String distance, int index) {
     return Row(
       children: [
         Container(

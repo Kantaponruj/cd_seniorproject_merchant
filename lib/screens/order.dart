@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cs_senior_project_merchant/asset/color.dart';
 import 'package:cs_senior_project_merchant/asset/constant.dart';
 import 'package:cs_senior_project_merchant/asset/text_style.dart';
+import 'package:cs_senior_project_merchant/models/order.dart';
 import 'package:cs_senior_project_merchant/notifiers/location_notifier.dart';
 import 'package:cs_senior_project_merchant/notifiers/order_notifier.dart';
 import 'package:cs_senior_project_merchant/notifiers/store_notifier.dart';
@@ -39,7 +40,7 @@ class _OrderPageState extends State<OrderPage> {
 
     updateLocation();
 
-    getOrderDelivery(orderNotifier, storeNotifier.store.storeId);
+    getOrderDelivery(orderNotifier, storeNotifier.user.uid);
     super.initState();
   }
 
@@ -89,17 +90,13 @@ class _OrderPageState extends State<OrderPage> {
         // ),
         body: SingleChildScrollView(
           child: StreamBuilder(
-              stream: firebaseFirestore
-                  .collection('stores')
-                  .doc(storeNotifier.store.storeId)
-                  .collection(widget.typeOrder)
-                  .orderBy('timeOrdered')
-                  .snapshots(),
+              stream: getOrders(storeNotifier.user.uid, widget.typeOrder),
               builder: (BuildContext context,
                   AsyncSnapshot<QuerySnapshot> snapshot) {
                 if (!snapshot.hasData) {
                   return LoadingWidget();
                 }
+
                 return Container(
                   child: Column(
                     children: [
@@ -114,7 +111,7 @@ class _OrderPageState extends State<OrderPage> {
                       ListView(
                         children: snapshot.data.docs.map((order) {
                           return order['orderStatus'] == 'กำลังดำเนินการ'
-                              ? orderCard(order, storeNotifier.store.storeId)
+                              ? orderCard(order, storeNotifier.user.uid)
                               : Container();
                         }).toList(),
                         shrinkWrap: true,
