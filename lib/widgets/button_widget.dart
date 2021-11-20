@@ -5,27 +5,33 @@ class ButtonWidget extends StatelessWidget {
   final String text;
   final VoidCallback onClicked;
   final Color color;
+  final double width;
 
   const ButtonWidget({
     @required this.text,
     @required this.onClicked,
     this.color,
+    this.width,
     Key key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
+      margin: EdgeInsets.fromLTRB(0, 20, 0, 20),
+      width: width,
       height: 50,
       child: ElevatedButton(
         onPressed: onClicked,
         style: ElevatedButton.styleFrom(
             shape: StadiumBorder(),
             primary: color != null ? color : Theme.of(context).buttonColor),
-        child: Text(
-          text,
-          style: FontCollection.buttonTextStyle,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Text(
+            text,
+            style: FontCollection.buttonTextStyle,
+          ),
         ),
       ),
     );

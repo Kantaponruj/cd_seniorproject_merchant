@@ -4,6 +4,7 @@ import 'package:cs_senior_project_merchant/asset/color.dart';
 import 'package:cs_senior_project_merchant/asset/text_style.dart';
 import 'package:cs_senior_project_merchant/component/bottomBar.dart';
 import 'package:cs_senior_project_merchant/component/dropdown.dart';
+import 'package:cs_senior_project_merchant/component/storeCard.dart';
 import 'package:cs_senior_project_merchant/component/textformfield.dart';
 import 'package:cs_senior_project_merchant/notifiers/store_notifier.dart';
 import 'package:cs_senior_project_merchant/widgets/button_widget.dart';
@@ -356,24 +357,52 @@ class _RegisterPageState extends State<RegisterPage> {
             child: Column(
               children: [
                 Container(
-                  width: 300,
-                  height: 300,
+                  padding: EdgeInsets.only(bottom: 20),
+                  width: MediaQuery.of(context).size.width,
+                  height: 250,
                   color: CollectionsColors.grey,
-                  child: showImage(),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.vertical(
+                      bottom: Radius.circular(20),
+                    ),
+                    child: showImage(),
+                  ),
                 ),
-                Text(storeNotifier.displayName.text.trim()),
-                Text(storeNotifier.email.text.trim()),
-                Text(storeNotifier.storeName.text.trim()),
-                Text(storeNotifier.description.text.trim()),
-                Text(storeNotifier.phone.text.trim()),
-                Text(storeNotifier.typeOfStore),
+                storeCard(
+                  headerText: 'ข้อมูลผู้ใช้',
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                    child: Column(
+                      children: [
+                        showResult('ชื่อผู้ใช้', storeNotifier.displayName.text.trim()),
+                        showResult('อีเมล', storeNotifier.email.text.trim()),
+                      ],
+                    ),
+                  ),
+                  canEdit: false,
+                  onClicked: () {},
+                ),
+                storeCard(
+                  headerText: 'ข้อมูลร้านคัา',
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                    child: Column(
+                      children: [
+                        showResult('ชื่อ', storeNotifier.storeName.text.trim()),
+                        showResult('คำอธิบาย', storeNotifier.description.text.trim()),
+                        showResult('หมายเลขโทรศัพท์', storeNotifier.phone.text.trim()),
+                        showResult('ประเภทร้านค้า', storeNotifier.typeOfStore),
+                      ],
+                    ),
+                  ),
+                  canEdit: false,
+                  onClicked: () {},
+                ),
               ],
             ),
           ),
         ),
       ];
-
-  
 
   Widget buildForm(Widget child) {
     return Form(
@@ -448,6 +477,29 @@ class _RegisterPageState extends State<RegisterPage> {
           storeNotifier.typeOfStore = value;
         });
       },
+    );
+  }
+
+  Widget showResult(String header, String result) {
+    return Container(
+      padding: EdgeInsets.only(bottom: 10),
+      child: Row(
+        children: [
+          Container(
+            child: Text(
+              header + ': ',
+              style: FontCollection.bodyBoldTextStyle,
+            ),
+          ),
+          Container(
+            padding: EdgeInsets.only(left: 20),
+            child: Text(
+              result,
+              style: FontCollection.bodyTextStyle,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
