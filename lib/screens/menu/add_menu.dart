@@ -1,7 +1,5 @@
 import 'dart:io';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:cs_senior_project_merchant/asset/constant.dart';
 import 'package:cs_senior_project_merchant/asset/text_style.dart';
 import 'package:cs_senior_project_merchant/component/dropdown.dart';
 import 'package:cs_senior_project_merchant/component/orderCard.dart';
@@ -40,7 +38,6 @@ class _AddMenuPageState extends State<AddMenuPage> {
   String _selectedType;
   String _selectedNumberTopping;
 
-  List<Topping> _toppingList = [];
   TextEditingController toppingName = new TextEditingController();
   TextEditingController toppingDetail = new TextEditingController();
 
@@ -65,9 +62,15 @@ class _AddMenuPageState extends State<AddMenuPage> {
 
   @override
   void initState() {
+    StoreNotifier storeNotifier =
+        Provider.of<StoreNotifier>(context, listen: false);
     MenuNotfier menuNotfier = Provider.of<MenuNotfier>(context, listen: false);
     if (widget.isUpdating) {
-      _getToppingFromFirebase(menuNotfier);
+      getTopping(
+        menuNotfier,
+        storeNotifier.store.storeId,
+        menuNotfier.currentMenu.menuId,
+      );
     }
 
     if (menuNotfier.currentMenu != null) {
@@ -84,25 +87,6 @@ class _AddMenuPageState extends State<AddMenuPage> {
     super.initState();
   }
 
-  Future<void> _getToppingFromFirebase(MenuNotfier menu) async {
-    StoreNotifier store = Provider.of<StoreNotifier>(context, listen: false);
-
-    QuerySnapshot snapshot = await firebaseFirestore
-        .collection('stores')
-        .doc(store.store.storeId)
-        .collection('menu')
-        .doc(menu.currentMenu.menuId)
-        .collection('topping')
-        .get();
-
-    setState(() {
-      snapshot.docs.forEach((document) {
-        Topping topping = Topping.fromMap(document.data());
-        _toppingList.add(topping);
-      });
-    });
-  }
-
   _menuUploaded(Menu menu) {
     MenuNotfier menuNotfier = Provider.of<MenuNotfier>(context, listen: false);
     if (!widget.isUpdating) {
@@ -117,7 +101,7 @@ class _AddMenuPageState extends State<AddMenuPage> {
     Navigator.pushNamedAndRemoveUntil(context, '/menu', (route) => false);
   }
 
-  handleSaveMenu() {
+  handleSaveMenu(MenuNotfier menuNotfier) {
     StoreNotifier storeNotifier =
         Provider.of<StoreNotifier>(context, listen: false);
 
@@ -128,7 +112,7 @@ class _AddMenuPageState extends State<AddMenuPage> {
 
     updateMenuAndImage(
       _currentMenu,
-      _toppingList,
+      menuNotfier.toppingList,
       widget.isUpdating,
       _imageFile,
       _menuUploaded,
@@ -149,8 +133,7 @@ class _AddMenuPageState extends State<AddMenuPage> {
 
   @override
   Widget build(BuildContext context) {
-    // List<Widget> _addOption =
-    //     new List.generate(_count, (int i) => buildAddOption());
+    MenuNotfier menuNotfier = Provider.of<MenuNotfier>(context, listen: false);
 
     return Scaffold(
       appBar: RoundedAppBar(
@@ -168,19 +151,19 @@ class _AddMenuPageState extends State<AddMenuPage> {
                   padding: EdgeInsets.only(top: 20),
                   child: ListView.separated(
                     shrinkWrap: true,
-                    itemCount: _toppingList.length,
+                    itemCount: menuNotfier.toppingList.length,
                     itemBuilder: (context, index) {
+                      Topping topping = menuNotfier.toppingList[index];
                       return ListTile(
                         title: Column(
                           children: [
-                            Text(_toppingList[index].type),
-                            Text(_toppingList[index].selectedNumberTopping),
-                            Text(_toppingList[index].topic),
-                            Text(_toppingList[index].detail),
+                            Text(topping.type),
+                            Text(topping.selectedNumberTopping),
+                            Text(topping.topic),
+                            Text(topping.detail),
                             Container(
                               child: Column(
-                                children: _toppingList[index]
-                                    .subTopping
+                                children: topping.subTopping
                                     .map(
                                       (subtopping) => Text(
                                           '${subtopping['name']} ${subtopping['price']}'),
@@ -193,14 +176,12 @@ class _AddMenuPageState extends State<AddMenuPage> {
                         onTap: () {
                           setState(() {
                             _subtoppingList.clear();
-                            _selectedType = _toppingList[index].type;
+                            _selectedType = topping.type;
                             _selectedNumberTopping =
-                                _toppingList[index].selectedNumberTopping;
-                            toppingName.text = _toppingList[index].topic;
-                            toppingDetail.text = _toppingList[index].detail;
-                            _toppingList[index]
-                                .subTopping
-                                .forEach((subtopping) {
+                                topping.selectedNumberTopping;
+                            toppingName.text = topping.topic;
+                            toppingDetail.text = topping.detail;
+                            topping.subTopping.forEach((subtopping) {
                               _subtoppingList.add({
                                 'name': subtopping['name'],
                                 'price': subtopping['price'],
@@ -227,7 +208,7 @@ class _AddMenuPageState extends State<AddMenuPage> {
                           children: <Widget>[
                             isUpdatingTopping
                                 ? buildAddOption(toppingIndex)
-                                : buildAddOption(null),
+                                : buildAddOption(null)
                           ],
                           physics: NeverScrollableScrollPhysics(),
                           shrinkWrap: true,
@@ -244,7 +225,7 @@ class _AddMenuPageState extends State<AddMenuPage> {
                     text: 'บันทึก',
                     onClicked: () {
                       FocusScope.of(context).requestFocus(new FocusNode());
-                      handleSaveMenu();
+                      handleSaveMenu(menuNotfier);
                     },
                   ),
                 ),
@@ -285,10 +266,7 @@ class _AddMenuPageState extends State<AddMenuPage> {
             Container(
               alignment: Alignment.topLeft,
               padding: EdgeInsets.symmetric(vertical: 10),
-              child: Text(
-                'รูปภาพอาหาร',
-                style: FontCollection.bodyTextStyle,
-              ),
+              child: Text('รูปภาพอาหาร', style: FontCollection.bodyTextStyle),
             ),
             Container(
               height: 150,
@@ -334,10 +312,7 @@ class _AddMenuPageState extends State<AddMenuPage> {
             ),
             Container(
               padding: EdgeInsets.symmetric(vertical: 10),
-              child: buildDropdown(
-                'หมวดหมู่',
-                menuNotfier.categoriesList,
-              ),
+              child: buildDropdown('หมวดหมู่', menuNotfier.categoriesList),
             ),
             Container(
               alignment: Alignment.topRight,
@@ -390,8 +365,6 @@ class _AddMenuPageState extends State<AddMenuPage> {
       ),
     );
   }
-
-  String test;
 
   Widget buildTextField(String headerText, TextEditingController controller,
       String initialValue, Function onSaved) {
@@ -719,12 +692,11 @@ class _AddMenuPageState extends State<AddMenuPage> {
                         deleteTopping(
                           storeNotifier.store.storeId,
                           menuNotfier.currentMenu.menuId,
-                          _toppingList[index].toppingId,
+                          menuNotfier.toppingList[index].toppingId,
                         );
-                        _toppingList.removeAt(index);
+                        menuNotfier.toppingList.removeAt(index);
                         onClickAddOptionalButton = false;
                       });
-                      print(_toppingList);
                     },
                   ),
                 ),
@@ -742,8 +714,8 @@ class _AddMenuPageState extends State<AddMenuPage> {
                       });
                       setState(() {
                         if (isUpdatingTopping) {
-                          _toppingList[index] = Topping(
-                            toppingId: _toppingList[index].toppingId,
+                          menuNotfier.toppingList[index] = Topping(
+                            toppingId: menuNotfier.toppingList[index].toppingId,
                             type: _selectedType,
                             selectedNumberTopping: _selectedNumberTopping,
                             topic: toppingName.text.trim(),
@@ -751,7 +723,7 @@ class _AddMenuPageState extends State<AddMenuPage> {
                             subTopping: _temporaryList,
                           );
                         } else {
-                          _toppingList.add(Topping(
+                          menuNotfier.toppingList.add(Topping(
                             type: _selectedType,
                             selectedNumberTopping: _selectedNumberTopping,
                             topic: toppingName.text.trim(),
@@ -760,7 +732,6 @@ class _AddMenuPageState extends State<AddMenuPage> {
                           ));
                         }
                       });
-                      print(_toppingList);
 
                       _selectedType = type.first;
                       _selectedNumberTopping = number.first;
