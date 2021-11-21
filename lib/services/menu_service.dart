@@ -16,13 +16,20 @@ Future<void> getMenu(MenuNotfier menuNotfier, String storeId) async {
       .get();
 
   List<Menu> _menuList = [];
+  List<String> _categoriesList = [];
 
   snapshot.docs.forEach((document) {
     Menu menu = Menu.fromMap(document.data());
     _menuList.add(menu);
+
+    if (_categoriesList.contains(menu.categoryFood)) {
+    } else {
+      _categoriesList.add(menu.categoryFood);
+    }
   });
 
   menuNotfier.menuList = _menuList;
+  menuNotfier.categoriesList = _categoriesList;
 }
 
 // Future<void> getTopping(MenuNotfier menuNotfier, String storeId) async {
@@ -199,11 +206,20 @@ deleteTopping(String storeId, String menuId, String toppingId) async {
       .delete();
 }
 
-updateMenuStatus(String storeId, String menuId, bool status) {
+// updateMenuStatus(String storeId, String menuId, bool status) {
+//   firebaseFirestore
+//       .collection('stores')
+//       .doc(storeId)
+//       .collection('menu')
+//       .doc(menuId)
+//       .update({'haveMenu': status});
+// }
+
+updateMenu(String storeId, String menuId, Map<String, dynamic> value) {
   firebaseFirestore
       .collection('stores')
       .doc(storeId)
       .collection('menu')
       .doc(menuId)
-      .update({'haveMenu': status});
+      .update(value);
 }

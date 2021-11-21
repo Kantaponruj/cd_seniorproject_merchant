@@ -18,13 +18,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 class AddMenuPage extends StatefulWidget {
-  AddMenuPage({
-    Key key,
-    @required this.isUpdating,
-    this.categories,
-  }) : super(key: key);
+  AddMenuPage({Key key, @required this.isUpdating}) : super(key: key);
   final bool isUpdating;
-  final List<String> categories;
 
   @override
   _AddMenuPageState createState() => _AddMenuPageState();
@@ -80,7 +75,7 @@ class _AddMenuPageState extends State<AddMenuPage> {
       _selectedCategory = menuNotfier.currentMenu.categoryFood;
     } else {
       _currentMenu = Menu();
-      _selectedCategory = widget.categories.first;
+      _selectedCategory = menuNotfier.categoriesList.first;
     }
     _selectedType = type.first;
     _selectedNumberTopping = number.first;
@@ -106,8 +101,6 @@ class _AddMenuPageState extends State<AddMenuPage> {
         _toppingList.add(topping);
       });
     });
-
-    print(_toppingList);
   }
 
   _menuUploaded(Menu menu) {
@@ -277,6 +270,8 @@ class _AddMenuPageState extends State<AddMenuPage> {
   }
 
   Widget mainCard() {
+    MenuNotfier menuNotfier = Provider.of<MenuNotfier>(context);
+
     return BuildPlainCard(
       child: Container(
         width: MediaQuery.of(context).size.width,
@@ -341,6 +336,7 @@ class _AddMenuPageState extends State<AddMenuPage> {
               padding: EdgeInsets.symmetric(vertical: 10),
               child: buildDropdown(
                 'หมวดหมู่',
+                menuNotfier.categoriesList,
               ),
             ),
             Container(
@@ -349,7 +345,7 @@ class _AddMenuPageState extends State<AddMenuPage> {
               child: buildButton(
                 'แก้ไขหมวดหมู่',
                 () {
-                  displayShowDialog(context);
+                  displayShowDialog(context, menuNotfier);
                 },
               ),
             ),
@@ -359,11 +355,12 @@ class _AddMenuPageState extends State<AddMenuPage> {
     );
   }
 
-  Future<void> displayShowDialog(BuildContext context) async {
+  Future<void> displayShowDialog(
+      BuildContext context, MenuNotfier menuNotfier) async {
     return showDialog(
       context: context,
       builder: (BuildContext context) {
-        return buildAlertDialog();
+        return buildAlertDialog(menuNotfier);
       },
     );
   }
@@ -382,7 +379,11 @@ class _AddMenuPageState extends State<AddMenuPage> {
           setState(
             () {
               _currentMenu.haveMenu = val;
-              updateMenuStatus(store.store.storeId, _currentMenu.menuId, val);
+              updateMenu(
+                store.store.storeId,
+                _currentMenu.menuId,
+                {'haveMenu': val},
+              );
             },
           );
         },
@@ -419,7 +420,7 @@ class _AddMenuPageState extends State<AddMenuPage> {
     );
   }
 
-  Widget buildDropdown(String headerText) {
+  Widget buildDropdown(String headerText, List<String> categories) {
     return Container(
       child: Column(
         children: [
@@ -433,7 +434,7 @@ class _AddMenuPageState extends State<AddMenuPage> {
           ),
           BuildDropdown(
             width: MediaQuery.of(context).size.width,
-            dropdownValues: widget.categories,
+            dropdownValues: categories,
             onChanged: (String value) {
               setState(() {
                 _selectedCategory = value;
@@ -514,20 +515,6 @@ class _AddMenuPageState extends State<AddMenuPage> {
       ],
     );
   }
-
-  // int _count = 1;
-
-  // void _addNewOption() {
-  //   setState(() {
-  //     _count = _count + 1;
-  //   });
-  // }
-
-  // void _removeOption() {
-  //   setState(() {
-  //     _count = _count - 1;
-  //   });
-  // }
 
   Widget cardOption() {
     StoreNotifier storeNotifier = Provider.of<StoreNotifier>(context);
@@ -877,7 +864,7 @@ class _AddMenuPageState extends State<AddMenuPage> {
     );
   }
 
-  Widget buildAlertDialog() {
+  Widget buildAlertDialog(MenuNotfier menuNotfier) {
     return AlertDialog(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(30),
@@ -892,10 +879,14 @@ class _AddMenuPageState extends State<AddMenuPage> {
         child: Column(
           children: [
             ListView.builder(
-              itemCount: widget.categories.length,
+              itemCount: menuNotfier.categoriesList.length,
               shrinkWrap: true,
               itemBuilder: (context, index) {
-                return catalogLists(widget.categories[index]);
+                return catalogLists(
+                  menuNotfier.categoriesList[index],
+                  menuNotfier,
+                  index,
+                );
               },
             ),
             Container(
@@ -909,7 +900,7 @@ class _AddMenuPageState extends State<AddMenuPage> {
             Container(
               padding: EdgeInsets.only(bottom: 10),
               alignment: Alignment.topLeft,
-              child: addCatalog(),
+              child: addCatalog(menuNotfier),
             ),
             Container(
               alignment: Alignment.center,
@@ -921,10 +912,11 @@ class _AddMenuPageState extends State<AddMenuPage> {
     );
   }
 
-  TextEditingController test1;
-  TextEditingController test2;
+  Widget catalogLists(String category, MenuNotfier menuNotfier, int index) {
+    StoreNotifier storeNotifier = Provider.of<StoreNotifier>(context);
+    TextEditingController editCategory = new TextEditingController();
+    editCategory.text = category;
 
-  Widget catalogLists(String menu) {
     return Container(
       child: Row(
         mainAxisSize: MainAxisSize.max,
@@ -933,11 +925,7 @@ class _AddMenuPageState extends State<AddMenuPage> {
             flex: 10,
             child: Padding(
               padding: EdgeInsets.only(bottom: 20),
-              child: BuildPlainTextField(
-                validator: (value) {},
-                initialValue: menu,
-                textEditingController: test1,
-              ),
+              child: BuildPlainTextField(textEditingController: editCategory),
             ),
           ),
           Expanded(
@@ -945,9 +933,23 @@ class _AddMenuPageState extends State<AddMenuPage> {
             child: Container(
               alignment: Alignment.topCenter,
               child: InkWell(
-                onTap: () {},
+                onTap: () {
+                  menuNotfier.menuList.forEach((menu) {
+                    menuNotfier.categoriesList[index] =
+                        editCategory.text.trim();
+                    if (menu.categoryFood == category) {
+                      updateMenu(
+                        storeNotifier.store.storeId,
+                        menu.menuId,
+                        {'categoryFood': editCategory.text.trim()},
+                      );
+                    }
+                  });
+                  _selectedCategory = menuNotfier.categoriesList[index];
+                  Navigator.pop(context);
+                },
                 child: Icon(
-                  Icons.delete,
+                  Icons.edit,
                   color: Colors.black,
                 ),
               ),
@@ -958,7 +960,9 @@ class _AddMenuPageState extends State<AddMenuPage> {
     );
   }
 
-  Widget addCatalog() {
+  Widget addCatalog(MenuNotfier menuNotfier) {
+    TextEditingController newCategory = new TextEditingController();
+
     return Container(
       child: Row(
         mainAxisSize: MainAxisSize.max,
@@ -967,16 +971,7 @@ class _AddMenuPageState extends State<AddMenuPage> {
             flex: 10,
             child: Padding(
               padding: EdgeInsets.only(bottom: 20),
-              child: BuildPlainTextField(
-                validator: (value) {},
-                initialValue: '',
-                textEditingController: test2,
-                onChanged: (value) {
-                  setState(() {
-                    test = value;
-                  });
-                },
-              ),
+              child: BuildPlainTextField(textEditingController: newCategory),
             ),
           ),
           Expanded(
@@ -985,7 +980,9 @@ class _AddMenuPageState extends State<AddMenuPage> {
               alignment: Alignment.topCenter,
               child: EditButton(
                 onClicked: () {
-                  print(test);
+                  menuNotfier.categoriesList.add(newCategory.text.trim());
+                  _selectedCategory = newCategory.text.trim();
+                  Navigator.pop(context);
                 },
                 editText: 'เพิ่ม',
               ),
