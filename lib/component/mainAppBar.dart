@@ -93,7 +93,7 @@ class _MainAppbarState extends State<MainAppbar>
           children: [
             OrderPage(typeOrder: 'delivery-orders'),
             OrderPage(typeOrder: 'pickup-orders'),
-            OrderPage(typeOrder: 'delivery-orders'),
+            OrderPage(typeOrder: 'meeting-orders'),
           ],
         ),
       ),
