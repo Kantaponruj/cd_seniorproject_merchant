@@ -42,8 +42,7 @@ Future<void> getOrderMenu(
   QuerySnapshot snapshot = await firebaseFirestore
       .collection('stores')
       .doc(storeId)
-      .collection(
-          typeOrder == 'delivery-orders' ? 'delivery-orders' : 'pickup-orders')
+      .collection(typeOrder)
       .doc(documentId)
       .collection('orders')
       .get();
