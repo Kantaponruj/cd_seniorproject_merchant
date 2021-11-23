@@ -69,7 +69,7 @@ dev_dependencies:
 flutter_icons:
   android: true
   ios: true
-  image_path: "assets/images/stalltruckr_logo_merchant_tran_text.png"
+  image_path: 'assets/images/stalltruckr_merchant_logo.png'
 
 
 # For information on the generic Dart part of this file, see the
@@ -90,7 +90,7 @@ flutter:
     - assets/images/house-marker-icon.png
     - assets/images/restaurant-marker-icon.png
     - assets/images/driver-marker-icon.png
-    - assets/images/stalltruckr_logo_merchant_tran_text.png
+    - assets/images/stalltruckr_merchant_logo.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

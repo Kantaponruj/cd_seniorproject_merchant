@@ -20,7 +20,7 @@ class _SplashPageState extends State<SplashPage> {
           style: FontCollection.topicBoldTextStyle,
         ),
         image: Image.asset(
-            'assets/images/stalltruckr_logo_merchant_tran_text.png'),
+            'assets/images/stalltruckr_merchant_logo.png'),
         backgroundColor: Colors.white,
         styleTextUnderTheLoader: TextStyle(color: Colors.deepPurple),
         photoSize: 100.0,
