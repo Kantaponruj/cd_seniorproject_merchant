@@ -844,40 +844,42 @@ class _AddMenuPageState extends State<AddMenuPage> {
         'หมวดหมู่อาหาร',
         style: FontCollection.bodyTextStyle,
       ),
-      content: Container(
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height / 2,
-        child: Column(
-          children: [
-            ListView.builder(
-              itemCount: menuNotfier.categoriesList.length,
-              shrinkWrap: true,
-              itemBuilder: (context, index) {
-                return catalogLists(
-                  menuNotfier.categoriesList[index],
-                  menuNotfier,
-                  index,
-                );
-              },
-            ),
-            Container(
-              padding: EdgeInsets.symmetric(vertical: 10),
-              alignment: Alignment.topLeft,
-              child: Text(
-                'เพิ่มหมวดหมู่เพิ่มเติม',
-                style: FontCollection.bodyTextStyle,
+      content: SingleChildScrollView(
+        child: Container(
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height / 2,
+          child: Column(
+            children: [
+              ListView.builder(
+                itemCount: menuNotfier.categoriesList.length,
+                shrinkWrap: true,
+                itemBuilder: (context, index) {
+                  return catalogLists(
+                    menuNotfier.categoriesList[index],
+                    menuNotfier,
+                    index,
+                  );
+                },
               ),
-            ),
-            Container(
-              padding: EdgeInsets.only(bottom: 10),
-              alignment: Alignment.topLeft,
-              child: addCatalog(menuNotfier),
-            ),
-            Container(
-              alignment: Alignment.center,
-              child: buildButton('บันทึก', () {}),
-            ),
-          ],
+              Container(
+                padding: EdgeInsets.symmetric(vertical: 10),
+                alignment: Alignment.topLeft,
+                child: Text(
+                  'เพิ่มหมวดหมู่เพิ่มเติม',
+                  style: FontCollection.bodyTextStyle,
+                ),
+              ),
+              Container(
+                padding: EdgeInsets.only(bottom: 10),
+                alignment: Alignment.topLeft,
+                child: addCatalog(menuNotfier),
+              ),
+              Container(
+                alignment: Alignment.center,
+                child: buildButton('บันทึก', () {}),
+              ),
+            ],
+          ),
         ),
       ),
     );

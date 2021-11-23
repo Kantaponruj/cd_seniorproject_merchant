@@ -76,7 +76,7 @@ updateImageStore(File localFile, StoreNotifier storeNotifier) async {
 // }
 
 addDateAndTime(
-  DateTime dateTime,
+  DateTimeModel dateTime,
   String storeId,
   Function onSaveDateTime,
 ) async {
@@ -99,10 +99,10 @@ Future<void> getDateAndTime(
       .collection('openingHours')
       .get();
 
-  List<DateTime> _dateTimeList = [];
+  List<DateTimeModel> _dateTimeList = [];
 
   snapshot.docs.forEach((document) {
-    DateTime dateTime = DateTime.fromMap(document.data());
+    DateTimeModel dateTime = DateTimeModel.fromMap(document.data());
     _dateTimeList.add(dateTime);
   });
 

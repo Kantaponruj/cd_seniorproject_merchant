@@ -60,7 +60,7 @@ class _StorePageState extends State<StorePage> {
     List daysArr = [];
     int textCase;
 
-    showDateTime(int index, DateTime dateTime) {
+    showDateTime(int index, DateTimeModel dateTime) {
       if (dateTime.dates.length >= 2) {
         daysArr = [];
         for (int i = 0; i < dateTime.dates.length - 1; i++) {
