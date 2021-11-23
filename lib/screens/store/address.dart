@@ -71,7 +71,7 @@ class _AddressPageState extends State<AddressPage> {
                           Navigator.pushAndRemoveUntil(
                               context,
                               MaterialPageRoute(
-                                builder: (BuildContext context) => MainBottombar(),
+                                builder: (BuildContext context) => MainBottombar(selectedIndex: 0,),
                               ),
                               (route) => false);
                         },

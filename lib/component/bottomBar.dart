@@ -11,7 +11,7 @@ import '../screens/menu.dart';
 class MainBottombar extends StatefulWidget {
   MainBottombar({
     Key key,
-    @required this.selectedIndex,
+    this.selectedIndex = null,
   }) : super(key: key);
 
   int selectedIndex;
@@ -22,6 +22,7 @@ class MainBottombar extends StatefulWidget {
 
 class _State extends State<MainBottombar> {
   int _selectedIndex = 1;
+
   List<Widget> _pageWidget = <Widget>[
     StorePage(),
     MainAppbar(),
@@ -102,7 +103,10 @@ class _State extends State<MainBottombar> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _pageWidget.elementAt(_selectedIndex),
+      body: IndexedStack(
+        index: _selectedIndex,
+        children: _pageWidget,
+      ),
       // bottomNavigationBar: BottomNavigationBar(
       //   items: _menuBar,
       //   currentIndex: _selectedIndex,
