@@ -1,5 +1,4 @@
 import 'package:cs_senior_project_merchant/asset/color.dart';
-import 'package:cs_senior_project_merchant/asset/text_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -7,18 +6,21 @@ class BuildTextField extends StatefulWidget {
   BuildTextField({
     Key key,
     this.labelText,
-    @required this.textEditingController,
+    this.textEditingController,
     @required this.hintText,
+    this.initialValue,
     this.errorText,
     this.validator,
     this.textInputType,
     this.obscureText = false,
     this.maxLength,
     this.maxLine,
+    this.onChanged,
   }) : super(key: key);
 
   final String labelText;
   final TextEditingController textEditingController;
+  final String initialValue;
   final String hintText;
   final String errorText;
   final String Function(String) validator;
@@ -26,6 +28,7 @@ class BuildTextField extends StatefulWidget {
   final bool obscureText;
   final int maxLength;
   final int maxLine;
+  final Function(String) onChanged;
 
   @override
   _BuildTextFieldState createState() => _BuildTextFieldState();
@@ -56,10 +59,12 @@ class _BuildTextFieldState extends State<BuildTextField> {
         ),
       ),
       keyboardType: widget.textInputType,
+      initialValue: widget.initialValue,
       validator: widget.validator,
       obscureText: widget.obscureText,
       maxLength: widget.maxLength,
       maxLines: widget.maxLine,
+      onChanged: widget.onChanged,
     );
   }
 }

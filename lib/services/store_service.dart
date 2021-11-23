@@ -15,16 +15,11 @@ import 'package:path/path.dart' as path;
 class StoreService {
   String collection = "stores";
 
-  void createUser({
-    String storeId,
-    String email,
-  }) {
-    firebaseFirestore.collection(collection).doc(storeId).set({
-      'storeId': storeId,
-      'email': email,
-      'deliveryStatus': false,
-      'storeStatus': false
-    });
+  void createUser({String storeId, String email}) {
+    firebaseFirestore
+        .collection(collection)
+        .doc(storeId)
+        .set({'storeId': storeId, 'email': email, 'storeStatus': false});
   }
 
   void updateUserData(String storeId, Map<String, dynamic> value) {
@@ -140,25 +135,3 @@ saveAddress(Address address, String storeId, Function addAddress) async {
 
   addAddress(address);
 }
-
-// Future<void> updateLocation(StoreNotifier store) async {
-//   Position _currentPosition = await Geolocator.getCurrentPosition(
-//     desiredAccuracy: LocationAccuracy.high,
-//   );
-
-//   firebaseFirestore.collection('stores').doc(store.store.storeId).update({
-//     "realtimeLocation": GeoPoint(
-//       _currentPosition.latitude,
-//       _currentPosition.longitude,
-//     )
-//   });
-//   print(
-//     '${_currentPosition.latitude} ${_currentPosition.longitude}',
-//   );
-
-//   if (store.store.storeStatus == true) {
-//     Future.delayed(Duration(seconds: 3), () {
-//       updateLocation(store);
-//     });
-//   }
-// }
