@@ -407,7 +407,12 @@ class _AddMenuPageState extends State<AddMenuPage> {
           ),
           BuildDropdown(
             width: MediaQuery.of(context).size.width,
-            dropdownValues: categories,
+            dropdownValues: categories
+                .map((value) => DropdownMenuItem(
+                      child: Text(value),
+                      value: value,
+                    ))
+                .toList(),
             onChanged: (String value) {
               setState(() {
                 _selectedCategory = value;
@@ -556,7 +561,11 @@ class _AddMenuPageState extends State<AddMenuPage> {
                     ),
                   ),
                   BuildDropdown(
-                    dropdownValues: type,
+                    dropdownValues: type.map((value) => DropdownMenuItem(
+                      child: Text(value),
+                      value: value,
+                    ))
+                        .toList(),
                     onChanged: (String value) {
                       setState(() {
                         _selectedType = value;
@@ -666,7 +675,7 @@ class _AddMenuPageState extends State<AddMenuPage> {
             Container(
               alignment: Alignment.centerLeft,
               child: EditButton(
-                  editText: 'เพิ่มรายการ',
+                editText: 'เพิ่มรายการ',
                 onClicked: () {
                   setState(() {
                     _subtoppingList.add({
