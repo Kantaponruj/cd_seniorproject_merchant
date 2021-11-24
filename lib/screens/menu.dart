@@ -140,7 +140,7 @@ class _MenuPageState extends State<MenuPage> {
         physics: NeverScrollableScrollPhysics(),
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
-          childAspectRatio: 0.6,
+          childAspectRatio: 0.7,
           mainAxisSpacing: 15,
           crossAxisSpacing: 20,
         ),
@@ -173,8 +173,8 @@ class _MenuPageState extends State<MenuPage> {
             child: Column(
               children: [
                 Container(
-                  height: 120,
-                  width: 120,
+                  height: 150,
+                  width: 150,
                   child: SizedBox(
                     child: Image.network(
                       menu.image != null

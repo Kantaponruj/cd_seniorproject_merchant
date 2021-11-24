@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cs_senior_project_merchant/asset/constant.dart';
 import 'package:cs_senior_project_merchant/models/store.dart';
 import 'package:cs_senior_project_merchant/services/store_service.dart';
@@ -23,6 +25,11 @@ class StoreNotifier with ChangeNotifier {
   TextEditingController password = TextEditingController();
   TextEditingController confirmPassword = TextEditingController();
   TextEditingController displayName = TextEditingController();
+  TextEditingController storeName = TextEditingController();
+  TextEditingController description = TextEditingController();
+  TextEditingController phone = TextEditingController();
+  String typeOfStore = '';
+  File localFile;
 
   StoreNotifier.initialize() {
     _fireSetUp();
@@ -42,7 +49,7 @@ class StoreNotifier with ChangeNotifier {
       notifyListeners();
       await auth
           .signInWithEmailAndPassword(
-              email: email.text.trim(), password: password.text.trim())
+          email: email.text.trim(), password: password.text.trim())
           .then((value) async {
         await prefs.setString("storeId", value.user.uid);
       });
@@ -61,7 +68,7 @@ class StoreNotifier with ChangeNotifier {
       notifyListeners();
       await auth
           .createUserWithEmailAndPassword(
-              email: email.text.trim(), password: password.text.trim())
+          email: email.text.trim(), password: password.text.trim())
           .then((result) async {
         SharedPreferences prefs = await SharedPreferences.getInstance();
         // String _deviceToken = await fcm.getToken();
@@ -69,6 +76,11 @@ class StoreNotifier with ChangeNotifier {
         _storeService.createUser(
           storeId: result.user.uid,
           email: email.text.trim(),
+          storeName: storeName.text.trim(),
+          description: description.text.trim(),
+          phone: phone.text.trim(),
+          typeOfStore: typeOfStore,
+          localFile: localFile,
         );
       });
       return true;

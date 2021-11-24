@@ -40,6 +40,7 @@ class _BuildTextFieldState extends State<BuildTextField> {
     return TextFormField(
       decoration: InputDecoration(
         labelText: widget.labelText,
+        labelStyle: TextStyle(fontWeight: FontWeight.w700),
         fillColor: CollectionsColors.orange,
         errorText: widget.errorText,
         hintText: widget.hintText,
@@ -59,6 +60,7 @@ class _BuildTextFieldState extends State<BuildTextField> {
         ),
       ),
       keyboardType: widget.textInputType,
+      controller: widget.textEditingController,
       initialValue: widget.initialValue,
       validator: widget.validator,
       obscureText: widget.obscureText,
@@ -77,6 +79,7 @@ class BuildPasswordField extends StatefulWidget {
     @required this.hintText,
     this.errorText,
     this.validator,
+    this.onSaved,
   }) : super(key: key);
 
   final String labelText;
@@ -84,6 +87,7 @@ class BuildPasswordField extends StatefulWidget {
   final String hintText;
   final String errorText;
   final String Function(String) validator;
+  final Function(String) onSaved;
 
   @override
   _BuildPasswordFieldState createState() => _BuildPasswordFieldState();
@@ -99,6 +103,7 @@ class _BuildPasswordFieldState extends State<BuildPasswordField> {
       obscureText: isHidden,
       decoration: InputDecoration(
         labelText: widget.labelText,
+        labelStyle: TextStyle(fontWeight: FontWeight.w700),
         hintText: widget.hintText,
         focusColor: CollectionsColors.orange,
         hoverColor: CollectionsColors.orange,
@@ -128,6 +133,7 @@ class _BuildPasswordFieldState extends State<BuildPasswordField> {
       keyboardType: TextInputType.visiblePassword,
       autofillHints: [AutofillHints.password],
       onEditingComplete: () => TextInput.finishAutofillContext(),
+      onSaved: widget.onSaved,
     );
   }
 

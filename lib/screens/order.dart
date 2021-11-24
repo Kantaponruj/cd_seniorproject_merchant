@@ -8,6 +8,7 @@ import 'package:cs_senior_project_merchant/notifiers/order_notifier.dart';
 import 'package:cs_senior_project_merchant/notifiers/store_notifier.dart';
 import 'package:cs_senior_project_merchant/screens/order/customer_map.dart';
 import 'package:cs_senior_project_merchant/screens/order/orderDetail.dart';
+import 'package:cs_senior_project_merchant/screens/store.dart';
 import 'package:cs_senior_project_merchant/services/order_service.dart';
 import 'package:cs_senior_project_merchant/widgets/icontext_widget.dart';
 import 'package:cs_senior_project_merchant/widgets/loading_widget.dart';
@@ -130,7 +131,7 @@ class _OrderPageState extends State<OrderPage> {
                         children: snapshot.data.docs.map((order) {
                           return order['orderStatus'] == 'ยืนยันคำสั่งซื้อ' ||
                                   order['orderStatus'] == 'ยืนยันการจัดส่ง'
-                              ? orderCard(order, storeNotifier.store.storeId)
+                              ? orderCard(order, storeNotifier.user.uid)
                               : Container();
                         }).toList(),
                         shrinkWrap: true,

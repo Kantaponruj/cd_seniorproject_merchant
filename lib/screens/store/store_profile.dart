@@ -103,7 +103,7 @@ class _StoreProfilePageState extends State<StoreProfilePage> {
                     'typeOfStore': selectedTypeOfStore
                   });
 
-                  updateImageStore(_imageFile, storeNotifier);
+                  updateImageStore(storeNotifier.store.storeId, _imageFile);
 
                   Navigator.of(context).pushAndRemoveUntil(
                     MaterialPageRoute(
@@ -192,7 +192,12 @@ class _StoreProfilePageState extends State<StoreProfilePage> {
                 'เบอร์โทรศัพท์',
                 phone,
                 TextInputType.phone,
-                validateMobile,
+               (value) {
+                  if(value.length < 10) {
+                    return 'error';
+                  }
+                  return null;
+               },
               ),
             ),
             Container(

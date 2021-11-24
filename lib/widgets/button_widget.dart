@@ -23,9 +23,12 @@ class ButtonWidget extends StatelessWidget {
         style: ElevatedButton.styleFrom(
             shape: StadiumBorder(),
             primary: color != null ? color : Theme.of(context).buttonColor),
-        child: Text(
-          text,
-          style: FontCollection.buttonTextStyle,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(20,0,20,0),
+          child: Text(
+            text,
+            style: FontCollection.buttonTextStyle,
+          ),
         ),
       ),
     );

@@ -15,11 +15,32 @@ import 'package:path/path.dart' as path;
 class StoreService {
   String collection = "stores";
 
-  void createUser({String storeId, String email}) {
-    firebaseFirestore
-        .collection(collection)
-        .doc(storeId)
-        .set({'storeId': storeId, 'email': email, 'storeStatus': false});
+  void createUser({
+    String storeId,
+    String email,
+    String storeName,
+    String description,
+    String phone,
+    String typeOfStore,
+    File localFile,
+  }) {
+    firebaseFirestore.collection(collection).doc(storeId).set({
+      'storeId': storeId,
+      'email': email,
+      'storeName': storeName,
+      'description': description,
+      'storeStatus': false,
+      'typeOfStore': typeOfStore,
+      'image': '',
+      'phone': phone,
+      'isDelivery': false,
+      'kindOfFood': [],
+      'realtimeLocation': GeoPoint(0, 0),
+      'selectedAddress': 'โปรดระบุสถานที่จำหน่ายสินค้า',
+      'selectedAddressName': '',
+      'selectedLocation': GeoPoint(0, 0),
+    });
+    updateImageStore(storeId, localFile);
   }
 
   void updateUserData(String storeId, Map<String, dynamic> value) {
@@ -33,7 +54,7 @@ class StoreService {
       .then((doc) => Store.fromSnapshot(doc));
 }
 
-updateImageStore(File localFile, StoreNotifier storeNotifier) async {
+updateImageStore(String storeId, File localFile) async {
   CollectionReference storeRef = firebaseFirestore.collection('stores');
 
   if (localFile != null) {
@@ -45,7 +66,7 @@ updateImageStore(File localFile, StoreNotifier storeNotifier) async {
     var uudid = Uuid().v4();
 
     final Reference firebaseStorageRef =
-        FirebaseStorage.instance.ref().child('store_img/$uudid$fileExtension');
+    FirebaseStorage.instance.ref().child('store_img/$uudid$fileExtension');
 
     await firebaseStorageRef.putFile(localFile).catchError((onError) {
       print(onError);
@@ -53,11 +74,9 @@ updateImageStore(File localFile, StoreNotifier storeNotifier) async {
     });
 
     String url = await firebaseStorageRef.getDownloadURL();
-    await storeRef.doc(storeNotifier.store.storeId).update({'image': url});
+    await storeRef.doc(storeId).update({'image': url});
     print("download url: $url");
   }
-
-  storeNotifier.reloadUserModel();
   // else {
   //   await storeRef.doc(store.storeId).update(value);
   //   print("...skipping image upload");

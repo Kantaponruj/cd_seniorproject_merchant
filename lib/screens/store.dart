@@ -32,7 +32,7 @@ class _StorePageState extends State<StorePage> {
         Provider.of<StoreNotifier>(context, listen: false);
     DateTimeNotifier dateTimeNotifier =
         Provider.of<DateTimeNotifier>(context, listen: false);
-    getDateAndTime(dateTimeNotifier, storeNotifier.store.storeId);
+    getDateAndTime(dateTimeNotifier, storeNotifier.user.uid);
 
     _storeStatus = storeNotifier.store.storeStatus;
     _isDelivery = storeNotifier.store.isDelivery;
