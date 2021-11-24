@@ -407,12 +407,7 @@ class _AddMenuPageState extends State<AddMenuPage> {
           ),
           BuildDropdown(
             width: MediaQuery.of(context).size.width,
-            dropdownValues: categories
-                .map((value) => DropdownMenuItem(
-                      child: Text(value),
-                      value: value,
-                    ))
-                .toList(),
+            dropdownValues: categories,
             onChanged: (String value) {
               setState(() {
                 _selectedCategory = value;
@@ -561,11 +556,7 @@ class _AddMenuPageState extends State<AddMenuPage> {
                     ),
                   ),
                   BuildDropdown(
-                    dropdownValues: type.map((value) => DropdownMenuItem(
-                      child: Text(value),
-                      value: value,
-                    ))
-                        .toList(),
+                    dropdownValues: type,
                     onChanged: (String value) {
                       setState(() {
                         _selectedType = value;
