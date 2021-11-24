@@ -23,12 +23,8 @@ class StorePage extends StatefulWidget {
 }
 
 class _StorePageState extends State<StorePage> {
-  bool _deliveryStatus;
   bool _storeStatus;
-  bool _isPickUp;
   bool _isDelivery;
-
-  // TextEditingController detail = TextEditingController();
 
   @override
   void initState() {
@@ -38,13 +34,10 @@ class _StorePageState extends State<StorePage> {
         Provider.of<DateTimeNotifier>(context, listen: false);
     getDateAndTime(dateTimeNotifier, storeNotifier.store.storeId);
 
-    _deliveryStatus = storeNotifier.store.deliveryStatus;
     _storeStatus = storeNotifier.store.storeStatus;
-    _isPickUp = storeNotifier.store.isPickUp;
     _isDelivery = storeNotifier.store.isDelivery;
 
     storeNotifier.reloadUserModel();
-
     super.initState();
   }
 
@@ -67,7 +60,7 @@ class _StorePageState extends State<StorePage> {
     List daysArr = [];
     int textCase;
 
-    showDateTime(int index, DateTime dateTime) {
+    showDateTime(int index, DateTimeModel dateTime) {
       if (dateTime.dates.length >= 2) {
         daysArr = [];
         for (int i = 0; i < dateTime.dates.length - 1; i++) {
@@ -235,13 +228,13 @@ class _StorePageState extends State<StorePage> {
                                     (val) {
                                       setState(
                                         () {
-                                          _deliveryStatus = val;
+                                          _isDelivery = val;
                                           storeNotifier.updateUserData(
-                                              {"deliveryStatus": val});
+                                              {"isDelivery": val});
                                         },
                                       );
                                     },
-                                    _deliveryStatus,
+                                    _isDelivery,
                                   ),
                                   switchCard(
                                     'สถานะร้านค้า',
@@ -264,7 +257,10 @@ class _StorePageState extends State<StorePage> {
                                 showDialog(
                                   context: context,
                                   builder: (BuildContext context) {
-                                    return buildEditStoreDes(storeNotifier);
+                                    return buildEditStoreDes(
+                                      storeNotifier,
+                                      storeNotifier.store.description,
+                                    );
                                   },
                                 );
                               },
@@ -349,64 +345,64 @@ class _StorePageState extends State<StorePage> {
                                       ),
                                     ),
                             ),
-                            storeCard(
-                              onClicked: () {},
-                              headerText: 'รูปแบบการจัดส่ง',
-                              child: Container(
-                                padding: EdgeInsets.all(20),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    saleType(
-                                      Icons.directions_walk,
-                                      'รับด้วยตนเอง',
-                                      _isPickUp,
-                                      () {
-                                        if (_isPickUp == false) {
-                                          setState(() {
-                                            _isPickUp = true;
-                                            storeNotifier.updateUserData({
-                                              'isPickUp': true,
-                                            });
-                                          });
-                                        } else {
-                                          setState(() {
-                                            _isPickUp = false;
-                                            storeNotifier.updateUserData({
-                                              'isPickUp': false,
-                                            });
-                                          });
-                                        }
-                                      },
-                                    ),
-                                    saleType(
-                                      Icons.local_shipping,
-                                      'บริการจัดส่ง',
-                                      _isDelivery,
-                                      () {
-                                        if (_isDelivery == false) {
-                                          setState(() {
-                                            _isDelivery = true;
-                                            storeNotifier.updateUserData({
-                                              'isDelivery': true,
-                                            });
-                                          });
-                                        } else {
-                                          setState(() {
-                                            _isDelivery = false;
-                                            storeNotifier.updateUserData({
-                                              'isDelivery': false,
-                                            });
-                                          });
-                                        }
-                                      },
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              canEdit: false,
-                            ),
+                            // storeCard(
+                            //   onClicked: () {},
+                            //   headerText: 'รูปแบบการจัดส่ง',
+                            //   child: Container(
+                            //     padding: EdgeInsets.all(20),
+                            //     child: Row(
+                            //       mainAxisAlignment:
+                            //           MainAxisAlignment.spaceEvenly,
+                            //       children: [
+                            //         saleType(
+                            //           Icons.directions_walk,
+                            //           'รับด้วยตนเอง',
+                            //           _isPickUp,
+                            //           () {
+                            //             if (_isPickUp == false) {
+                            //               setState(() {
+                            //                 _isPickUp = true;
+                            //                 storeNotifier.updateUserData({
+                            //                   'isPickUp': true,
+                            //                 });
+                            //               });
+                            //             } else {
+                            //               setState(() {
+                            //                 _isPickUp = false;
+                            //                 storeNotifier.updateUserData({
+                            //                   'isPickUp': false,
+                            //                 });
+                            //               });
+                            //             }
+                            //           },
+                            //         ),
+                            //         saleType(
+                            //           Icons.local_shipping,
+                            //           'บริการจัดส่ง',
+                            //           _isDelivery,
+                            //           () {
+                            //             if (_isDelivery == false) {
+                            //               setState(() {
+                            //                 _isDelivery = true;
+                            //                 storeNotifier.updateUserData({
+                            //                   'isDelivery': true,
+                            //                 });
+                            //               });
+                            //             } else {
+                            //               setState(() {
+                            //                 _isDelivery = false;
+                            //                 storeNotifier.updateUserData({
+                            //                   'isDelivery': false,
+                            //                 });
+                            //               });
+                            //             }
+                            //           },
+                            //         ),
+                            //       ],
+                            //     ),
+                            //   ),
+                            //   canEdit: false,
+                            // ),
                             storeCard(
                               onClicked: () {
                                 Navigator.push(
@@ -529,9 +525,7 @@ class _StorePageState extends State<StorePage> {
     );
   }
 
-  Widget buildEditStoreDes(StoreNotifier storeNotifier) {
-    TextEditingController detail = TextEditingController();
-
+  Widget buildEditStoreDes(StoreNotifier storeNotifier, String detail) {
     return AlertDialog(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(30),
@@ -552,10 +546,13 @@ class _StorePageState extends State<StorePage> {
             Container(
               padding: EdgeInsets.only(top: 20),
               child: BuildTextField(
-                textEditingController: detail,
+                initialValue: detail,
                 hintText: 'กรุณากรอกรายละเอียดร้านค้า',
                 maxLine: 5,
                 textInputType: TextInputType.multiline,
+                onChanged: (value) {
+                  storeNotifier.updateUserData({'description': value});
+                },
               ),
             ),
             Container(
@@ -564,9 +561,7 @@ class _StorePageState extends State<StorePage> {
               child: NoShapeButton(
                 text: 'บันทึก',
                 onClicked: () {
-                  // storeNotifier
-                  //     .updateUserData({'description': controller.text.trim()});
-                  print(detail.text.trim());
+                  storeNotifier.reloadUserModel();
                   Navigator.pop(context);
                 },
               ),

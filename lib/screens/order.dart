@@ -2,11 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cs_senior_project_merchant/asset/color.dart';
 import 'package:cs_senior_project_merchant/asset/constant.dart';
 import 'package:cs_senior_project_merchant/asset/text_style.dart';
-import 'package:cs_senior_project_merchant/component/mainAppBar.dart';
+import 'package:cs_senior_project_merchant/models/order.dart';
 import 'package:cs_senior_project_merchant/notifiers/location_notifier.dart';
 import 'package:cs_senior_project_merchant/notifiers/order_notifier.dart';
 import 'package:cs_senior_project_merchant/notifiers/store_notifier.dart';
-import 'package:cs_senior_project_merchant/screens/allDes_map.dart';
 import 'package:cs_senior_project_merchant/screens/order/customer_map.dart';
 import 'package:cs_senior_project_merchant/screens/order/orderDetail.dart';
 import 'package:cs_senior_project_merchant/services/order_service.dart';
@@ -17,7 +16,9 @@ import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
 
 class OrderPage extends StatefulWidget {
-  const OrderPage({Key key}) : super(key: key);
+  const OrderPage({Key key, this.typeOrder}) : super(key: key);
+
+  final String typeOrder;
 
   @override
   _OrderPageState createState() => _OrderPageState();
@@ -80,26 +81,22 @@ class _OrderPageState extends State<OrderPage> {
     return SafeArea(
       child: Scaffold(
         backgroundColor: CollectionsColors.grey,
-        appBar: MainAppbar(
-          appBarTitle: 'คำสั่งซื้อ',
-          map: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => AllDestinationPage()));
-          },
-        ),
+        // appBar: MainAppbar(
+        //   appBarTitle: 'คำสั่งซื้อ',
+        //   map: () {
+        //     Navigator.push(context,
+        //         MaterialPageRoute(builder: (context) => AllDestinationPage()));
+        //   },
+        // ),
         body: SingleChildScrollView(
           child: StreamBuilder(
-              stream: firebaseFirestore
-                  .collection('stores')
-                  .doc(storeNotifier.store.storeId)
-                  .collection('delivery-orders')
-                  .orderBy('timeOrdered')
-                  .snapshots(),
+              stream: getOrders(storeNotifier.user.uid, widget.typeOrder),
               builder: (BuildContext context,
                   AsyncSnapshot<QuerySnapshot> snapshot) {
                 if (!snapshot.hasData) {
                   return LoadingWidget();
                 }
+
                 return Container(
                   child: Column(
                     children: [
@@ -114,7 +111,7 @@ class _OrderPageState extends State<OrderPage> {
                       ListView(
                         children: snapshot.data.docs.map((order) {
                           return order['orderStatus'] == 'กำลังดำเนินการ'
-                              ? orderCard(order, storeNotifier.store.storeId)
+                              ? orderCard(order, storeNotifier.user.uid)
                               : Container();
                         }).toList(),
                         shrinkWrap: true,
@@ -173,12 +170,18 @@ class _OrderPageState extends State<OrderPage> {
             switch (order['orderStatus']) {
               case 'ยืนยันคำสั่งซื้อ':
                 return OrderDetailPage(
-                    storeId: storeId, order: order, isConfirm: false);
+                    storeId: storeId,
+                    order: order,
+                    isConfirm: false,
+                    typeOrder: widget.typeOrder);
               case 'ยืนยันการจัดส่ง':
                 return CustomerMapPage(order: order);
               default:
                 return OrderDetailPage(
-                    storeId: storeId, order: order, isConfirm: false);
+                    storeId: storeId,
+                    order: order,
+                    isConfirm: false,
+                    typeOrder: widget.typeOrder);
             }
           }
 
@@ -217,7 +220,7 @@ class _OrderPageState extends State<OrderPage> {
                               color: Colors.white,
                             ),
                             Text(
-                              '0.5 กม.',
+                              '${order['distance']} กม.',
                               style:
                                   TextStyle(fontSize: 14, color: Colors.white),
                             ),

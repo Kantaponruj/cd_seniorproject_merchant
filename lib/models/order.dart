@@ -7,15 +7,16 @@ class OrderDetail {
   String customerName;
   String phone;
   String address;
-  // String addressName;
   String addressDetail;
   GeoPoint geoPoint;
   String message;
   String dateOrdered;
   String timeOrdered;
+  String startWaitingTime;
+  String endWaitingTime;
   String netPrice;
   String amountOfMenu;
-  GeoPoint testPoint;
+  String typeOrder;
 
   OrderDetail();
 
@@ -26,15 +27,16 @@ class OrderDetail {
     customerName = data['customerName'];
     phone = data['phone'];
     address = data['address'];
-    // addressName = data['addressName'];
     addressDetail = data['addressDetail'];
     geoPoint = data['geoPoint'];
     message = data['message'];
     dateOrdered = data['dateOrdered'];
     timeOrdered = data['timeOrdered'];
+    startWaitingTime = data['startWaitingTime'];
+    endWaitingTime = data['endWaitingTime'];
     netPrice = data['netPrice'];
     amountOfMenu = data['amountOfFood'];
-    testPoint = data['testPoint'];
+    typeOrder = data['typeOrder'];
   }
 
   Map<String, dynamic> toMap() {
@@ -45,13 +47,16 @@ class OrderDetail {
       'customerName': customerName,
       'phone': phone,
       'address': address,
-      // 'addressName': addressName,
       'addressDetail': addressDetail,
       'geoPoint': geoPoint,
       'message': message,
       'dateOrdered': dateOrdered,
       'timeOrdered': timeOrdered,
+      'startWaitingTime': startWaitingTime,
+      'endWaitingTime': endWaitingTime,
       'netPrice': netPrice,
+      'amountOfMenu': amountOfMenu,
+      'typeOrder': typeOrder
     };
   }
 }

@@ -8,6 +8,7 @@ import 'package:cs_senior_project_merchant/notifiers/order_notifier.dart';
 import 'package:cs_senior_project_merchant/notifiers/store_notifier.dart';
 import 'package:cs_senior_project_merchant/screens/login.dart';
 import 'package:cs_senior_project_merchant/screens/menu.dart';
+import 'package:cs_senior_project_merchant/screens/splash_page.dart';
 import 'package:cs_senior_project_merchant/widgets/loading_widget.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -29,6 +30,7 @@ void main() async {
       ChangeNotifierProvider(create: (context) => MenuNotfier())
     ],
     child: MaterialApp(
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         fontFamily: NotoSansFont,
         backgroundColor: Colors.white,
@@ -38,7 +40,8 @@ void main() async {
         // iconTheme: IconThemeData(color: CollectionsColors.orange),
       ),
       // initialRoute: '/',
-      home: MyApp(),
+      // home: MyApp(),
+      home: SplashPage(),
       routes: {
         // '/': (context) => BottomBar(),
         // '/address': (context) => AddressPage(),
@@ -85,7 +88,7 @@ class _MyAppState extends State<MyApp> {
             case Status.Authenticating:
               return LoginPage();
             case Status.Authenticated:
-              return BottomBar();
+              return MainBottombar(selectedIndex: 1);
             default:
               return LoginPage();
           }

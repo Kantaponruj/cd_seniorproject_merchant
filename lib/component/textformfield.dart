@@ -6,19 +6,22 @@ class BuildTextField extends StatefulWidget {
   BuildTextField({
     Key key,
     this.labelText,
-    @required this.textEditingController,
+    this.textEditingController,
     @required this.hintText,
+    this.initialValue,
     this.errorText,
     this.validator,
     this.textInputType,
     this.obscureText = false,
     this.maxLength,
     this.maxLine,
+    this.onChanged,
     this.onSaved,
   }) : super(key: key);
 
   final String labelText;
   final TextEditingController textEditingController;
+  final String initialValue;
   final String hintText;
   final String errorText;
   final String Function(String) validator;
@@ -26,6 +29,7 @@ class BuildTextField extends StatefulWidget {
   final bool obscureText;
   final int maxLength;
   final int maxLine;
+  final Function(String) onChanged;
   final Function onSaved;
 
   @override
@@ -58,10 +62,12 @@ class _BuildTextFieldState extends State<BuildTextField> {
       ),
       controller: widget.textEditingController,
       keyboardType: widget.textInputType,
+      initialValue: widget.initialValue,
       validator: widget.validator,
       obscureText: widget.obscureText,
       maxLength: widget.maxLength,
       maxLines: widget.maxLine,
+      onChanged: widget.onChanged,
       onSaved: widget.onSaved,
     );
   }
@@ -145,6 +151,7 @@ class BuildPlainTextField extends StatefulWidget {
     this.errorText,
     this.validator,
     this.onSaved,
+    this.onChanged,
   }) : super(key: key);
 
   final TextEditingController textEditingController;
@@ -154,6 +161,7 @@ class BuildPlainTextField extends StatefulWidget {
   final String errorText;
   final Function(String) validator;
   final Function(String) onSaved;
+  final Function(String) onChanged;
 
   @override
   _BuildPlainTextFieldState createState() => _BuildPlainTextFieldState();
@@ -179,6 +187,7 @@ class _BuildPlainTextFieldState extends State<BuildPlainTextField> {
       ),
       validator: widget.validator,
       onSaved: widget.onSaved,
+      onChanged: widget.onChanged,
     );
   }
 }

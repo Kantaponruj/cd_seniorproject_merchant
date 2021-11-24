@@ -96,7 +96,7 @@ class BuildCard extends StatelessWidget {
                           alignment: Alignment.centerLeft,
                           child: Text(
                             headerText,
-                            style: FontCollection.topicBoldTextStyle,
+                            style: FontCollection.topicTextStyle,
                             textAlign: TextAlign.left,
                           ),
                         ),
