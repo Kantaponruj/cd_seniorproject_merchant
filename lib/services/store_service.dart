@@ -15,33 +15,11 @@ import 'package:path/path.dart' as path;
 class StoreService {
   String collection = "stores";
 
-  void createUser({
-    String storeId,
-    String email,
-    String storeName,
-    String description,
-    String phone,
-    String typeOfStore,
-    File localFile,
-  }) {
-    firebaseFirestore.collection(collection).doc(storeId).set({
-      'storeId': storeId,
-      'email': email,
-      'storeName': storeName,
-      'description': description,
-      'storeStatus': false,
-      'typeOfStore': typeOfStore,
-      'image': '',
-      'phone': phone,
-      'isDelivery': false,
-      'kindOfFood': [],
-      'realtimeLocation': GeoPoint(0, 0),
-      'selectedAddress': 'โปรดระบุสถานที่จำหน่ายสินค้า',
-      'selectedAddressName': '',
-      'selectedLocation': GeoPoint(0, 0),
-      'storeStatus': false
-    });
-    updateImageStore(storeId, localFile);
+  void createUser({String storeId, String email}) {
+    firebaseFirestore
+        .collection(collection)
+        .doc(storeId)
+        .set({'storeId': storeId, 'email': email, 'storeStatus': false});
   }
 
   void updateUserData(String storeId, Map<String, dynamic> value) {

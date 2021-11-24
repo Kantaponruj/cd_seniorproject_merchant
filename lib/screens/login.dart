@@ -1,6 +1,3 @@
-import 'package:cs_senior_project_merchant/asset/color.dart';
-import 'package:cs_senior_project_merchant/asset/text_style.dart';
-import 'package:cs_senior_project_merchant/component/textformfield.dart';
 import 'package:cs_senior_project_merchant/notifiers/store_notifier.dart';
 import 'package:cs_senior_project_merchant/screens/register.dart';
 import 'package:cs_senior_project_merchant/widgets/button_widget.dart';
@@ -38,83 +35,55 @@ class _LoginPageState extends State<LoginPage> {
       key: formKey,
       body: storeNotifier.status == Status.Authenticating
           ? LoadingWidget()
-          : Center(
-              child: SingleChildScrollView(
-                child: Theme(
-                  data: Theme.of(context).copyWith(
-                    colorScheme: ColorScheme.light(
-                      primary: CollectionsColors.orange,
-                    ),
-                  ),
-                  child: Form(
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    child: Padding(
-                      padding: EdgeInsets.all(30),
-                      child: Column(
-                        children: [
-                          Container(
-                            margin: EdgeInsets.only(top: 30),
-                            child: buildEmail(storeNotifier),
-                          ),
-                          Container(
-                            margin: EdgeInsets.only(top: 30),
-                            child: buildPassword(storeNotifier),
-                          ),
-                          Container(
-                            margin: EdgeInsets.only(top: 60),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                TextButton(
-                                  onPressed: () {},
-                                  style: TextButton.styleFrom(
-                                    primary: Colors.black,
-                                  ),
-                                  child: Text(
-                                    'ลืมรหัสผ่าน',
-                                    style:
-                                        FontCollection.underlineButtonTextStyle,
-                                  ),
-                                ),
-                                buildSubmit(storeNotifier),
-                              ],
-                            ),
-                          ),
-                          Container(
-                            margin: EdgeInsets.only(top: 30),
-                            child: Divider(
-                              thickness: 2,
-                            ),
-                          ),
-                          Container(
-                            alignment: Alignment.topCenter,
-                            margin: EdgeInsets.only(top: 30),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Container(
-                                  child: Text(
-                                    'หากคุณยังไม่มีบัญชี',
-                                    style: FontCollection.bodyTextStyle,
-                                  ),
-                                ),
-                                TextButton(
-                                  onPressed: () => register(context),
-                                  style: TextButton.styleFrom(
-                                    primary: Colors.black,
-                                  ),
-                                  child: Text(
-                                    'ลงทะเบียน',
-                                    style:
-                                        FontCollection.underlineButtonTextStyle,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
+          : SingleChildScrollView(
+              child: Form(
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                child: Padding(
+                  padding: EdgeInsets.all(16),
+                  child: Column(
+                    children: [
+                      SizedBox(
+                        height: 150,
                       ),
-                    ),
+                      buildEmail(storeNotifier),
+                      const SizedBox(
+                        height: 30,
+                      ),
+                      buildPassword(storeNotifier),
+                      const SizedBox(
+                        height: 30,
+                      ),
+                      buildSubmit(storeNotifier),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      TextButton(
+                        onPressed: () {},
+                        style: TextButton.styleFrom(
+                          primary: Colors.black,
+                        ),
+                        child: Text(
+                          'ลืมรหัสผ่าน',
+                          style: TextStyle(),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      Divider(
+                        thickness: 2,
+                      ),
+                      const SizedBox(
+                        height: 30,
+                      ),
+                      InkWell(
+                        onTap: () => register(context),
+                        child: Text(
+                          'ลงทะเบียน',
+                          style: TextStyle(),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
@@ -123,11 +92,16 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget buildEmail(StoreNotifier storeNotifier) {
-    return BuildTextField(
-      labelText: 'อีเมล',
-      textEditingController: storeNotifier.email,
-      hintText: 'อีเมล',
-      textInputType: TextInputType.emailAddress,
+    return TextFormField(
+      decoration: InputDecoration(
+        labelText: 'อีเมล',
+        border: OutlineInputBorder(),
+        errorBorder:
+            OutlineInputBorder(borderSide: BorderSide(color: Colors.red)),
+        errorStyle: TextStyle(color: Colors.red),
+      ),
+      controller: storeNotifier.email,
+      keyboardType: TextInputType.emailAddress,
       validator: (value) {
         final pattern = r'(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-]+$)';
         final regExp = RegExp(pattern);
@@ -144,16 +118,22 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget buildPassword(StoreNotifier storeNotifier) {
-    return BuildPasswordField(
-      labelText: 'รหัสผ่าน',
-      textEditingController: storeNotifier.password,
-      hintText: 'รหัสผ่าน',
+    return TextFormField(
+      decoration: InputDecoration(
+        labelText: 'รหัสผ่าน',
+        border: OutlineInputBorder(),
+        errorBorder:
+            OutlineInputBorder(borderSide: BorderSide(color: Colors.red)),
+        errorStyle: TextStyle(color: Colors.red),
+      ),
+      controller: storeNotifier.password,
       validator: (value) {
         if (value.isEmpty) {
           return 'โปรดระบุรหัสผ่าน';
         }
         return null;
       },
+      obscureText: true,
     );
   }
 

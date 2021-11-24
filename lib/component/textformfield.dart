@@ -16,7 +16,6 @@ class BuildTextField extends StatefulWidget {
     this.maxLength,
     this.maxLine,
     this.onChanged,
-    this.onSaved,
   }) : super(key: key);
 
   final String labelText;
@@ -30,7 +29,6 @@ class BuildTextField extends StatefulWidget {
   final int maxLength;
   final int maxLine;
   final Function(String) onChanged;
-  final Function onSaved;
 
   @override
   _BuildTextFieldState createState() => _BuildTextFieldState();
@@ -60,7 +58,6 @@ class _BuildTextFieldState extends State<BuildTextField> {
           borderSide: BorderSide(color: CollectionsColors.red, width: 2.0),
         ),
       ),
-      controller: widget.textEditingController,
       keyboardType: widget.textInputType,
       initialValue: widget.initialValue,
       validator: widget.validator,
@@ -68,7 +65,6 @@ class _BuildTextFieldState extends State<BuildTextField> {
       maxLength: widget.maxLength,
       maxLines: widget.maxLine,
       onChanged: widget.onChanged,
-      onSaved: widget.onSaved,
     );
   }
 }
@@ -81,7 +77,6 @@ class BuildPasswordField extends StatefulWidget {
     @required this.hintText,
     this.errorText,
     this.validator,
-    this.onSaved,
   }) : super(key: key);
 
   final String labelText;
@@ -89,7 +84,6 @@ class BuildPasswordField extends StatefulWidget {
   final String hintText;
   final String errorText;
   final String Function(String) validator;
-  final Function onSaved;
 
   @override
   _BuildPasswordFieldState createState() => _BuildPasswordFieldState();
@@ -134,7 +128,6 @@ class _BuildPasswordFieldState extends State<BuildPasswordField> {
       keyboardType: TextInputType.visiblePassword,
       autofillHints: [AutofillHints.password],
       onEditingComplete: () => TextInput.finishAutofillContext(),
-      onSaved: widget.onSaved,
     );
   }
 
