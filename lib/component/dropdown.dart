@@ -38,10 +38,10 @@ class BuildDropdown extends StatelessWidget {
               .toList(),
           onChanged: onChanged,
           value: value,
-          // hint: Text(
-          //   hintText,
-          //   style: FontCollection.smallBodyTextStyle,
-          // ),
+          hint: Text(
+            hintText,
+            style: FontCollection.smallBodyTextStyle,
+          ),
         ),
       ),
     );

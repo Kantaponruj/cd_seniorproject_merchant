@@ -36,6 +36,13 @@ class _RegisterPageState extends State<RegisterPage> {
   String _imageUrl;
   File _imageFile;
 
+  @override
+  void initState() {
+    StoreNotifier store = Provider.of<StoreNotifier>(context, listen: false);
+    store.clearController();
+    super.initState();
+  }
+
   void login(BuildContext context) {
     Navigator.of(context).push(
       MaterialPageRoute(
@@ -94,7 +101,9 @@ class _RegisterPageState extends State<RegisterPage> {
                       setState(() => isCompleted = true);
                       if (!await storeNotifier.signUp()) {
                         ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text("Register failed")));
+                            const SnackBar(
+                                content:
+                                    Text("ลงทะเบียนล้มเหลว โปรดลองอีกครั้ง")));
                         return;
                       }
                       storeNotifier.clearController();
@@ -398,6 +407,10 @@ class _RegisterPageState extends State<RegisterPage> {
                         showResult(
                             'หมายเลขโทรศัพท์', storeNotifier.phone.text.trim()),
                         showResult('ประเภทร้านค้า', storeNotifier.typeOfStore),
+                        showResult(
+                          'ประเภทสินค้า',
+                          storeNotifier.kindOfFood.join(', '),
+                        ),
                       ],
                     ),
                   ),
@@ -465,7 +478,7 @@ class _RegisterPageState extends State<RegisterPage> {
             Container(
               alignment: Alignment.centerLeft,
               padding: EdgeInsets.only(top: 20),
-              child: salesType('ประเภทสินค้า'),
+              child: salesType('ประเภทสินค้า', storeNotifier),
             ),
           ],
         ),
@@ -510,10 +523,10 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
-  List<String> name = ['test','test2','test3'];
-  List<bool> listValue = [true, false, false];
+  List<String> kindOfFood = ['ของคาว', 'ของหวาน', 'เครื่องดื่ม', 'อื่น ๆ'];
+  List<bool> isSelectedKindOfFood = [false, false, false, false];
 
-  Widget salesType(String headerText) {
+  Widget salesType(String headerText, StoreNotifier storeNotifier) {
     return Column(
       children: [
         Container(
@@ -526,17 +539,22 @@ class _RegisterPageState extends State<RegisterPage> {
         ),
         ListView.builder(
           shrinkWrap: true,
-          itemCount: listValue.length,
+          itemCount: kindOfFood.length,
           physics: NeverScrollableScrollPhysics(),
           itemBuilder: (context, index) {
             return BuildCheckBox(
-              title: name[index],
-              value: listValue[index],
+              title: kindOfFood[index],
+              value: isSelectedKindOfFood[index],
               onChanged: (value) {
                 setState(() {
-                  listValue[index] = value;
+                  isSelectedKindOfFood[index] = value;
                 });
-                // print(isSelectedKindOfFood);
+
+                if (value) {
+                  storeNotifier.kindOfFood.add(kindOfFood[index]);
+                } else {
+                  storeNotifier.kindOfFood.remove(kindOfFood[index]);
+                }
               },
             );
           },
@@ -544,5 +562,4 @@ class _RegisterPageState extends State<RegisterPage> {
       ],
     );
   }
-
 }

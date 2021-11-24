@@ -22,6 +22,7 @@ class StoreService {
     String description,
     String phone,
     String typeOfStore,
+    List kindOfFood,
     File localFile,
   }) {
     firebaseFirestore.collection(collection).doc(storeId).set({
@@ -34,7 +35,7 @@ class StoreService {
       'image': '',
       'phone': phone,
       'isDelivery': false,
-      'kindOfFood': [],
+      'kindOfFood': kindOfFood,
       'realtimeLocation': GeoPoint(0, 0),
       'selectedAddress': 'โปรดระบุสถานที่จำหน่ายสินค้า',
       'selectedAddressName': '',
@@ -66,7 +67,7 @@ updateImageStore(String storeId, File localFile) async {
     var uudid = Uuid().v4();
 
     final Reference firebaseStorageRef =
-    FirebaseStorage.instance.ref().child('store_img/$uudid$fileExtension');
+        FirebaseStorage.instance.ref().child('store_img/$uudid$fileExtension');
 
     await firebaseStorageRef.putFile(localFile).catchError((onError) {
       print(onError);

@@ -29,6 +29,7 @@ class StoreNotifier with ChangeNotifier {
   TextEditingController description = TextEditingController();
   TextEditingController phone = TextEditingController();
   String typeOfStore = '';
+  List<String> kindOfFood = [];
   File localFile;
 
   StoreNotifier.initialize() {
@@ -49,7 +50,7 @@ class StoreNotifier with ChangeNotifier {
       notifyListeners();
       await auth
           .signInWithEmailAndPassword(
-          email: email.text.trim(), password: password.text.trim())
+              email: email.text.trim(), password: password.text.trim())
           .then((value) async {
         await prefs.setString("storeId", value.user.uid);
       });
@@ -68,7 +69,7 @@ class StoreNotifier with ChangeNotifier {
       notifyListeners();
       await auth
           .createUserWithEmailAndPassword(
-          email: email.text.trim(), password: password.text.trim())
+              email: email.text.trim(), password: password.text.trim())
           .then((result) async {
         SharedPreferences prefs = await SharedPreferences.getInstance();
         // String _deviceToken = await fcm.getToken();
@@ -80,6 +81,7 @@ class StoreNotifier with ChangeNotifier {
           description: description.text.trim(),
           phone: phone.text.trim(),
           typeOfStore: typeOfStore,
+          kindOfFood: kindOfFood,
           localFile: localFile,
         );
       });
@@ -104,6 +106,12 @@ class StoreNotifier with ChangeNotifier {
     email.text = "";
     password.text = "";
     confirmPassword.text = "";
+    storeName.text = "";
+    description.text = "";
+    phone.text = "";
+    typeOfStore = "";
+    kindOfFood.clear();
+    localFile = null;
   }
 
   Future<void> reloadUserModel() async {
