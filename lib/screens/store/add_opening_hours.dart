@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:cs_senior_project_merchant/asset/color.dart';
 import 'package:cs_senior_project_merchant/asset/text_style.dart';
 import 'package:cs_senior_project_merchant/models/dateTime.dart';
@@ -22,17 +20,26 @@ class AddOpeningHours extends StatefulWidget {
 }
 
 class _AddOpeningHoursState extends State<AddOpeningHours> {
+  List<String> _days = [
+    'วันจันทร์',
+    'วันอังคาร',
+    'วันพุธ',
+    'วันพฤหัสบดี',
+    'วันศุกร์',
+    'วันเสาร์',
+    'วันอาทิตย์'
+  ];
+  List<bool> _isSelected = [false, false, false, false, false, false, false];
+
   DateTimeModel _selectedDateTime;
-
   List _dates = [];
-
-  String _openTime = '10.00';
-  String _closeTime = '18.00';
+  String _openTime;
+  String _closeTime;
 
   @override
   void initState() {
     DateTimeNotifier dateTimeNotifier =
-    Provider.of<DateTimeNotifier>(context, listen: false);
+        Provider.of<DateTimeNotifier>(context, listen: false);
 
     _selectedDateTime = DateTimeModel();
 
@@ -42,7 +49,7 @@ class _AddOpeningHoursState extends State<AddOpeningHours> {
 
   _onSaveDateTime(DateTimeModel dateTime) {
     DateTimeNotifier dateTimeNotifier =
-    Provider.of<DateTimeNotifier>(context, listen: false);
+        Provider.of<DateTimeNotifier>(context, listen: false);
     dateTimeNotifier.addDateTime(
         dateTime, dateTimeNotifier.dateTimeList.length);
     Navigator.pop(context);
@@ -100,19 +107,29 @@ class _AddOpeningHoursState extends State<AddOpeningHours> {
             ),
             Container(
               margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
-              child: timeSelect('เวลาเปิด', getText('openTime'), () async {
-                await pickTime(context, 'openTime');
-                setState(() {
-
-                });
-              }),
+              child: timeSelect(
+                'เวลาเปิด',
+                getText('openTime'),
+                () async {
+                  await pickTime(context, 'openTime');
+                  setState(() {
+                    _openTime = getText('openTime');
+                  });
+                },
+              ),
             ),
             Container(
               margin: EdgeInsets.fromLTRB(0, 15, 0, 20),
-              child: timeSelect('เวลาปิด', getText('closeTime'), () {
-                pickTime(context, 'closedTime');
-                print(closedTime);
-              }),
+              child: timeSelect(
+                'เวลาปิด',
+                getText('closeTime'),
+                () async {
+                  await pickTime(context, 'closedTime');
+                  setState(() {
+                    _closeTime = getText('closeTime');
+                  });
+                },
+              ),
             ),
             Container(
               child: Row(
@@ -142,22 +159,11 @@ class _AddOpeningHoursState extends State<AddOpeningHours> {
     );
   }
 
-  List<String> _days = [
-    'วันจันทร์',
-    'วันอังคาร',
-    'วันพุธ',
-    'วันพฤหัสบดี',
-    'วันศุกร์',
-    'วันเสาร์',
-    'วันอาทิตย์'
-  ];
-  List<bool> _isSelected = [false, false, false, false, false, false, false];
-
   Widget timeSelect(
-      String topicText,
-      String time,
-      VoidCallback onPressed,
-      ) {
+    String topicText,
+    String time,
+    VoidCallback onPressed,
+  ) {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 20),
       child: Row(
@@ -218,8 +224,7 @@ class _AddOpeningHoursState extends State<AddOpeningHours> {
           setState(() {
             _isSelected[i] = selected;
             _dates.add(i);
-            setState(() {
-            });
+            setState(() {});
           });
         },
       );
@@ -240,7 +245,7 @@ class _AddOpeningHoursState extends State<AddOpeningHours> {
   String getText(String whatTime) {
     TimeOfDay time;
 
-    if(whatTime == 'openTime') {
+    if (whatTime == 'openTime') {
       time = openTime;
     } else {
       time = closedTime;
@@ -259,7 +264,7 @@ class _AddOpeningHoursState extends State<AddOpeningHours> {
   Future pickTime(BuildContext context, String whatTime) async {
     TimeOfDay time;
 
-    if(whatTime == 'openTime') {
+    if (whatTime == 'openTime') {
       time = openTime;
     } else {
       time = closedTime;
@@ -275,12 +280,11 @@ class _AddOpeningHoursState extends State<AddOpeningHours> {
 
     setState(() {
       time = newTime;
-      if(whatTime == 'openTime') {
+      if (whatTime == 'openTime') {
         openTime = time;
       } else {
         closedTime = time;
       }
     });
   }
-
 }

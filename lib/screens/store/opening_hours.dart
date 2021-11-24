@@ -1,4 +1,3 @@
-import 'package:cs_senior_project_merchant/asset/color.dart';
 import 'package:cs_senior_project_merchant/asset/text_style.dart';
 import 'package:cs_senior_project_merchant/component/roundAppBar.dart';
 import 'package:cs_senior_project_merchant/models/dateTime.dart';
@@ -18,17 +17,24 @@ class OpeningHoursPage extends StatefulWidget {
 }
 
 class _OpeningHoursPageState extends State<OpeningHoursPage> {
+  List<String> _days = [
+    'วันจันทร์',
+    'วันอังคาร',
+    'วันพุธ',
+    'วันพฤหัสบดี',
+    'วันศุกร์',
+    'วันเสาร์',
+    'วันอาทิตย์'
+  ];
 
   @override
   void initState() {
     DateTimeNotifier dateTimeNotifier =
         Provider.of<DateTimeNotifier>(context, listen: false);
 
-
     getDateAndTime(dateTimeNotifier, widget.storeId);
     super.initState();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -63,16 +69,6 @@ class _OpeningHoursPageState extends State<OpeningHoursPage> {
           ),
         ));
   }
-
-  List<String> _days = [
-    'วันจันทร์',
-    'วันอังคาร',
-    'วันพุธ',
-    'วันพฤหัสบดี',
-    'วันศุกร์',
-    'วันเสาร์',
-    'วันอาทิตย์'
-  ];
 
   Widget buildCard(String topicText) {
     DateTimeNotifier dateTimeNotifier = Provider.of<DateTimeNotifier>(context);
@@ -170,5 +166,4 @@ class _OpeningHoursPageState extends State<OpeningHoursPage> {
       ),
     );
   }
-
 }

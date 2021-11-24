@@ -27,6 +27,8 @@ class RegisterPage extends StatefulWidget {
 class _RegisterPageState extends State<RegisterPage> {
   final formKey = GlobalKey<ScaffoldState>();
   List<String> typeOfStore = ['Food Truck', 'ร้านค้ารถเข็น'];
+  List<String> kindOfFood = ['ของคาว', 'ของหวาน', 'เครื่องดื่ม', 'อื่น ๆ'];
+  List<bool> isSelectedKindOfFood = [false, false, false, false];
   String selectedTypeOfStore;
   String password = '';
 
@@ -522,9 +524,6 @@ class _RegisterPageState extends State<RegisterPage> {
       ),
     );
   }
-
-  List<String> kindOfFood = ['ของคาว', 'ของหวาน', 'เครื่องดื่ม', 'อื่น ๆ'];
-  List<bool> isSelectedKindOfFood = [false, false, false, false];
 
   Widget salesType(String headerText, StoreNotifier storeNotifier) {
     return Column(
