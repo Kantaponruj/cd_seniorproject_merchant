@@ -4,20 +4,20 @@ import 'package:cs_senior_project_merchant/models/dateTime.dart';
 import 'package:flutter/material.dart';
 
 class DateTimeNotifier with ChangeNotifier {
-  List<DateTimeModel> _dateTimeList = [];
+  List<DateTime> _dateTimeList = [];
   // DateTime _dateTime;
 
-  UnmodifiableListView<DateTimeModel> get dateTimeList =>
+  UnmodifiableListView<DateTime> get dateTimeList =>
       UnmodifiableListView(_dateTimeList);
 
   // DateTime get dateTime => _dateTime;
 
-  set dateTimeList(List<DateTimeModel> dateTimeList) {
+  set dateTimeList(List<DateTime> dateTimeList) {
     _dateTimeList = dateTimeList;
     notifyListeners();
   }
 
-  addDateTime(DateTimeModel dateTime, int index) {
+  addDateTime(DateTime dateTime, int index) {
     _dateTimeList.insert(index, dateTime);
     notifyListeners();
   }

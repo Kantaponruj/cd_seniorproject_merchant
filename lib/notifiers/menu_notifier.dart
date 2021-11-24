@@ -4,22 +4,17 @@ import 'package:cs_senior_project_merchant/models/menu.dart';
 import 'package:flutter/material.dart';
 
 class MenuNotfier with ChangeNotifier {
-  List<String> _categoriesList = [];
   List<Menu> _menuList = [];
-  List<Topping> _toppingList = [];
+  // List<Topping> _toppingList = [];
   Menu _currentMenu;
+  // Topping _currentTopping;
 
   UnmodifiableListView<Menu> get menuList => UnmodifiableListView(_menuList);
-
-  List<String> get categoriesList => _categoriesList;
-  List<Topping> get toppingList => _toppingList;
+  // UnmodifiableListView<Topping> get toppingList =>
+  //     UnmodifiableListView(_toppingList);
 
   Menu get currentMenu => _currentMenu;
-
-  set categoriesList(List<String> categories) {
-    _categoriesList = categories;
-    notifyListeners();
-  }
+  // Topping get currentTopping => _currentTopping;
 
   set menuList(List<Menu> menu) {
     _menuList = menu;
@@ -31,10 +26,10 @@ class MenuNotfier with ChangeNotifier {
     notifyListeners();
   }
 
-  set toppingList(List<Topping> topping) {
-    _toppingList = topping;
-    notifyListeners();
-  }
+  // set toppingList(List<Topping> topping) {
+  //   _toppingList = topping;
+  //   notifyListeners();
+  // }
 
   addMenu(Menu menu) {
     _menuList.add(menu);

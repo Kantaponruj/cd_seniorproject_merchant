@@ -1,11 +1,11 @@
-class DateTimeModel {
+class DateTime {
   String openTime;
   String closeTime;
   List dates = [];
 
-  DateTimeModel();
+  DateTime();
 
-  DateTimeModel.fromMap(Map<String, dynamic> data) {
+  DateTime.fromMap(Map<String, dynamic> data) {
     openTime = data['openTime'];
     closeTime = data['closeTime'];
     dates = data['date'];

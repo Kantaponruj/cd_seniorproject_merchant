@@ -150,7 +150,7 @@ class _LoginPageState extends State<LoginPage> {
         storeNotifier.clearController();
         Navigator.pushAndRemoveUntil(
             context,
-            MaterialPageRoute(builder: (context) => MainBottombar()),
+            MaterialPageRoute(builder: (context) => BottomBar()),
             (route) => false);
         FocusScope.of(context).unfocus();
       },

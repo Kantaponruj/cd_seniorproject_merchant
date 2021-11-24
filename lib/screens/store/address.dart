@@ -1,8 +1,6 @@
 import 'package:cs_senior_project_merchant/asset/text_style.dart';
-import 'package:cs_senior_project_merchant/component/bottomBar.dart';
 import 'package:cs_senior_project_merchant/component/roundAppBar.dart';
 import 'package:cs_senior_project_merchant/notifiers/address_notifier.dart';
-import 'package:cs_senior_project_merchant/notifiers/store_notifier.dart';
 import 'package:cs_senior_project_merchant/screens/store/add_address.dart';
 import 'package:cs_senior_project_merchant/services/store_service.dart';
 import 'package:flutter/material.dart';
@@ -29,7 +27,6 @@ class _AddressPageState extends State<AddressPage> {
   @override
   Widget build(BuildContext context) {
     AddressNotifier addressNotifier = Provider.of<AddressNotifier>(context);
-    StoreNotifier storeNotifier = Provider.of<StoreNotifier>(context);
 
     return Scaffold(
       appBar: RoundedAppBar(
@@ -52,29 +49,16 @@ class _AddressPageState extends State<AddressPage> {
                     shrinkWrap: true,
                     itemCount: addressNotifier.addressList.length,
                     itemBuilder: (BuildContext context, index) {
-                      final address = addressNotifier.addressList[index];
                       return ListTile(
                         title: Text(
-                          address.addressName,
+                          addressNotifier.addressList[index].addressName,
                           style: FontCollection.bodyTextStyle,
                         ),
                         subtitle: AutoSizeText(
-                          address.address,
+                          addressNotifier.addressList[index].address,
                           maxLines: 2,
                         ),
-                        onTap: () {
-                          storeNotifier.updateUserData({
-                            'selectedAddress': address.address,
-                            'selectedAddressName': address.addressName,
-                            'selectedLocation': address.geoPoint,
-                          });
-                          Navigator.pushAndRemoveUntil(
-                              context,
-                              MaterialPageRoute(
-                                builder: (BuildContext context) => MainBottombar(selectedIndex: 0,),
-                              ),
-                              (route) => false);
-                        },
+                        onTap: () {},
                       );
                     },
                     separatorBuilder: (BuildContext context, int index) {

@@ -7,7 +7,6 @@ import 'package:cs_senior_project_merchant/models/dateTime.dart';
 import 'package:cs_senior_project_merchant/models/store.dart';
 import 'package:cs_senior_project_merchant/notifiers/address_notifier.dart';
 import 'package:cs_senior_project_merchant/notifiers/dateTime_notifier.dart';
-import 'package:cs_senior_project_merchant/notifiers/store_notifier.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:uuid/uuid.dart';
 import 'package:path/path.dart' as path;
@@ -15,11 +14,36 @@ import 'package:path/path.dart' as path;
 class StoreService {
   String collection = "stores";
 
-  void createUser({String storeId, String email}) {
-    firebaseFirestore
-        .collection(collection)
-        .doc(storeId)
-        .set({'storeId': storeId, 'email': email, 'storeStatus': false});
+  void createUser({
+    String storeId,
+    String email,
+    String storeName,
+    String description,
+    String phone,
+    String typeOfStore,
+    File localFile,
+  }) {
+    firebaseFirestore.collection(collection).doc(storeId).set({
+      'storeId': storeId,
+      'email': email,
+      'storeName': storeName,
+      'description': description,
+      'deliveryStatus': false,
+      'storeStatus': false,
+      'typeOfStore': typeOfStore,
+      'image': '',
+      'phone': phone,
+      'deliveryStatus': false,
+      'isDelivery': false,
+      'isPickUp': false,
+      'kindOfFood': [],
+      'realtimeLocation': GeoPoint(0, 0),
+      'selectedAddress': 'โปรดระบุสถานที่จำหน่ายสินค้า',
+      'selectedAddressName': '',
+      'selectedLocation': GeoPoint(0, 0),
+      'storeStatus': false
+    });
+    updateImageStore(storeId, localFile);
   }
 
   void updateUserData(String storeId, Map<String, dynamic> value) {
@@ -33,7 +57,7 @@ class StoreService {
       .then((doc) => Store.fromSnapshot(doc));
 }
 
-updateImageStore(File localFile, StoreNotifier storeNotifier) async {
+updateImageStore(String storeId, File localFile) async {
   CollectionReference storeRef = firebaseFirestore.collection('stores');
 
   if (localFile != null) {
@@ -53,11 +77,9 @@ updateImageStore(File localFile, StoreNotifier storeNotifier) async {
     });
 
     String url = await firebaseStorageRef.getDownloadURL();
-    await storeRef.doc(storeNotifier.store.storeId).update({'image': url});
+    await storeRef.doc(storeId).update({'image': url});
     print("download url: $url");
   }
-
-  storeNotifier.reloadUserModel();
   // else {
   //   await storeRef.doc(store.storeId).update(value);
   //   print("...skipping image upload");
@@ -76,7 +98,7 @@ updateImageStore(File localFile, StoreNotifier storeNotifier) async {
 // }
 
 addDateAndTime(
-  DateTimeModel dateTime,
+  DateTime dateTime,
   String storeId,
   Function onSaveDateTime,
 ) async {
@@ -99,10 +121,10 @@ Future<void> getDateAndTime(
       .collection('openingHours')
       .get();
 
-  List<DateTimeModel> _dateTimeList = [];
+  List<DateTime> _dateTimeList = [];
 
   snapshot.docs.forEach((document) {
-    DateTimeModel dateTime = DateTimeModel.fromMap(document.data());
+    DateTime dateTime = DateTime.fromMap(document.data());
     _dateTimeList.add(dateTime);
   });
 
@@ -135,3 +157,25 @@ saveAddress(Address address, String storeId, Function addAddress) async {
 
   addAddress(address);
 }
+
+// Future<void> updateLocation(StoreNotifier store) async {
+//   Position _currentPosition = await Geolocator.getCurrentPosition(
+//     desiredAccuracy: LocationAccuracy.high,
+//   );
+
+//   firebaseFirestore.collection('stores').doc(store.store.storeId).update({
+//     "realtimeLocation": GeoPoint(
+//       _currentPosition.latitude,
+//       _currentPosition.longitude,
+//     )
+//   });
+//   print(
+//     '${_currentPosition.latitude} ${_currentPosition.longitude}',
+//   );
+
+//   if (store.store.storeStatus == true) {
+//     Future.delayed(Duration(seconds: 3), () {
+//       updateLocation(store);
+//     });
+//   }
+// }

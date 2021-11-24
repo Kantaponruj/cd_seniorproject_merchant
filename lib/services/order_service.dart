@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cs_senior_project_merchant/asset/constant.dart';
 import 'package:cs_senior_project_merchant/models/order.dart';
+import 'package:cs_senior_project_merchant/models/order.dart';
 import 'package:cs_senior_project_merchant/notifiers/order_notifier.dart';
 
 Future<void> getOrderDelivery(
@@ -24,25 +25,15 @@ Future<void> getOrderDelivery(
   orderNotifier.orderList = _orderList;
 }
 
-Stream<QuerySnapshot> getOrders(String storeId, String typeOrder) {
-  return firebaseFirestore
-      .collection('stores')
-      .doc(storeId)
-      .collection(typeOrder)
-      .orderBy('timeOrdered')
-      .snapshots();
-}
-
 Future<void> getOrderMenu(
   OrderNotifier orderNotifier,
   String storeId,
   String documentId,
-  String typeOrder,
 ) async {
   QuerySnapshot snapshot = await firebaseFirestore
       .collection('stores')
       .doc(storeId)
-      .collection(typeOrder)
+      .collection('delivery-orders')
       .doc(documentId)
       .collection('orders')
       .get();
@@ -105,7 +96,10 @@ saveOrderToHistory(String storeId, OrderDetail orderDetail) {
   documentRef.set(orderDetail.toMap(), SetOptions(merge: true));
 }
 
-saveOrderMenuToHistory(String storeId, OrderMenu orderMenu) async {
+saveOrderMenuToHistory(
+  String storeId,
+  OrderMenu orderMenu,
+) async {
   CollectionReference historyRef = firebaseFirestore
       .collection('stores')
       .doc(storeId)
