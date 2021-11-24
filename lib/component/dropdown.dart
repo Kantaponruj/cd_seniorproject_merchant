@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cs_senior_project_merchant/asset/color.dart';
 import 'package:cs_senior_project_merchant/asset/text_style.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +14,7 @@ class BuildDropdown extends StatelessWidget {
     this.width,
   }) : super(key: key);
 
-  final List<String> dropdownValues;
+  final List<DropdownMenuItem<String>> dropdownValues;
   final Function(String) onChanged;
   final String value;
   final String hintText;
@@ -30,18 +32,27 @@ class BuildDropdown extends StatelessWidget {
       ),
       child: DropdownButtonHideUnderline(
         child: DropdownButton(
-          items: dropdownValues
-              .map((value) => DropdownMenuItem(
-                    child: Text(value),
-                    value: value,
-                  ))
-              .toList(),
+          iconSize: 30,
+          icon: Icon(
+            Icons.keyboard_arrow_down,
+            color: Colors.black,
+          ),
+          isExpanded: true,
+          items: dropdownValues,
+              // .map((value) => DropdownMenuItem(
+              //       child: Text(value),
+              //       value: value,
+              //     ))
+              // .toList(),
           onChanged: onChanged,
           value: value,
-          // hint: Text(
-          //   hintText,
-          //   style: FontCollection.smallBodyTextStyle,
-          // ),
+          hint: Text(
+            hintText,
+            style: TextStyle(
+              fontSize: 14,
+              color: Colors.grey.shade700,
+            ),
+          ),
         ),
       ),
     );

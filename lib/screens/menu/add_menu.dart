@@ -468,7 +468,11 @@ class _AddMenuPageState extends State<AddMenuPage> {
         ),
         Container(
             child: BuildDropdown(
-          dropdownValues: number,
+          dropdownValues: number.map((value) => DropdownMenuItem(
+        child: Text(value),
+        value: value,
+        ))
+            .toList(),
           hintText: 'จำนวน',
           onChanged: (String value) {
             setState(() {
@@ -556,7 +560,11 @@ class _AddMenuPageState extends State<AddMenuPage> {
                     ),
                   ),
                   BuildDropdown(
-                    dropdownValues: type,
+                    dropdownValues: type.map((value) => DropdownMenuItem(
+                      child: Text(value),
+                      value: value,
+                    ))
+                        .toList(),
                     onChanged: (String value) {
                       setState(() {
                         _selectedType = value;
