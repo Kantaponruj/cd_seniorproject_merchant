@@ -39,7 +39,7 @@ class _MainAppbarState extends State<MainAppbar>
       length: 3,
       child: Scaffold(
         appBar: AppBar(
-          toolbarHeight: 150,
+          toolbarHeight: 120,
           backgroundColor: CollectionsColors.white,
           elevation: 0,
           title: titleText(),

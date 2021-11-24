@@ -12,6 +12,7 @@ import 'package:cs_senior_project_merchant/widgets/bottomOrder_widget.dart';
 import 'package:cs_senior_project_merchant/widgets/icontext_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_icons/flutter_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 
@@ -271,9 +272,10 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
               // Add message card
               BuildCard(
                 headerText: 'ข้อความเพิ่มเติม',
+                canEdit: false,
                 child: Container(
                   width: MediaQuery.of(context).size.width,
-                  padding: EdgeInsets.fromLTRB(40, 40, 40, 40),
+                  padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
                   child: Align(
                     alignment: Alignment.centerLeft,
                     child: Text(

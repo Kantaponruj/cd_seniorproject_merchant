@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cs_senior_project_merchant/asset/color.dart';
 import 'package:cs_senior_project_merchant/asset/text_style.dart';
 import 'package:cs_senior_project_merchant/component/orderCard.dart';
@@ -139,8 +140,8 @@ class _MenuPageState extends State<MenuPage> {
         physics: NeverScrollableScrollPhysics(),
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
-          childAspectRatio: 0.7,
-          mainAxisSpacing: 10,
+          childAspectRatio: 0.6,
+          mainAxisSpacing: 15,
           crossAxisSpacing: 20,
         ),
         padding: EdgeInsets.fromLTRB(20, 20, 20, 0),
@@ -172,7 +173,8 @@ class _MenuPageState extends State<MenuPage> {
             child: Column(
               children: [
                 Container(
-                  height: 150,
+                  height: 120,
+                  width: 120,
                   child: SizedBox(
                     child: Image.network(
                       menu.image != null
@@ -185,10 +187,11 @@ class _MenuPageState extends State<MenuPage> {
                 Container(
                   alignment: Alignment.centerLeft,
                   margin: EdgeInsets.only(top: 10),
-                  child: Text(
+                  child: AutoSizeText(
                     menu.name,
                     textAlign: TextAlign.left,
                     style: FontCollection.bodyTextStyle,
+                    maxLines: 1,
                   ),
                 ),
                 Container(

@@ -45,6 +45,7 @@ class _SelectAddressState extends State<SelectAddress> {
                     child: PlacePicker(
                       apiKey: GOOGLE_MAPS_API_KEY,
                       initialPosition: location.initialPosition,
+                      automaticallyImplyAppBarLeading: false,
                       useCurrentLocation: true,
                       selectInitialPosition: true,
                       usePlaceDetailSearch: true,

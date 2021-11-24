@@ -615,10 +615,6 @@ class _AddMenuPageState extends State<AddMenuPage> {
             ),
             Container(
               padding: EdgeInsets.only(top: 20),
-              child: addList(),
-            ),
-            Container(
-              padding: EdgeInsets.only(top: 20),
               alignment: Alignment.topLeft,
               child: Text(
                 'รายการทั้งหมด',
@@ -664,9 +660,13 @@ class _AddMenuPageState extends State<AddMenuPage> {
               ),
             ),
             Container(
+              padding: EdgeInsets.only(top: 20),
+              child: addList(),
+            ),
+            Container(
               alignment: Alignment.centerLeft,
               child: EditButton(
-                editText: 'เพิ่มตัวเลือก',
+                  editText: 'เพิ่มรายการ',
                 onClicked: () {
                   setState(() {
                     _subtoppingList.add({
