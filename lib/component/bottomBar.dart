@@ -1,26 +1,31 @@
 import 'package:cs_senior_project_merchant/asset/color.dart';
-import 'package:cs_senior_project_merchant/asset/text_style.dart';
+import 'package:cs_senior_project_merchant/component/mainAppBar.dart';
 import 'package:cs_senior_project_merchant/screens/order.dart';
 import 'package:flutter/material.dart';
 import 'package:bottom_indicator_bar_fork/bottom_indicator_bar_fork.dart';
-import 'package:flutter_icons/flutter_icons.dart';
 
 import '../screens/order.dart';
 import '../screens/store.dart';
 import '../screens/menu.dart';
-import '../screens/order/notification.dart';
 
-class BottomBar extends StatefulWidget {
+class MainBottombar extends StatefulWidget {
+  MainBottombar({
+    Key key,
+    this.selectedIndex = null,
+  }) : super(key: key);
+
+  int selectedIndex;
+
   @override
   _State createState() => _State();
 }
 
-class _State extends State<BottomBar> {
+class _State extends State<MainBottombar> {
   int _selectedIndex = 1;
-  int selectedIndex = 1;
+
   List<Widget> _pageWidget = <Widget>[
     StorePage(),
-    OrderPage(),
+    MainAppbar(),
     MenuPage(),
   ];
 
@@ -91,14 +96,17 @@ class _State extends State<BottomBar> {
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
-      selectedIndex = _selectedIndex;
+      // selectedIndex = _selectedIndex;
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _pageWidget.elementAt(_selectedIndex),
+      body: IndexedStack(
+        index: _selectedIndex,
+        children: _pageWidget,
+      ),
       // bottomNavigationBar: BottomNavigationBar(
       //   items: _menuBar,
       //   currentIndex: _selectedIndex,

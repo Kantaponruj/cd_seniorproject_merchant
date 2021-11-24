@@ -29,6 +29,11 @@ class LocationNotifier with ChangeNotifier {
     await _determinePosition();
   }
 
+  set currentAddress(String address) {
+    _currentAddress = address;
+    notifyListeners();
+  }
+
   Future<Position> _determinePosition() async {
     bool serviceEnabled;
     LocationPermission permission;

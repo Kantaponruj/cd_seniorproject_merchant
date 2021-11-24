@@ -53,8 +53,8 @@ class _CustomerMapPageState extends State<CustomerMapPage> {
             panelBuilder: (scrollController) => ClipRRect(
               borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
               child: buildSlidingPanel(
-                scrollController: scrollController,
-                panelController: panelController,
+                // scrollController: scrollController,
+                // panelController: panelController,
               ),
             ),
             body: Padding(
@@ -83,10 +83,10 @@ class _CustomerMapPageState extends State<CustomerMapPage> {
         ),
       );
 
-  Widget buildSlidingPanel({
-    @required PanelController panelController,
-    @required ScrollController scrollController,
-  }) {
+  Widget buildSlidingPanel(
+    // @required PanelController panelController,
+    // @required ScrollController scrollController,
+  ) {
     StoreNotifier storeNotifier = Provider.of<StoreNotifier>(context);
     String orderStatus = 'จัดส่งเรียบร้อยแล้ว';
 
@@ -185,7 +185,13 @@ class _CustomerMapPageState extends State<CustomerMapPage> {
                     _orderDetail.netPrice = widget.order['netPrice'];
                     _orderDetail.dateOrdered = widget.order['dateOrdered'];
                     _orderDetail.timeOrdered = widget.order['timeOrdered'];
+                    _orderDetail.startWaitingTime =
+                        widget.order['startWaitingTime'];
+                    _orderDetail.endWaitingTime =
+                        widget.order['endWaitingTime'];
                     _orderDetail.amountOfMenu = widget.order['amountOfMenu'];
+                    _orderDetail.geoPoint = widget.order['geoPoint'];
+                    _orderDetail.typeOrder = widget.order['typeOrder'];
                   });
 
                   updateStatusOrder(
@@ -207,7 +213,7 @@ class _CustomerMapPageState extends State<CustomerMapPage> {
                   );
 
                   Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(builder: (context) => BottomBar()),
+                    MaterialPageRoute(builder: (context) => MainBottombar()),
                     (route) => false,
                   );
                 },

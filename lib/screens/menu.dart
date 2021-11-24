@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cs_senior_project_merchant/asset/color.dart';
 import 'package:cs_senior_project_merchant/asset/text_style.dart';
 import 'package:cs_senior_project_merchant/component/orderCard.dart';
@@ -5,7 +6,6 @@ import 'package:cs_senior_project_merchant/component/roundAppBar.dart';
 import 'package:cs_senior_project_merchant/models/menu.dart';
 import 'package:cs_senior_project_merchant/notifiers/menu_notifier.dart';
 import 'package:cs_senior_project_merchant/notifiers/store_notifier.dart';
-import 'package:cs_senior_project_merchant/screens/login.dart';
 import 'package:cs_senior_project_merchant/screens/menu/add_menu.dart';
 import 'package:cs_senior_project_merchant/services/menu_service.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +21,7 @@ class MenuPage extends StatefulWidget {
 class _MenuPageState extends State<MenuPage> {
   final controller = ScrollController();
 
-  List<String> categories = [];
+  // List<String> categories = [];
 
   @override
   void initState() {
@@ -34,15 +34,14 @@ class _MenuPageState extends State<MenuPage> {
 
   @override
   Widget build(BuildContext context) {
-    StoreNotifier store = Provider.of<StoreNotifier>(context);
     MenuNotfier menuNotfier = Provider.of<MenuNotfier>(context);
 
-    menuNotfier.menuList.forEach((menu) {
-      if (categories.contains(menu.categoryFood)) {
-      } else {
-        categories.add(menu.categoryFood);
-      }
-    });
+    // menuNotfier.menuList.forEach((menu) {
+    //   if (categories.contains(menu.categoryFood)) {
+    //   } else {
+    //     categories.add(menu.categoryFood);
+    //   }
+    // });
 
     return SafeArea(
       child: Scaffold(
@@ -57,7 +56,7 @@ class _MenuPageState extends State<MenuPage> {
               Container(
                 height: 80,
                 padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
-                child: buildHorizontalListView(),
+                child: buildHorizontalListView(menuNotfier.categoriesList),
               ),
               Expanded(
                 child: SingleChildScrollView(
@@ -69,10 +68,12 @@ class _MenuPageState extends State<MenuPage> {
                         child: ListView.builder(
                           shrinkWrap: true,
                           physics: NeverScrollableScrollPhysics(),
-                          itemCount: categories.length,
+                          itemCount: menuNotfier.categoriesList.length,
                           padding: EdgeInsets.zero,
                           itemBuilder: (context, index) {
-                            return menuCategories(categories[index]);
+                            return menuCategories(
+                              menuNotfier.categoriesList[index],
+                            );
                           },
                         ),
                       ),
@@ -87,12 +88,7 @@ class _MenuPageState extends State<MenuPage> {
           onPressed: () {
             menuNotfier.currentMenu = null;
             Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => AddMenuPage(
-                isUpdating: false,
-                categories: menuNotfier.menuList.length == 0
-                    ? ['กรุณาเลือกหมวดหมู่']
-                    : categories,
-              ),
+              builder: (context) => AddMenuPage(isUpdating: false),
             ));
           },
           backgroundColor: CollectionsColors.orange,
@@ -102,7 +98,7 @@ class _MenuPageState extends State<MenuPage> {
     );
   }
 
-  Widget buildHorizontalListView() => ListView.builder(
+  Widget buildHorizontalListView(List<String> categories) => ListView.builder(
         padding: EdgeInsets.all(16),
         scrollDirection: Axis.horizontal,
         physics: NeverScrollableScrollPhysics(),
@@ -144,8 +140,8 @@ class _MenuPageState extends State<MenuPage> {
         physics: NeverScrollableScrollPhysics(),
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
-          childAspectRatio: 0.7,
-          mainAxisSpacing: 10,
+          childAspectRatio: 0.6,
+          mainAxisSpacing: 15,
           crossAxisSpacing: 20,
         ),
         padding: EdgeInsets.fromLTRB(20, 20, 20, 0),
@@ -167,10 +163,7 @@ class _MenuPageState extends State<MenuPage> {
             menuNotfier.currentMenu = menu;
             Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (context) => AddMenuPage(
-                  isUpdating: true,
-                  categories: categories,
-                ),
+                builder: (context) => AddMenuPage(isUpdating: true),
               ),
             );
           },
@@ -180,7 +173,8 @@ class _MenuPageState extends State<MenuPage> {
             child: Column(
               children: [
                 Container(
-                  height: 150,
+                  height: 120,
+                  width: 120,
                   child: SizedBox(
                     child: Image.network(
                       menu.image != null
@@ -193,10 +187,11 @@ class _MenuPageState extends State<MenuPage> {
                 Container(
                   alignment: Alignment.centerLeft,
                   margin: EdgeInsets.only(top: 10),
-                  child: Text(
+                  child: AutoSizeText(
                     menu.name,
                     textAlign: TextAlign.left,
                     style: FontCollection.bodyTextStyle,
+                    maxLines: 1,
                   ),
                 ),
                 Container(
