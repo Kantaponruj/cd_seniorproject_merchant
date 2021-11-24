@@ -103,11 +103,11 @@ class _StoreProfilePageState extends State<StoreProfilePage> {
                     'typeOfStore': selectedTypeOfStore
                   });
 
-                  updateImageStore(_imageFile, storeNotifier);
+                  updateImageStore(storeNotifier.store.storeId, _imageFile);
 
                   Navigator.of(context).pushAndRemoveUntil(
                     MaterialPageRoute(
-                      builder: (context) => MainBottombar(),
+                      builder: (context) => BottomBar(),
                     ),
                     (route) => false,
                   );
@@ -183,7 +183,6 @@ class _StoreProfilePageState extends State<StoreProfilePage> {
                 'ชื่อร้านอาหาร',
                 storeName,
                 TextInputType.text,
-                validateMobile,
               ),
             ),
             Container(
@@ -192,7 +191,6 @@ class _StoreProfilePageState extends State<StoreProfilePage> {
                 'เบอร์โทรศัพท์',
                 phone,
                 TextInputType.phone,
-                validateMobile,
               ),
             ),
             Container(
@@ -210,15 +208,8 @@ class _StoreProfilePageState extends State<StoreProfilePage> {
     );
   }
 
-  String validateMobile(String value) {
-    if (value.length != 10)
-      return 'Mobile Number must be of 10 digit';
-    else
-      return null;
-  }
-
   Widget buildTextField(String headerText, TextEditingController controller,
-      TextInputType keyboardType, Function(String) validator) {
+      TextInputType keyboardType) {
     return Column(
       children: [
         Container(
@@ -233,7 +224,6 @@ class _StoreProfilePageState extends State<StoreProfilePage> {
           // initialValue: initialValue,
           keyboardType: keyboardType,
           textEditingController: controller,
-          validator: validator,
           // onSaved: onSaved,
         ),
       ],

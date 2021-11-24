@@ -16,41 +16,34 @@ Future<void> getMenu(MenuNotfier menuNotfier, String storeId) async {
       .get();
 
   List<Menu> _menuList = [];
-  List<String> _categoriesList = [];
 
   snapshot.docs.forEach((document) {
     Menu menu = Menu.fromMap(document.data());
     _menuList.add(menu);
-
-    if (_categoriesList.contains(menu.categoryFood)) {
-    } else {
-      _categoriesList.add(menu.categoryFood);
-    }
   });
 
   menuNotfier.menuList = _menuList;
-  menuNotfier.categoriesList = _categoriesList;
 }
 
-Future<void> getTopping(
-    MenuNotfier menuNotfier, String storeId, String menuId) async {
-  QuerySnapshot snapshot = await firebaseFirestore
-      .collection('stores')
-      .doc(storeId)
-      .collection('menu')
-      .doc(menuId)
-      .collection('topping')
-      .get();
+// Future<void> getTopping(MenuNotfier menuNotfier, String storeId) async {
+//   QuerySnapshot snapshot = await firebaseFirestore
+//       .collection('stores')
+//       .doc(storeId)
+//       .collection('menu')
+//       .doc(menuNotfier.currentMenu.menuId)
+//       .collection('topping')
+//       .get();
 
-  List<Topping> _toppingList = [];
+//   List<Topping> _toppingList = [];
 
-  snapshot.docs.forEach((document) {
-    Topping topping = Topping.fromMap(document.data());
-    _toppingList.add(topping);
-  });
+//   snapshot.docs.forEach((document) {
+//     Topping topping = Topping.fromMap(document.data());
+//     _toppingList.add(topping);
+//   });
 
-  menuNotfier.toppingList = _toppingList;
-}
+//   menuNotfier.toppingList = _toppingList;
+//   print(_toppingList);
+// }
 
 updateMenuAndImage(
   Menu menu,
@@ -148,6 +141,33 @@ _uploadTopping(List<Topping> toppingList, String storeId, String menuId,
   }
 }
 
+// _uploadSubTopping(List<SubTopping> subtoppingList, String storeId,
+//     String menuId, String toppingId, bool isUpdating) async {
+//   CollectionReference subtoppingRef = firebaseFirestore
+//       .collection('stores')
+//       .doc(storeId)
+//       .collection('menu')
+//       .doc(menuId)
+//       .collection('topping')
+//       .doc(toppingId)
+//       .collection('subtopping');
+
+//   if (isUpdating) {
+//     for (int i = 0; i < subtoppingList.length; i++) {
+//       subtoppingRef
+//           .doc(subtoppingList[i].subToppingId)
+//           .update(subtoppingList[i].toMap());
+//     }
+//   } else {
+//     for (int i = 0; i < subtoppingList.length; i++) {
+//       DocumentReference documentRef =
+//           await subtoppingRef.add(subtoppingList[i].toMap());
+//       subtoppingList[i].subToppingId = documentRef.id;
+//       await documentRef.set(subtoppingList[i].toMap(), SetOptions(merge: true));
+//     }
+//   }
+// }
+
 deleteMenu(Menu menu, Function menuDeleted, String storeId) async {
   if (menu.image != null) {
     Reference storageRef =
@@ -179,11 +199,11 @@ deleteTopping(String storeId, String menuId, String toppingId) async {
       .delete();
 }
 
-updateMenu(String storeId, String menuId, Map<String, dynamic> value) {
+updateMenuStatus(String storeId, String menuId, bool status) {
   firebaseFirestore
       .collection('stores')
       .doc(storeId)
       .collection('menu')
       .doc(menuId)
-      .update(value);
+      .update({'haveMenu': status});
 }

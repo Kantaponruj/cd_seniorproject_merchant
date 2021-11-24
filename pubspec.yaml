@@ -30,7 +30,6 @@ dependencies:
   provider: ^5.0.0
   http: ^0.13.0
   uuid: ^3.0.5
-  splashscreen: any
 
   #firebase
   cloud_firestore: ^1.0.7
@@ -57,20 +56,11 @@ dependencies:
   bottom_indicator_bar_fork: ^1.0.2
   flutter_switch: ^0.3.2
   auto_size_text: ^2.1.0
-  flutter_launcher_icons: ^0.9.2
-  google_maps_place_picker: ^2.1.0-nullsafety.3
-
-  #app Icon
 
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
-flutter_icons:
-  android: true
-  ios: true
-  image_path: 'assets/images/stalltruckr_merchant_logo.png'
 
 
 # For information on the generic Dart part of this file, see the
@@ -91,7 +81,6 @@ flutter:
     - assets/images/house-marker-icon.png
     - assets/images/restaurant-marker-icon.png
     - assets/images/driver-marker-icon.png
-    - assets/images/stalltruckr_merchant_logo.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
