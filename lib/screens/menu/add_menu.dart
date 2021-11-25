@@ -242,8 +242,8 @@ class _AddMenuPageState extends State<AddMenuPage> {
 
   Widget showImage() {
     if (_imageUrl == null && _imageFile == null) {
-      return Image.network(
-        'https://www.testingxperts.com/wp-content/uploads/2019/02/placeholder-img.jpg',
+      return Image.asset(
+        'assets/images/default-photo.png',
         fit: BoxFit.cover,
       );
     } else if (_imageFile != null) {
