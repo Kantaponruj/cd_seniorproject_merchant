@@ -124,7 +124,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       ? null
                       : () => setState(() => currentStep -= 1),
                   onStepTapped: (step) => setState(() => currentStep = step),
-                  controlsBuilder: (context, {onStepContinue, onStepCancel}) {
+                  controlsBuilder: (context, ControlsDetails controls) {
                     return Container(
                       margin: EdgeInsets.only(top: 50),
                       child: Row(
@@ -132,7 +132,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           Expanded(
                             child: ButtonWidget(
                               text: isLastStep ? 'ลงทะเบียน' : 'ถัดไป',
-                              onClicked: onStepContinue,
+                              onClicked: controls.onStepContinue,
                             ),
                           ),
                           if (currentStep != 0)
@@ -145,7 +145,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                     style:
                                         FontCollection.underlineButtonTextStyle,
                                   ),
-                                  onPressed: onStepCancel,
+                                  onPressed: controls.onStepCancel,
                                 ),
                               ),
                             ),
