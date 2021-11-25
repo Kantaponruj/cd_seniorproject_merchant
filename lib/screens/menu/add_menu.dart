@@ -14,6 +14,7 @@ import 'package:cs_senior_project_merchant/widgets/button_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:collection/collection.dart';
 
 class AddMenuPage extends StatefulWidget {
   AddMenuPage({Key key, @required this.isUpdating}) : super(key: key);
@@ -45,6 +46,8 @@ class _AddMenuPageState extends State<AddMenuPage> {
   bool statusSubTopping;
   TextEditingController subtoppingName = new TextEditingController();
   TextEditingController subtoppingPrice = new TextEditingController();
+
+  List<String> test = ['โปรดกรอกประเภทสินค้า'];
 
   final List<String> type = ['ตัวเลือกเดียว', 'หลายตัวเลือก'];
   final List<String> number = [
@@ -78,7 +81,7 @@ class _AddMenuPageState extends State<AddMenuPage> {
       _selectedCategory = menuNotfier.currentMenu.categoryFood;
     } else {
       _currentMenu = Menu();
-      _selectedCategory = menuNotfier.categoriesList.first;
+      _selectedCategory = menuNotfier.categoriesList.isNotEmpty ? menuNotfier.categoriesList.first : test[0];
     }
     _selectedType = type.first;
     _selectedNumberTopping = number.first;
@@ -312,7 +315,7 @@ class _AddMenuPageState extends State<AddMenuPage> {
             ),
             Container(
               padding: EdgeInsets.symmetric(vertical: 10),
-              child: buildDropdown('หมวดหมู่', menuNotfier.categoriesList),
+              child: buildDropdown('หมวดหมู่', menuNotfier.categoriesList.isNotEmpty ? menuNotfier.categoriesList : test),
             ),
             Container(
               alignment: Alignment.topRight,
@@ -851,11 +854,11 @@ class _AddMenuPageState extends State<AddMenuPage> {
           child: Column(
             children: [
               ListView.builder(
-                itemCount: menuNotfier.categoriesList.length,
+                itemCount: menuNotfier.categoriesList.isNotEmpty ? menuNotfier.categoriesList.length : test.length,
                 shrinkWrap: true,
                 itemBuilder: (context, index) {
                   return catalogLists(
-                    menuNotfier.categoriesList[index],
+                    menuNotfier.categoriesList.isNotEmpty ? menuNotfier.categoriesList[index] : test[index],
                     menuNotfier,
                     index,
                   );
