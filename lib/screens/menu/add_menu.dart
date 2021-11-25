@@ -14,7 +14,6 @@ import 'package:cs_senior_project_merchant/widgets/button_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
-import 'package:collection/collection.dart';
 
 class AddMenuPage extends StatefulWidget {
   AddMenuPage({Key key, @required this.isUpdating}) : super(key: key);
@@ -81,7 +80,9 @@ class _AddMenuPageState extends State<AddMenuPage> {
       _selectedCategory = menuNotfier.currentMenu.categoryFood;
     } else {
       _currentMenu = Menu();
-      _selectedCategory = menuNotfier.categoriesList.isNotEmpty ? menuNotfier.categoriesList.first : test[0];
+      _selectedCategory = menuNotfier.categoriesList.isNotEmpty
+          ? menuNotfier.categoriesList.first
+          : test[0];
     }
     _selectedType = type.first;
     _selectedNumberTopping = number.first;
@@ -106,7 +107,7 @@ class _AddMenuPageState extends State<AddMenuPage> {
 
   handleSaveMenu(MenuNotfier menuNotfier) {
     StoreNotifier storeNotifier =
-    Provider.of<StoreNotifier>(context, listen: false);
+        Provider.of<StoreNotifier>(context, listen: false);
 
     _formKey.currentState.save();
 
@@ -125,7 +126,7 @@ class _AddMenuPageState extends State<AddMenuPage> {
 
   getLocalImage() async {
     PickedFile imageFile =
-    await ImagePicker().getImage(source: ImageSource.gallery);
+        await ImagePicker().getImage(source: ImageSource.gallery);
 
     if (imageFile != null) {
       setState(() {
@@ -169,8 +170,8 @@ class _AddMenuPageState extends State<AddMenuPage> {
                                 children: topping.subTopping
                                     .map(
                                       (subtopping) => Text(
-                                      '${subtopping['name']} ${subtopping['price']}'),
-                                )
+                                          '${subtopping['name']} ${subtopping['price']}'),
+                                    )
                                     .toList(),
                               ),
                             )
@@ -189,7 +190,7 @@ class _AddMenuPageState extends State<AddMenuPage> {
                                 'name': subtopping['name'],
                                 'price': subtopping['price'],
                                 'haveSubTopping':
-                                subtopping['haveSubTopping'].toString(),
+                                    subtopping['haveSubTopping'].toString(),
                               });
                             });
                           });
@@ -288,7 +289,7 @@ class _AddMenuPageState extends State<AddMenuPage> {
                 'ชื่อรายการอาหาร',
                 null,
                 _currentMenu.name,
-                    (String value) {
+                (String value) {
                   _currentMenu.name = value;
                 },
               ),
@@ -299,7 +300,7 @@ class _AddMenuPageState extends State<AddMenuPage> {
                 'รายละเอียด',
                 null,
                 _currentMenu.description,
-                    (String value) {
+                (String value) {
                   _currentMenu.description = value;
                 },
               ),
@@ -308,14 +309,19 @@ class _AddMenuPageState extends State<AddMenuPage> {
               padding: EdgeInsets.symmetric(vertical: 10),
               child: buildPrice(
                 _currentMenu.price,
-                    (String value) {
+                (String value) {
                   _currentMenu.price = value;
                 },
               ),
             ),
             Container(
               padding: EdgeInsets.symmetric(vertical: 10),
-              child: buildDropdown('หมวดหมู่', menuNotfier.categoriesList.isNotEmpty ? menuNotfier.categoriesList : test),
+              child: buildDropdown(
+                'หมวดหมู่',
+                menuNotfier.categoriesList.isNotEmpty
+                    ? menuNotfier.categoriesList
+                    : test,
+              ),
             ),
             Container(
               alignment: Alignment.topRight,
@@ -355,7 +361,7 @@ class _AddMenuPageState extends State<AddMenuPage> {
         value: _currentMenu.haveMenu ?? status,
         onToggle: (val) {
           setState(
-                () {
+            () {
               _currentMenu.haveMenu = val;
               updateMenu(
                 store.store.storeId,
@@ -387,7 +393,7 @@ class _AddMenuPageState extends State<AddMenuPage> {
             controller: controller,
             decoration: InputDecoration(
               border:
-              OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                  OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
             ),
             onSaved: onSaved,
           ),
@@ -441,7 +447,7 @@ class _AddMenuPageState extends State<AddMenuPage> {
             decoration: InputDecoration(
               hintText: hintText,
               border:
-              OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                  OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
             ),
             onSaved: onSaved,
           ),
@@ -471,15 +477,15 @@ class _AddMenuPageState extends State<AddMenuPage> {
         ),
         Container(
             child: BuildDropdown(
-              dropdownValues: number,
-              hintText: 'จำนวน',
-              onChanged: (String value) {
-                setState(() {
-                  _selectedNumberTopping = value;
-                });
-              },
-              value: _selectedNumberTopping,
-            )),
+          dropdownValues: number,
+          hintText: 'จำนวน',
+          onChanged: (String value) {
+            setState(() {
+              _selectedNumberTopping = value;
+            });
+          },
+          value: _selectedNumberTopping,
+        )),
         Container(
           alignment: Alignment.centerLeft,
           margin: EdgeInsets.only(left: 20),
@@ -513,7 +519,7 @@ class _AddMenuPageState extends State<AddMenuPage> {
           onClickAddOptionalButton
               ? 'ปิดเพิ่มตัวเลือกเพิ่มเติม'
               : 'เพิ่มตัวเลือกเพิ่มเติม',
-              () {
+          () {
             setState(() {
               onClickAddOptionalButton = !onClickAddOptionalButton;
               isUpdatingTopping = false;
@@ -580,7 +586,7 @@ class _AddMenuPageState extends State<AddMenuPage> {
                 'ชื่อตัวเลือก',
                 toppingName,
                 null,
-                    (String value) {},
+                (String value) {},
               ),
             ),
             Container(
@@ -589,7 +595,7 @@ class _AddMenuPageState extends State<AddMenuPage> {
                 'รายละเอียด',
                 toppingDetail,
                 null,
-                    (String value) {},
+                (String value) {},
               ),
             ),
             Container(
@@ -854,11 +860,15 @@ class _AddMenuPageState extends State<AddMenuPage> {
           child: Column(
             children: [
               ListView.builder(
-                itemCount: menuNotfier.categoriesList.isNotEmpty ? menuNotfier.categoriesList.length : test.length,
+                itemCount: menuNotfier.categoriesList.isNotEmpty
+                    ? menuNotfier.categoriesList.length
+                    : test.length,
                 shrinkWrap: true,
                 itemBuilder: (context, index) {
                   return catalogLists(
-                    menuNotfier.categoriesList.isNotEmpty ? menuNotfier.categoriesList[index] : test[index],
+                    menuNotfier.categoriesList.isNotEmpty
+                        ? menuNotfier.categoriesList[index]
+                        : test[index],
                     menuNotfier,
                     index,
                   );

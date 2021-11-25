@@ -32,14 +32,14 @@ class BuildDropdown extends StatelessWidget {
         child: DropdownButton(
           items: dropdownValues
               .map((value) => DropdownMenuItem(
-                    child: Text(value),
+                    child: Text(value ?? "null"),
                     value: value,
                   ))
               .toList(),
           onChanged: onChanged,
           value: value,
           hint: Text(
-            hintText,
+            hintText ?? ' ',
             style: FontCollection.smallBodyTextStyle,
           ),
         ),
