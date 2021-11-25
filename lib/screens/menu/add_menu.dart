@@ -46,8 +46,7 @@ class _AddMenuPageState extends State<AddMenuPage> {
   TextEditingController subtoppingName = new TextEditingController();
   TextEditingController subtoppingPrice = new TextEditingController();
 
-  List<String> test = ['โปรดกรอกประเภทสินค้า'];
-
+  final List<String> temp = ['โปรดกรอกประเภทสินค้า'];
   final List<String> type = ['ตัวเลือกเดียว', 'หลายตัวเลือก'];
   final List<String> number = [
     '1',
@@ -82,8 +81,9 @@ class _AddMenuPageState extends State<AddMenuPage> {
       _currentMenu = Menu();
       _selectedCategory = menuNotfier.categoriesList.isNotEmpty
           ? menuNotfier.categoriesList.first
-          : test[0];
+          : temp[0];
     }
+
     _selectedType = type.first;
     _selectedNumberTopping = number.first;
     _imageUrl = _currentMenu.image;
@@ -320,7 +320,7 @@ class _AddMenuPageState extends State<AddMenuPage> {
                 'หมวดหมู่',
                 menuNotfier.categoriesList.isNotEmpty
                     ? menuNotfier.categoriesList
-                    : test,
+                    : temp,
               ),
             ),
             Container(
@@ -859,21 +859,19 @@ class _AddMenuPageState extends State<AddMenuPage> {
           height: MediaQuery.of(context).size.height / 2,
           child: Column(
             children: [
-              ListView.builder(
-                itemCount: menuNotfier.categoriesList.isNotEmpty
-                    ? menuNotfier.categoriesList.length
-                    : test.length,
-                shrinkWrap: true,
-                itemBuilder: (context, index) {
-                  return catalogLists(
-                    menuNotfier.categoriesList.isNotEmpty
-                        ? menuNotfier.categoriesList[index]
-                        : test[index],
-                    menuNotfier,
-                    index,
-                  );
-                },
-              ),
+              menuNotfier.categoriesList.isNotEmpty
+                  ? ListView.builder(
+                      itemCount: menuNotfier.categoriesList.length,
+                      shrinkWrap: true,
+                      itemBuilder: (context, index) {
+                        return catalogLists(
+                          menuNotfier.categoriesList[index],
+                          menuNotfier,
+                          index,
+                        );
+                      },
+                    )
+                  : SizedBox.shrink(),
               Container(
                 padding: EdgeInsets.symmetric(vertical: 10),
                 alignment: Alignment.topLeft,
@@ -920,9 +918,8 @@ class _AddMenuPageState extends State<AddMenuPage> {
               alignment: Alignment.topCenter,
               child: InkWell(
                 onTap: () {
+                  menuNotfier.categoriesList[index] = editCategory.text.trim();
                   menuNotfier.menuList.forEach((menu) {
-                    menuNotfier.categoriesList[index] =
-                        editCategory.text.trim();
                     if (menu.categoryFood == category) {
                       updateMenu(
                         storeNotifier.store.storeId,
