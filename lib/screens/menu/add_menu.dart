@@ -884,6 +884,7 @@ class _AddMenuPageState extends State<AddMenuPage> {
               menuNotfier.categoriesList.isNotEmpty
                   ? ListView.builder(
                       itemCount: menuNotfier.categoriesList.length,
+                      physics: NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
                       itemBuilder: (context, index) {
                         return catalogLists(
@@ -973,14 +974,14 @@ class _AddMenuPageState extends State<AddMenuPage> {
         mainAxisSize: MainAxisSize.max,
         children: [
           Expanded(
-            flex: 10,
+            flex: 9,
             child: Padding(
               padding: EdgeInsets.only(bottom: 20),
               child: BuildPlainTextField(textEditingController: newCategory),
             ),
           ),
           Expanded(
-            flex: 2,
+            flex: 3,
             child: Container(
               alignment: Alignment.topCenter,
               child: EditButton(
@@ -1093,6 +1094,7 @@ class _AddMenuPageState extends State<AddMenuPage> {
     bool value = false;
 
     return Container(
+      width: MediaQuery.of(context).size.width,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -1140,7 +1142,7 @@ class _AddMenuPageState extends State<AddMenuPage> {
       child: Row(
         children: [
           Container(
-            padding: EdgeInsets.only(right: 30),
+            padding: EdgeInsets.only(right: 20),
             child: Text(
               '+ ' + topping.subTopping[i]['price'] + '  บาท',
               style: FontCollection.smallBodyTextStyle,
