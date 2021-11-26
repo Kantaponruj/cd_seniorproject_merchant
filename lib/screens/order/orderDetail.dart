@@ -6,7 +6,7 @@ import 'package:cs_senior_project_merchant/component/roundAppBar.dart';
 import 'package:cs_senior_project_merchant/models/order.dart';
 import 'package:cs_senior_project_merchant/notifiers/order_notifier.dart';
 import 'package:cs_senior_project_merchant/screens/order/customer_map.dart';
-import 'package:cs_senior_project_merchant/screens/order/cutomer_map.dart';
+import 'package:cs_senior_project_merchant/screens/order/individual_map.dart';
 import 'package:cs_senior_project_merchant/services/order_service.dart';
 import 'package:cs_senior_project_merchant/widgets/bottomOrder_widget.dart';
 import 'package:cs_senior_project_merchant/widgets/icontext_widget.dart';
@@ -320,7 +320,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                   );
                   Navigator.of(context).pushReplacement(
                     MaterialPageRoute(
-                      builder: (context) => CustomerMapPage(
+                      builder: (context) => IndividualMapPage(
                         order: widget.order,
                         orderMenu: menu,
                       ),

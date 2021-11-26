@@ -73,6 +73,13 @@ class FontCollection {
     color: Colors.black,
   );
 
+  static const descriptionBoldTextStyle = TextStyle(
+    fontFamily: NotoSansFont,
+    fontWeight: FontWeight.w700,
+    fontSize: smallestSize,
+    color: Colors.black,
+  );
+
   static const buttonTextStyle = TextStyle(
     fontFamily: NotoSansFont,
     fontWeight: FontWeight.w400,

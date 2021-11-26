@@ -176,7 +176,7 @@ class _OrderPageState extends State<OrderPage> {
                     isConfirm: false,
                     typeOrder: widget.typeOrder);
               case 'ยืนยันการจัดส่ง':
-                return CustomerMapPage(order: order);
+                return IndividualMapPage(order: order);
               default:
                 return OrderDetailPage(
                     storeId: storeId,

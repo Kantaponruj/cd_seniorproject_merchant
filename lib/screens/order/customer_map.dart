@@ -13,17 +13,17 @@ import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:provider/provider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
-class CustomerMapPage extends StatefulWidget {
-  CustomerMapPage({Key key, @required this.order, @required this.orderMenu})
+class IndividualMapPage extends StatefulWidget {
+  IndividualMapPage({Key key, @required this.order, @required this.orderMenu})
       : super(key: key);
   final order;
   final OrderMenu orderMenu;
 
   @override
-  _CustomerMapPageState createState() => _CustomerMapPageState();
+  _IndividualMapPageState createState() => _IndividualMapPageState();
 }
 
-class _CustomerMapPageState extends State<CustomerMapPage> {
+class _IndividualMapPageState extends State<IndividualMapPage> {
   final panelController = PanelController();
   OrderDetail _orderDetail = OrderDetail();
 
