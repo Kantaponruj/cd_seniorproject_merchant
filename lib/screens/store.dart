@@ -125,7 +125,7 @@ class _StorePageState extends State<StorePage> {
                                 height: double.infinity,
                               )
                             : Image.asset(
-                                'assets/images/shop_test.jpg',
+                                'assets/images/default-photo.png',
                                 fit: BoxFit.cover,
                                 width: double.infinity,
                                 height: double.infinity,

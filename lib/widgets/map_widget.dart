@@ -2,6 +2,7 @@ import 'package:cs_senior_project_merchant/asset/color.dart';
 import 'package:cs_senior_project_merchant/asset/constant.dart';
 import 'package:cs_senior_project_merchant/notifiers/store_notifier.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_widget/google_maps_widget.dart';
 import 'package:provider/provider.dart';
 
@@ -16,6 +17,48 @@ class MapWidget extends StatefulWidget {
 }
 
 class _MapWidgetState extends State<MapWidget> {
+  // GoogleMapController mapController;
+  // List<LatLng> polylineCoordinates = [];
+  // PolylinePoints polylinePoints;
+  // Set<Polyline> _polylines = Set<Polyline>();
+
+  // @override
+  // void initState() {
+  //   polylinePoints = PolylinePoints();
+  //   super.initState();
+  // }
+
+  // void setPolylines(LatLng customerPoint, LatLng storePoint) async {
+  //   PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
+  //     GOOGLE_MAPS_API_KEY,
+  //     PointLatLng(
+  //       storePoint.latitude,
+  //       storePoint.longitude,
+  //     ),
+  //     PointLatLng(
+  //       customerPoint.latitude,
+  //       customerPoint.longitude,
+  //     ),
+  //     travelMode: TravelMode.walking,
+  //   );
+
+  //   if (result.status == 'OK') {
+  //     result.points.forEach((PointLatLng point) {
+  //       polylineCoordinates.add(LatLng(point.latitude, point.longitude));
+  //     });
+
+  //     setState(() {
+  //       _polylines.add(Polyline(
+  //         width: 5,
+  //         polylineId: PolylineId('polyLine'),
+  //         color: Color(0xFF0E7AC7),
+  //         points: polylineCoordinates,
+  //       ));
+  //       // calculateDistance();
+  //     });
+  //   }
+  // }
+
   @override
   Widget build(BuildContext context) {
     StoreNotifier store = Provider.of<StoreNotifier>(context);
@@ -49,6 +92,21 @@ class _MapWidgetState extends State<MapWidget> {
             destinationName: customerName,
             totalTimeCallback: (time) => print(time),
             totalDistanceCallback: (distance) => print(distance),
+            // showPolyline: false,
+            // polylines: _polylines,
+            // onMapCreated: (GoogleMapController controller) {
+            //   mapController = controller;
+            //   setPolylines(
+            //     LatLng(
+            //       double.parse(widget.order['geoPoint'].latitude.toString()),
+            //       double.parse(widget.order['geoPoint'].longitude.toString()),
+            //     ),
+            //     LatLng(
+            //       store.store.realtimeLocation.latitude,
+            //       store.store.realtimeLocation.longitude,
+            //     ),
+            //   );
+            // },
           )
         : GoogleMapsWidget(
             apiKey: GOOGLE_MAPS_API_KEY,
