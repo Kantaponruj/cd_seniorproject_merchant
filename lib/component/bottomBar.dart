@@ -122,4 +122,32 @@ class _State extends State<MainBottombar> {
       ),
     );
   }
+
+  Map<String, WidgetBuilder> _routeBuilders(BuildContext context, int index) {
+    return {
+      '/': (context) {
+        return [
+          StorePage(),
+          MainAppbar(),
+          MenuPage(),
+        ].elementAt(index);
+      },
+    };
+  }
+
+  Widget _buildOffstageNavigator(int index) {
+    var routeBuilders = _routeBuilders(context, index);
+
+    return Offstage(
+      offstage: _selectedIndex != index,
+      child: Navigator(
+        onGenerateRoute: (routeSettings) {
+          return MaterialPageRoute(
+            builder: (context) => routeBuilders[routeSettings.name](context),
+          );
+        },
+      ),
+    );
+  }
+
 }

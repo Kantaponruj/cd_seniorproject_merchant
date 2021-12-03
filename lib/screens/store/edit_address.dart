@@ -14,43 +14,20 @@ import 'package:cs_senior_project_merchant/services/store_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class AddAddress extends StatefulWidget {
-  const AddAddress({Key key}) : super(key: key);
+class EditAddress extends StatefulWidget {
+  const EditAddress({Key key}) : super(key: key);
 
   @override
-  _AddAddressState createState() => _AddAddressState();
+  _EditAddressState createState() => _EditAddressState();
 }
 
-class _AddAddressState extends State<AddAddress> {
-  Address _currentAddress;
-
+class _EditAddressState extends State<EditAddress> {
   TextEditingController addressName = new TextEditingController();
   TextEditingController addressDetail = new TextEditingController();
 
   @override
   void initState() {
-    _currentAddress = Address();
     super.initState();
-  }
-
-  _onAddAddress(Address address) {
-    AddressNotifier addressNotifier =
-        Provider.of<AddressNotifier>(context, listen: false);
-    addressNotifier.addAddress(address);
-    Navigator.pop(context);
-  }
-
-  _saveAddress(LocationNotifier locationNotifier) {
-    StoreNotifier store = Provider.of<StoreNotifier>(context, listen: false);
-
-    _currentAddress.address = locationNotifier.currentAddress;
-    _currentAddress.geoPoint = GeoPoint(
-        locationNotifier.currentPosition.latitude,
-        locationNotifier.currentPosition.longitude);
-    _currentAddress.addressName = addressName.text.trim();
-    _currentAddress.addressDetail = addressDetail.text.trim();
-
-    saveAddress(_currentAddress, store.store.storeId, _onAddAddress);
   }
 
   @override
@@ -59,7 +36,7 @@ class _AddAddressState extends State<AddAddress> {
 
     return Scaffold(
       appBar: RoundedAppBar(
-        appBarTittle: 'ข้อมูลที่อยู่',
+        appBarTittle: 'แก้ไขข้อมูลที่อยู่',
       ),
       body: SingleChildScrollView(
         child: Container(
@@ -143,10 +120,54 @@ class _AddAddressState extends State<AddAddress> {
                 margin: EdgeInsets.only(top: 20),
                 child: StadiumButtonWidget(
                   text: 'บันทึก',
+                  onClicked: () {},
+                ),
+              ),
+              Container(
+                padding: EdgeInsets.only(top: 20),
+                child: EditButton(
                   onClicked: () {
-                    FocusScope.of(context).requestFocus(new FocusNode());
-                    _saveAddress(locationNotifier);
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return ClipRRect(
+                          borderRadius: BorderRadius.circular(30),
+                          child: AlertDialog(
+                            title: Text(
+                              'ยืนยันที่จะลบข้อมูลที่อยู่นี้หรือไม่',
+                              style: FontCollection.bodyTextStyle,
+                            ),
+                            actions: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Container(
+                                    child: TextButton(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      child: Text(
+                                        'ยกเลิก',
+                                        style: TextStyle(
+                                            fontSize: 16, color: CollectionsColors.red),
+                                      ),
+                                    ),
+                                  ),
+                                  Container(
+                                    child: ButtonWidget(
+                                      text: 'ยืนยัน',
+                                      onClicked: () {},
+                                    ),
+                                  ),
+                                ],
+                              )
+                            ],
+                          ),
+                        );
+                      },
+                    );
                   },
+                  editText: 'ลบที่อยู่',
                 ),
               ),
             ],
@@ -156,8 +177,13 @@ class _AddAddressState extends State<AddAddress> {
     );
   }
 
-  Widget buildTextFormField(String labelText, TextInputType keyboardType,
-      String Function(String) validator, TextEditingController controller, String hintText, {Function(String) onChanged}) {
+  Widget buildTextFormField(
+      String labelText,
+      TextInputType keyboardType,
+      String Function(String) validator,
+      TextEditingController controller,
+      String hintText,
+      {Function(String) onChanged}) {
     return Padding(
       padding: const EdgeInsets.only(top: 20),
       child: BuildTextField(

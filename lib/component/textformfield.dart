@@ -37,36 +37,43 @@ class BuildTextField extends StatefulWidget {
 class _BuildTextFieldState extends State<BuildTextField> {
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      decoration: InputDecoration(
-        labelText: widget.labelText,
-        labelStyle: TextStyle(fontWeight: FontWeight.w700),
-        fillColor: CollectionsColors.orange,
-        errorText: widget.errorText,
-        hintText: widget.hintText,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-          borderSide: BorderSide(
-            color: CollectionsColors.orange,
-          ),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-          borderSide: BorderSide(color: CollectionsColors.orange, width: 2.0),
-        ),
-        errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-          borderSide: BorderSide(color: CollectionsColors.red, width: 2.0),
+    return Theme(
+      data: Theme.of(context).copyWith(
+        colorScheme: ColorScheme.light(
+          primary: CollectionsColors.orange,
         ),
       ),
-      keyboardType: widget.textInputType,
-      controller: widget.textEditingController,
-      initialValue: widget.initialValue,
-      validator: widget.validator,
-      obscureText: widget.obscureText,
-      maxLength: widget.maxLength,
-      maxLines: widget.maxLine,
-      onChanged: widget.onChanged,
+      child: TextFormField(
+        decoration: InputDecoration(
+          labelText: widget.labelText,
+          labelStyle: TextStyle(fontWeight: FontWeight.w700),
+          fillColor: CollectionsColors.orange,
+          errorText: widget.errorText,
+          hintText: widget.hintText,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: BorderSide(
+              color: CollectionsColors.orange,
+            ),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: BorderSide(color: CollectionsColors.orange, width: 2.0),
+          ),
+          errorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: BorderSide(color: CollectionsColors.red, width: 2.0),
+          ),
+        ),
+        keyboardType: widget.textInputType,
+        controller: widget.textEditingController,
+        initialValue: widget.initialValue,
+        validator: widget.validator,
+        obscureText: widget.obscureText,
+        maxLength: widget.maxLength,
+        maxLines: widget.maxLine,
+        onChanged: widget.onChanged,
+      ),
     );
   }
 }
@@ -98,42 +105,49 @@ class _BuildPasswordFieldState extends State<BuildPasswordField> {
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      controller: widget.textEditingController,
-      obscureText: isHidden,
-      decoration: InputDecoration(
-        labelText: widget.labelText,
-        labelStyle: TextStyle(fontWeight: FontWeight.w700),
-        hintText: widget.hintText,
-        focusColor: CollectionsColors.orange,
-        hoverColor: CollectionsColors.orange,
-        fillColor: CollectionsColors.orange,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-          borderSide: BorderSide(
-            color: CollectionsColors.orange,
-          ),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-          borderSide: BorderSide(color: CollectionsColors.orange, width: 2.0),
-        ),
-        errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-          borderSide: BorderSide(color: CollectionsColors.red, width: 2.0),
-        ),
-        suffixIcon: IconButton(
-          icon: isHidden ? Icon(Icons.visibility_off) : Icon(Icons.visibility),
-          disabledColor: Colors.grey,
-          focusColor: CollectionsColors.orange,
-          color: Colors.black.withOpacity(0.6),
-          onPressed: togglePasswordVisibility,
+    return Theme(
+      data: Theme.of(context).copyWith(
+        colorScheme: ColorScheme.light(
+          primary: CollectionsColors.orange,
         ),
       ),
-      keyboardType: TextInputType.visiblePassword,
-      autofillHints: [AutofillHints.password],
-      onEditingComplete: () => TextInput.finishAutofillContext(),
-      onSaved: widget.onSaved,
+      child: TextFormField(
+        controller: widget.textEditingController,
+        obscureText: isHidden,
+        decoration: InputDecoration(
+          labelText: widget.labelText,
+          labelStyle: TextStyle(fontWeight: FontWeight.w700),
+          hintText: widget.hintText,
+          focusColor: CollectionsColors.orange,
+          hoverColor: CollectionsColors.orange,
+          fillColor: CollectionsColors.orange,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: BorderSide(
+              color: CollectionsColors.orange,
+            ),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: BorderSide(color: CollectionsColors.orange, width: 2.0),
+          ),
+          errorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: BorderSide(color: CollectionsColors.red, width: 2.0),
+          ),
+          suffixIcon: IconButton(
+            icon: isHidden ? Icon(Icons.visibility_off) : Icon(Icons.visibility),
+            disabledColor: Colors.grey,
+            focusColor: CollectionsColors.orange,
+            color: Colors.black.withOpacity(0.6),
+            onPressed: togglePasswordVisibility,
+          ),
+        ),
+        keyboardType: TextInputType.visiblePassword,
+        autofillHints: [AutofillHints.password],
+        onEditingComplete: () => TextInput.finishAutofillContext(),
+        onSaved: widget.onSaved,
+      ),
     );
   }
 
@@ -169,24 +183,31 @@ class BuildPlainTextField extends StatefulWidget {
 class _BuildPlainTextFieldState extends State<BuildPlainTextField> {
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      controller: widget.textEditingController,
-      initialValue: widget.initialValue,
-      keyboardType: widget.keyboardType,
-      decoration: InputDecoration(
-        hintText: widget.hintText,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-          borderSide: BorderSide(color: CollectionsColors.orange, width: 2.0),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-          borderSide: BorderSide(color: CollectionsColors.orange, width: 2.0),
+    return Theme(
+      data: Theme.of(context).copyWith(
+        colorScheme: ColorScheme.light(
+          primary: CollectionsColors.orange,
         ),
       ),
-      validator: widget.validator,
-      onSaved: widget.onSaved,
-      onChanged: widget.onChanged,
+      child: TextFormField(
+        controller: widget.textEditingController,
+        initialValue: widget.initialValue,
+        keyboardType: widget.keyboardType,
+        decoration: InputDecoration(
+          hintText: widget.hintText,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: BorderSide(color: CollectionsColors.orange, width: 2.0),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: BorderSide(color: CollectionsColors.orange, width: 2.0),
+          ),
+        ),
+        validator: widget.validator,
+        onSaved: widget.onSaved,
+        onChanged: widget.onChanged,
+      ),
     );
   }
 }

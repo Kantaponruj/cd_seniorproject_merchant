@@ -404,8 +404,8 @@ class _StorePageState extends State<StorePage> {
                             //   canEdit: false,
                             // ),
                             storeCard(
-                              onClicked: () {
-                                Navigator.push(
+                              onClicked: () async {
+                                await Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) => AddressPage(

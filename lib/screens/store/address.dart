@@ -4,7 +4,9 @@ import 'package:cs_senior_project_merchant/component/roundAppBar.dart';
 import 'package:cs_senior_project_merchant/notifiers/address_notifier.dart';
 import 'package:cs_senior_project_merchant/notifiers/store_notifier.dart';
 import 'package:cs_senior_project_merchant/screens/store/add_address.dart';
+import 'package:cs_senior_project_merchant/screens/store/edit_address.dart';
 import 'package:cs_senior_project_merchant/services/store_service.dart';
+import 'package:cs_senior_project_merchant/widgets/button_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:auto_size_text/auto_size_text.dart';
@@ -50,6 +52,7 @@ class _AddressPageState extends State<AddressPage> {
                   padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
                   child: ListView.separated(
                     shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
                     itemCount: addressNotifier.addressList.length,
                     itemBuilder: (BuildContext context, index) {
                       final address = addressNotifier.addressList[index];
@@ -61,6 +64,13 @@ class _AddressPageState extends State<AddressPage> {
                         subtitle: AutoSizeText(
                           address.address,
                           maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        trailing: GestureDetector(
+                          onTap: () {
+                            Navigator.of(context).push(MaterialPageRoute(builder: (context) => EditAddress(),),);
+                          },
+                          child: Icon(Icons.edit),
                         ),
                         onTap: () {
                           storeNotifier.updateUserData({
@@ -68,10 +78,12 @@ class _AddressPageState extends State<AddressPage> {
                             'selectedAddressName': address.addressName,
                             'selectedLocation': address.geoPoint,
                           });
+                          // Navigator.of(context).pop();
                           Navigator.pushAndRemoveUntil(
                               context,
                               MaterialPageRoute(
-                                builder: (BuildContext context) => MainBottombar(),
+                                builder: (BuildContext context) =>
+                                    MainBottombar(),
                               ),
                               (route) => false);
                         },
@@ -87,22 +99,15 @@ class _AddressPageState extends State<AddressPage> {
             Container(
               margin: EdgeInsets.fromLTRB(0, 20, 0, 20),
               width: MediaQuery.of(context).size.width,
-              height: 50,
-              child: ElevatedButton(
-                onPressed: () {
+              child: StadiumButtonWidget(
+                text: 'เพิ่มที่อยู่ใหม่',
+                onClicked: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (context) => AddAddress(),
                     ),
                   );
                 },
-                style: ElevatedButton.styleFrom(
-                    shape: StadiumBorder(),
-                    primary: Theme.of(context).buttonColor),
-                child: Text(
-                  'เพิ่มที่อยู่ใหม่',
-                  style: FontCollection.buttonTextStyle,
-                ),
               ),
             ),
           ],
