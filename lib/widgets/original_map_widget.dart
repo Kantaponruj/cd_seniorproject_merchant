@@ -130,6 +130,7 @@ class _OriginalMapWidgetState extends State<OriginalMapWidget> {
         children: [
           Container(
             child: GoogleMap(
+              padding: EdgeInsets.only(bottom: 20,top: 100),
               myLocationEnabled: true,
               polylines: _polylines,
               initialCameraPosition: CameraPosition(

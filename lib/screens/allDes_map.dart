@@ -1,12 +1,16 @@
 import 'dart:math';
 
+import 'package:cs_senior_project_merchant/asset/color.dart';
 import 'package:cs_senior_project_merchant/asset/constant.dart';
 import 'package:cs_senior_project_merchant/asset/text_style.dart';
 import 'package:cs_senior_project_merchant/component/roundAppBar.dart';
 import 'package:cs_senior_project_merchant/notifiers/location_notifier.dart';
 import 'package:cs_senior_project_merchant/notifiers/order_notifier.dart';
+import 'package:cs_senior_project_merchant/widgets/icontext_widget.dart';
 import 'package:cs_senior_project_merchant/widgets/original_map_widget.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
@@ -27,6 +31,7 @@ class _AllDestinationPageState extends State<AllDestinationPage> {
   List distanceList = [];
   List<LatLng> polylineCoordinates = [];
   PolylinePoints polylinePoints;
+
   // Set<Polyline> _polylines = Set<Polyline>();
 
   String _placeDistance;
@@ -153,95 +158,195 @@ class _AllDestinationPageState extends State<AllDestinationPage> {
 
   @override
   Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
+    double mapHeight = MediaQuery.of(context).size.height * 0.6;
+
     return Scaffold(
+      extendBodyBehindAppBar: true,
         backgroundColor: Colors.white,
         appBar: RoundedAppBar(
           appBarTittle: 'All destination',
         ),
         body: Stack(
           children: [
-            Column(
-              children: [
-                Container(
-                  height: MediaQuery.of(context).size.height / 2,
-                  child: OriginalMapWidget(),
+            Container(
+              height: mapHeight,
+              child: OriginalMapWidget(),
+            ),
+            Container(
+              margin: EdgeInsets.fromLTRB(0, mapHeight - 20, 0, 0),
+              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+              height: MediaQuery.of(context).size.height / 2 + 20,
+              width: width,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
+                color: CollectionsColors.white,
+              ),
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      padding: EdgeInsets.only(bottom: 20),
+                      alignment: Alignment.topLeft,
+                      child: Text(
+                        'ลำดับการส่ง',
+                        style: FontCollection.topicTextStyle,
+                      ),
+                    ),
+                    Flexible(
+                      child: nextStartPoint.isNotEmpty
+                          ? Column(
+                              children: [
+                                showOrders(
+                                    'My location',
+                                    nextStartPoint.first['name'],
+                                    nextStartPoint.first['distance'].toString(),
+                                    1),
+                                ListView.builder(
+                                  shrinkWrap: true,
+                                  padding: EdgeInsets.zero,
+                                  physics: NeverScrollableScrollPhysics(),
+                                  itemCount: nextStartPoint.length,
+                                  itemBuilder: (context, index) {
+                                    return index == nextStartPoint.length - 1
+                                        ? Container()
+                                        : showOrders(
+                                            nextStartPoint[index]['name'],
+                                            nextStartPoint[index + 1]['name'],
+                                            nextStartPoint[index + 1]
+                                                    ['distance']
+                                                .toString(),
+                                            index + 2,
+                                          );
+                                  },
+                                ),
+                              ],
+                            )
+                          : SizedBox.shrink(),
+                    ),
+                  ],
                 ),
-                SingleChildScrollView(
-                  child: Expanded(
-                    child: nextStartPoint.isNotEmpty
-                        ? Column(
-                            children: [
-                              Row(
-                                children: [
-                                  Container(
-                                    child: Text(
-                                      '1. First points is ' +
-                                          nextStartPoint.first['name'],
-                                      style: FontCollection.bodyTextStyle,
-                                    ),
-                                  ),
-                                  Container(
-                                    padding: EdgeInsets.only(left: 20),
-                                    child: Text(
-                                      'Distance: ' +
-                                          nextStartPoint.first['distance']
-                                              .toString(),
-                                      style: FontCollection.bodyTextStyle,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              ListView.builder(
-                                shrinkWrap: true,
-                                physics: NeverScrollableScrollPhysics(),
-                                itemCount: nextStartPoint.length,
-                                itemBuilder: (context, index) {
-                                  return index == nextStartPoint.length - 1
-                                      ? Container()
-                                      : showOrder(
-                                          nextStartPoint[index]['name'],
-                                          nextStartPoint[index + 1]['name'],
-                                          nextStartPoint[index + 1]['distance']
-                                              .toString(),
-                                          index + 2,
-                                        );
-                                },
-                              ),
-                            ],
-                          )
-                        : SizedBox.shrink(),
-                  ),
-                ),
-              ],
+              ),
             ),
           ],
         ));
   }
 
-  Widget showOrder(
+  Widget showOrders(
       String startPoint, String stopPoint, String distance, int index) {
-    return Row(
-      children: [
-        Container(
+    return Container(
+      // decoration: BoxDecoration(
+      //   borderRadius: BorderRadius.circular(20),
+      //   color: CollectionsColors.yellow,
+      // ),
+      padding: EdgeInsets.all(10),
+      // margin: EdgeInsets.only(bottom: 5),
+      child: ListTile(
+        leading: Container(
+          padding: EdgeInsets.all(15),
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: CollectionsColors.orange,
+            // border: Border.all(
+            //   width: 1,
+            //   color: Colors.black,
+            // ),
+          ),
           child: Text(
-            index.toString() + '. ' + startPoint + ' to ',
-            style: FontCollection.bodyTextStyle,
+            index.toString(),
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 16,
+              fontWeight: FontWeight.w700,
+            ),
           ),
         ),
-        Container(
-          child: Text(
-            stopPoint,
-            style: FontCollection.bodyTextStyle,
-          ),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Container(
+              padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
+              child: Text(
+                stopPoint,
+                style: FontCollection.bodyTextStyle,
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(right: 10),
+              child: BuildIconText(
+                icon: Icons.location_on,
+                text: distance,
+                color: CollectionsColors.yellow,
+              ),
+              // Text(
+              //   'Distance: ' + distance,
+              //   style: FontCollection.bodyTextStyle,
+              // ),
+            ),
+          ],
         ),
-        Container(
-          padding: EdgeInsets.only(left: 20),
-          child: Text(
-            'Distance: ' + distance,
-            style: FontCollection.bodyTextStyle,
-          ),
-        ),
-      ],
+        trailing: Icon(Icons.navigate_next),
+      ),
+      // Row(
+      //   children: [
+      //     Expanded(
+      //       flex: 3,
+      //       child: Container(
+      //         padding: EdgeInsets.all(10),
+      //         decoration: BoxDecoration(
+      //           shape: BoxShape.circle,
+      //           // color: CollectionsColors.white,
+      //           border: Border.all(
+      //             width: 1,
+      //             color: Colors.black,
+      //           ),
+      //         ),
+      //         child: Text(
+      //           index.toString(),
+      //           textAlign: TextAlign.center,
+      //           style: TextStyle(
+      //             color: Colors.black,
+      //             fontSize: 16,
+      //             fontWeight: FontWeight.w700,
+      //           ),
+      //         ),
+      //       ),
+      //     ),
+      //     // Container(
+      //     //   child: Text(
+      //     //     index.toString() + '. ' + startPoint + ' to ',
+      //     //     style: FontCollection.bodyTextStyle,
+      //     //   ),
+      //     // ),
+      //     Expanded(
+      //       flex: 5,
+      //       child: Container(
+      //         padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
+      //         child: Text(
+      //           stopPoint,
+      //           style: FontCollection.bodyTextStyle,
+      //         ),
+      //       ),
+      //     ),
+      //     Expanded(
+      //       flex: 4,
+      //       child: Padding(
+      //         padding: EdgeInsets.only(left: 20),
+      //         child: BuildIconText(
+      //           icon: Icons.location_on,
+      //           text: distance,
+      //         ),
+      //         // Text(
+      //         //   'Distance: ' + distance,
+      //         //   style: FontCollection.bodyTextStyle,
+      //         // ),
+      //       ),
+      //     ),
+      //   ],
+      // ),
     );
   }
 }

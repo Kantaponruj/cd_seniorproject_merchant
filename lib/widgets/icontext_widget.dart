@@ -2,11 +2,12 @@ import 'package:cs_senior_project_merchant/asset/text_style.dart';
 import 'package:flutter/material.dart';
 
 class BuildIconText extends StatelessWidget {
-  BuildIconText({Key key, this.icon, this.text, this.child}) : super(key: key);
+  BuildIconText({Key key, this.icon, this.text, this.child, this.color}) : super(key: key);
 
   final IconData icon;
   final String text;
   final Widget child;
+  final Color color;
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +16,7 @@ class BuildIconText extends StatelessWidget {
         children: [
           icon != null
               ? Container(
-                  child: Icon(icon),
+                  child: Icon(icon, color: color != null ? color : Colors.black,),
                 )
               : SizedBox(),
           Container(
