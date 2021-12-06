@@ -568,7 +568,7 @@ class _RegisterPageState extends State<RegisterPage> {
             spacing: 5.0,
             runSpacing: 5.0,
             children: [
-              daySelect(storeNotifier),
+              buildKindOfFood(storeNotifier),
             ],
           ),
         ),
@@ -598,7 +598,7 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
-  Widget daySelect(StoreNotifier storeNotifier) {
+  Widget buildKindOfFood(StoreNotifier storeNotifier) {
     List<Widget> chips = [];
 
     for (int i = 0; i < kindOfFood.length; i++) {

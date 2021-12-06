@@ -11,9 +11,11 @@ class AddOpeningHours extends StatefulWidget {
   AddOpeningHours({
     Key key,
     @required this.storeId,
+    @required this.isEdit,
   }) : super(key: key);
 
   final String storeId;
+  final bool isEdit;
 
   @override
   _AddOpeningHoursState createState() => _AddOpeningHoursState();
@@ -75,6 +77,20 @@ class _AddOpeningHoursState extends State<AddOpeningHours> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
+            widget.isEdit
+                ? Container(
+                    margin: EdgeInsets.fromLTRB(0, 20, 0, 20),
+                    alignment: Alignment.topRight,
+                    child: Text(
+                      'ลบรายการนี้',
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.grey,
+                        decoration: TextDecoration.underline,
+                      ),
+                    ),
+                  )
+                : SizedBox.shrink(),
             Container(
               alignment: Alignment.centerLeft,
               child: Text(

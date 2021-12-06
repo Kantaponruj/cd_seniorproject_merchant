@@ -59,6 +59,7 @@ class _OpeningHoursPageState extends State<OpeningHoursPage> {
                       builder: (BuildContext context) {
                         return AddOpeningHours(
                           storeId: widget.storeId,
+                          isEdit: false,
                         );
                       },
                     );
@@ -149,11 +150,35 @@ class _OpeningHoursPageState extends State<OpeningHoursPage> {
                     children: [
                       showDateTime(index, dateTimeNotifier.dateTimeList[index]),
                       Container(
-                        child: Text(
-                          dateTimeNotifier.dateTimeList[index].openTime +
-                              " - " +
-                              dateTimeNotifier.dateTimeList[index].closeTime,
-                          style: FontCollection.bodyTextStyle,
+                        child: Row(
+                          children: [
+                            Container(
+                              child: Text(
+                                dateTimeNotifier.dateTimeList[index].openTime +
+                                    " - " +
+                                    dateTimeNotifier.dateTimeList[index].closeTime,
+                                style: FontCollection.bodyTextStyle,
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                showDialog(
+                                  barrierDismissible: false,
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AddOpeningHours(
+                                      storeId: widget.storeId,
+                                      isEdit: true,
+                                    );
+                                  },
+                                );
+                              },
+                              child: Container(
+                                padding: EdgeInsets.only(left: 15),
+                                child: Icon(Icons.edit, color: Colors.grey,),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ],
