@@ -14,6 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:syncfusion_flutter_sliders/sliders.dart';
 
 import 'login.dart';
 
@@ -485,6 +486,28 @@ class _RegisterPageState extends State<RegisterPage> {
               padding: EdgeInsets.only(top: 20),
               child: salesType('ประเภทสินค้า', storeNotifier),
             ),
+            Container(
+              alignment: Alignment.topLeft,
+              margin: EdgeInsets.fromLTRB(0, 20, 0, 20),
+              child: Text(
+                'จำนวนระยะทางมากสุดที่จะทำการส่งอาหาร',
+                style: FontCollection.bodyTextStyle,
+              ),
+            ),
+            Container(
+              child: distanceSelected(),
+            ),
+            Container(
+              alignment: Alignment.topLeft,
+              margin: EdgeInsets.fromLTRB(0, 20, 0, 20),
+              child: Text(
+                'ราคาค่าส่งเริ่มต้น',
+                style: FontCollection.bodyTextStyle,
+              ),
+            ),
+            Container(
+              child: priceSelected(),
+            ),
           ],
         ),
       ),
@@ -539,29 +562,124 @@ class _RegisterPageState extends State<RegisterPage> {
             style: FontCollection.bodyTextStyle,
           ),
         ),
-        ListView.builder(
-          shrinkWrap: true,
-          itemCount: kindOfFood.length,
-          physics: NeverScrollableScrollPhysics(),
-          itemBuilder: (context, index) {
-            return BuildCheckBox(
-              title: kindOfFood[index],
-              value: isSelectedKindOfFood[index],
-              onChanged: (value) {
-                setState(() {
-                  isSelectedKindOfFood[index] = value;
-                });
-
-                if (value) {
-                  storeNotifier.kindOfFood.add(kindOfFood[index]);
-                } else {
-                  storeNotifier.kindOfFood.remove(kindOfFood[index]);
-                }
-              },
-            );
-          },
+        Container(
+          margin: EdgeInsets.symmetric(vertical: 10),
+          child: Wrap(
+            spacing: 5.0,
+            runSpacing: 5.0,
+            children: [
+              daySelect(storeNotifier),
+            ],
+          ),
         ),
+        // ListView.builder(
+        //   shrinkWrap: true,
+        //   itemCount: kindOfFood.length,
+        //   physics: NeverScrollableScrollPhysics(),
+        //   itemBuilder: (context, index) {
+        //     return BuildCheckBox(
+        //       title: kindOfFood[index],
+        //       value: isSelectedKindOfFood[index],
+        //       onChanged: (value) {
+        //         setState(() {
+        //           isSelectedKindOfFood[index] = value;
+        //         });
+        //
+        //         if (value) {
+        //           storeNotifier.kindOfFood.add(kindOfFood[index]);
+        //         } else {
+        //           storeNotifier.kindOfFood.remove(kindOfFood[index]);
+        //         }
+        //       },
+        //     );
+        //   },
+        // ),
       ],
     );
   }
+
+  Widget daySelect(StoreNotifier storeNotifier) {
+    List<Widget> chips = [];
+
+    for (int i = 0; i < kindOfFood.length; i++) {
+      FilterChip filterChip = FilterChip(
+        selected: isSelectedKindOfFood[i],
+        label: Padding(
+          padding: const EdgeInsets.fromLTRB(5,5,10,5),
+          child: Text(
+            kindOfFood[i],
+            style: FontCollection.smallBodyTextStyle,
+          ),
+        ),
+        pressElevation: 5,
+        backgroundColor: CollectionsColors.white,
+        selectedColor: CollectionsColors.yellow,
+        onSelected: (bool selected) {
+          setState(() {
+            isSelectedKindOfFood[i] = selected;
+          });
+
+          if (selected) {
+            storeNotifier.kindOfFood.add(kindOfFood[i]);
+          } else {
+            storeNotifier.kindOfFood.remove(kindOfFood[i]);
+          }
+          // setState(() {
+          //   isSelectedKindOfFood[i] = selected;
+          //   _productType.add(i);
+          //   setState(() {});
+          // });
+        },
+      );
+      chips.add(Padding(
+          padding: EdgeInsets.symmetric(horizontal: 5), child: filterChip));
+    }
+
+    return Wrap(
+      spacing: 10.0,
+      runSpacing: 5.0,
+      children: chips,
+    );
+  }
+
+  double _price = 20.0;
+
+  Widget priceSelected() {
+    return SfSlider(
+      min: 0.0,
+      max: 40.0,
+      interval: 5,
+      stepSize: 5,
+      showTicks: true,
+      minorTicksPerInterval: 0,
+      showLabels: true,
+      value: _price,
+      onChanged: (dynamic newValue) {
+        setState(() {
+          _price = newValue;
+        });
+      },
+    );
+  }
+
+  double _distance = 5.0;
+
+  Widget distanceSelected() {
+    return SfSlider(
+      min: 0.0,
+      max: 16.0,
+      interval: 2,
+      stepSize: 1,
+      showTicks: true,
+      minorTicksPerInterval: 1,
+      showLabels: true,
+      value: _distance,
+      onChanged: (dynamic newValue) {
+        setState(() {
+          _distance = newValue;
+        });
+      },
+    );
+  }
+
 }
