@@ -192,12 +192,12 @@ class _StoreProfilePageState extends State<StoreProfilePage> {
                 'เบอร์โทรศัพท์',
                 phone,
                 TextInputType.phone,
-               (value) {
-                  if(value.length < 10) {
+                (value) {
+                  if (value.length < 10) {
                     return 'error';
                   }
                   return null;
-               },
+                },
               ),
             ),
             Container(

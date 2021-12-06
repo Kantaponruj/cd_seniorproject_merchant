@@ -101,6 +101,10 @@ class StoreNotifier with ChangeNotifier {
     return Future.delayed(Duration.zero);
   }
 
+  resetPassword() {
+    auth.sendPasswordResetEmail(email: email.text.trim());
+  }
+
   void clearController() {
     displayName.text = "";
     email.text = "";

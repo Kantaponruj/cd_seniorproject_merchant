@@ -2,6 +2,7 @@ import 'package:cs_senior_project_merchant/asset/color.dart';
 import 'package:cs_senior_project_merchant/asset/text_style.dart';
 import 'package:cs_senior_project_merchant/component/textformfield.dart';
 import 'package:cs_senior_project_merchant/notifiers/store_notifier.dart';
+import 'package:cs_senior_project_merchant/screens/forget_password.dart';
 import 'package:cs_senior_project_merchant/screens/register.dart';
 import 'package:cs_senior_project_merchant/widgets/button_widget.dart';
 import 'package:cs_senior_project_merchant/widgets/loading_widget.dart';
@@ -57,7 +58,8 @@ class _LoginPageState extends State<LoginPage> {
                         Container(
                           height: 200,
                           margin: EdgeInsets.symmetric(vertical: 30),
-                          child: Image.asset('assets/images/stalltruckr_merchant_logo.png'),
+                          child: Image.asset(
+                              'assets/images/stalltruckr_merchant_logo.png'),
                         ),
                         const SizedBox(
                           height: 30,
@@ -75,7 +77,15 @@ class _LoginPageState extends State<LoginPage> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               EditButton(
-                                onClicked: () {},
+                                onClicked: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute<void>(
+                                      builder: (BuildContext context) =>
+                                          ForgetPasswordPage(),
+                                    ),
+                                  );
+                                },
                                 editText: 'ลืมรหัสผ่าน',
                               ),
                               buildSubmit(storeNotifier),
@@ -96,7 +106,10 @@ class _LoginPageState extends State<LoginPage> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Container(
-                                child: Text('หากคุณยังไม่มีบัญชี ', style: FontCollection.bodyTextStyle,),
+                                child: Text(
+                                  'หากคุณยังไม่มีบัญชี ',
+                                  style: FontCollection.bodyTextStyle,
+                                ),
                               ),
                               InkWell(
                                 onTap: () => register(context),
