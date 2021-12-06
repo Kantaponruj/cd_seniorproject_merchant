@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:cs_senior_project_merchant/asset/color.dart';
 import 'package:cs_senior_project_merchant/asset/text_style.dart';
 import 'package:cs_senior_project_merchant/component/bottomBar.dart';
-import 'package:cs_senior_project_merchant/component/checkBox.dart';
 import 'package:cs_senior_project_merchant/component/dropdown.dart';
 import 'package:cs_senior_project_merchant/component/storeCard.dart';
 import 'package:cs_senior_project_merchant/component/textformfield.dart';
@@ -417,6 +416,22 @@ class _RegisterPageState extends State<RegisterPage> {
                           'ประเภทสินค้า',
                           storeNotifier.kindOfFood.join(', '),
                         ),
+                        selectedTypeOfStore == 'ร้านค้ารถเข็น'
+                            ? Container(
+                                child: Column(
+                                  children: [
+                                    showResult(
+                                      'ระยะทางมากสุดในจัดส่งอาหาร',
+                                      '${storeNotifier.distance} กม.',
+                                    ),
+                                    showResult(
+                                      'ราคาค่าส่งเริ่มต้น',
+                                      '${storeNotifier.shippingfee} บาท',
+                                    ),
+                                  ],
+                                ),
+                              )
+                            : SizedBox.shrink(),
                       ],
                     ),
                   ),
@@ -486,28 +501,36 @@ class _RegisterPageState extends State<RegisterPage> {
               padding: EdgeInsets.only(top: 20),
               child: salesType('ประเภทสินค้า', storeNotifier),
             ),
-            Container(
-              alignment: Alignment.topLeft,
-              margin: EdgeInsets.fromLTRB(0, 20, 0, 20),
-              child: Text(
-                'จำนวนระยะทางมากสุดที่จะทำการส่งอาหาร',
-                style: FontCollection.bodyTextStyle,
-              ),
-            ),
-            Container(
-              child: distanceSelected(),
-            ),
-            Container(
-              alignment: Alignment.topLeft,
-              margin: EdgeInsets.fromLTRB(0, 20, 0, 20),
-              child: Text(
-                'ราคาค่าส่งเริ่มต้น',
-                style: FontCollection.bodyTextStyle,
-              ),
-            ),
-            Container(
-              child: priceSelected(),
-            ),
+            selectedTypeOfStore == 'ร้านค้ารถเข็น'
+                ? Container(
+                    child: Column(
+                      children: [
+                        Container(
+                          alignment: Alignment.topLeft,
+                          margin: EdgeInsets.fromLTRB(0, 20, 0, 20),
+                          child: Text(
+                            'จำนวนระยะทางมากสุดที่จะทำการส่งอาหาร',
+                            style: FontCollection.bodyTextStyle,
+                          ),
+                        ),
+                        Container(
+                          child: distanceSelected(storeNotifier),
+                        ),
+                        Container(
+                          alignment: Alignment.topLeft,
+                          margin: EdgeInsets.fromLTRB(0, 20, 0, 20),
+                          child: Text(
+                            'ราคาค่าส่งเริ่มต้น',
+                            style: FontCollection.bodyTextStyle,
+                          ),
+                        ),
+                        Container(
+                          child: priceSelected(storeNotifier),
+                        ),
+                      ],
+                    ),
+                  )
+                : SizedBox.shrink(),
           ],
         ),
       ),
@@ -605,7 +628,7 @@ class _RegisterPageState extends State<RegisterPage> {
       FilterChip filterChip = FilterChip(
         selected: isSelectedKindOfFood[i],
         label: Padding(
-          padding: const EdgeInsets.fromLTRB(5,5,10,5),
+          padding: const EdgeInsets.fromLTRB(5, 5, 10, 5),
           child: Text(
             kindOfFood[i],
             style: FontCollection.smallBodyTextStyle,
@@ -644,7 +667,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
   double _price = 20.0;
 
-  Widget priceSelected() {
+  Widget priceSelected(StoreNotifier storeNotifier) {
     return SfSlider(
       min: 0.0,
       max: 40.0,
@@ -657,6 +680,7 @@ class _RegisterPageState extends State<RegisterPage> {
       onChanged: (dynamic newValue) {
         setState(() {
           _price = newValue;
+          storeNotifier.shippingfee = newValue.toString();
         });
       },
     );
@@ -664,7 +688,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
   double _distance = 5.0;
 
-  Widget distanceSelected() {
+  Widget distanceSelected(StoreNotifier storeNotifier) {
     return SfSlider(
       min: 0.0,
       max: 16.0,
@@ -677,9 +701,9 @@ class _RegisterPageState extends State<RegisterPage> {
       onChanged: (dynamic newValue) {
         setState(() {
           _distance = newValue;
+          storeNotifier.distance = newValue.toString();
         });
       },
     );
   }
-
 }

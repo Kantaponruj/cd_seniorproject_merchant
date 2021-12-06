@@ -17,6 +17,8 @@ class Store {
   String selectedAddress;
   GeoPoint selectedLocation;
   GeoPoint realtimeLocation;
+  String distanceForOrder;
+  String shippingfee;
 
   Store();
 
@@ -37,5 +39,7 @@ class Store {
     selectedAddress = snapshot.data()['selectedAddress'];
     selectedLocation = snapshot.data()['selectedLocation'];
     realtimeLocation = snapshot.data()['realtimeLocation'];
+    distanceForOrder = snapshot.data()['distanceForOrdre'];
+    shippingfee = snapshot.data()['shippingfee'];
   }
 }

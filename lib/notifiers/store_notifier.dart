@@ -31,6 +31,8 @@ class StoreNotifier with ChangeNotifier {
   String typeOfStore = '';
   List<String> kindOfFood = [];
   File localFile;
+  String distance = '0.0';
+  String shippingfee = '0.0';
 
   StoreNotifier.initialize() {
     _fireSetUp();
@@ -83,6 +85,8 @@ class StoreNotifier with ChangeNotifier {
           typeOfStore: typeOfStore,
           kindOfFood: kindOfFood,
           localFile: localFile,
+          distance: distance,
+          shippingfee: shippingfee,
         );
       });
       return true;
@@ -116,6 +120,8 @@ class StoreNotifier with ChangeNotifier {
     typeOfStore = "";
     kindOfFood.clear();
     localFile = null;
+    distance = '0.0';
+    shippingfee = '0.0';
   }
 
   Future<void> reloadUserModel() async {

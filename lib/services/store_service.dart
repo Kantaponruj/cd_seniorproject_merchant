@@ -24,6 +24,8 @@ class StoreService {
     String typeOfStore,
     List kindOfFood,
     File localFile,
+    String distance,
+    String shippingfee,
   }) {
     firebaseFirestore.collection(collection).doc(storeId).set({
       'storeId': storeId,
@@ -40,6 +42,8 @@ class StoreService {
       'selectedAddress': 'โปรดระบุสถานที่จำหน่ายสินค้า',
       'selectedAddressName': '',
       'selectedLocation': GeoPoint(0, 0),
+      'distanceForOrder': distance,
+      'shippingfee': shippingfee,
     });
     updateImageStore(storeId, localFile);
   }
