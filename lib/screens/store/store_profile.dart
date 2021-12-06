@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:cs_senior_project_merchant/asset/color.dart';
 import 'package:cs_senior_project_merchant/asset/text_style.dart';
 import 'package:cs_senior_project_merchant/component/bottomBar.dart';
-import 'package:cs_senior_project_merchant/component/checkBox.dart';
 import 'package:cs_senior_project_merchant/component/dropdown.dart';
 import 'package:cs_senior_project_merchant/component/roundAppBar.dart';
 import 'package:cs_senior_project_merchant/component/textformfield.dart';
@@ -133,14 +132,14 @@ class _StoreProfilePageState extends State<StoreProfilePage> {
   }
 
   Widget showImage() {
-    if (_imageUrl == null && _imageFile == null) {
+    if (_imageUrl == '' && _imageFile == null) {
       return Image.asset(
         'assets/images/default-photo.png',
         fit: BoxFit.cover,
       );
     } else if (_imageFile != null) {
       return Image.file(_imageFile, fit: BoxFit.cover);
-    } else if (_imageUrl != null) {
+    } else if (_imageUrl != '') {
       return Image.network(_imageUrl, fit: BoxFit.cover);
     }
   }
@@ -281,7 +280,9 @@ class _StoreProfilePageState extends State<StoreProfilePage> {
     );
   }
 
-  Widget storeType(String headerText,) {
+  Widget storeType(
+    String headerText,
+  ) {
     return Column(
       children: [
         Container(
@@ -318,7 +319,7 @@ class _StoreProfilePageState extends State<StoreProfilePage> {
       FilterChip filterChip = FilterChip(
         selected: isSelectedKindOfFood[i],
         label: Padding(
-          padding: const EdgeInsets.fromLTRB(5,5,10,5),
+          padding: const EdgeInsets.fromLTRB(5, 5, 10, 5),
           child: Text(
             kindOfFood[i],
             style: FontCollection.smallBodyTextStyle,
@@ -354,5 +355,4 @@ class _StoreProfilePageState extends State<StoreProfilePage> {
       children: chips,
     );
   }
-  
 }

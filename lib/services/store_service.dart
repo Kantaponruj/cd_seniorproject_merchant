@@ -7,7 +7,6 @@ import 'package:cs_senior_project_merchant/models/dateTime.dart';
 import 'package:cs_senior_project_merchant/models/store.dart';
 import 'package:cs_senior_project_merchant/notifiers/address_notifier.dart';
 import 'package:cs_senior_project_merchant/notifiers/dateTime_notifier.dart';
-import 'package:cs_senior_project_merchant/notifiers/store_notifier.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:uuid/uuid.dart';
 import 'package:path/path.dart' as path;
