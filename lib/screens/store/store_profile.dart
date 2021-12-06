@@ -4,6 +4,7 @@ import 'package:cs_senior_project_merchant/asset/color.dart';
 import 'package:cs_senior_project_merchant/asset/text_style.dart';
 import 'package:cs_senior_project_merchant/component/bottomBar.dart';
 import 'package:cs_senior_project_merchant/component/checkBox.dart';
+import 'package:cs_senior_project_merchant/component/dropdown.dart';
 import 'package:cs_senior_project_merchant/component/roundAppBar.dart';
 import 'package:cs_senior_project_merchant/component/textformfield.dart';
 import 'package:cs_senior_project_merchant/notifiers/store_notifier.dart';
@@ -25,7 +26,7 @@ class _StoreProfilePageState extends State<StoreProfilePage> {
   List kindOfFood = ['ของคาว', 'ของหวาน', 'เครื่องดื่ม', 'อื่น ๆ'];
   List isSelectedKindOfFood = [false, false, false, false];
 
-  List<dynamic> typeOfStore = ['Food Truck', 'ร้านค้ารถเข็น'];
+  List<String> typeOfStore = ['Food Truck', 'ร้านค้ารถเข็น'];
   String selectedTypeOfStore;
 
   String _imageUrl;
@@ -203,7 +204,7 @@ class _StoreProfilePageState extends State<StoreProfilePage> {
             Container(
               alignment: Alignment.centerLeft,
               padding: EdgeInsets.only(top: 20),
-              child: salesType('ประเภทสินค้า'),
+              child: salesType('ประเภทสินค้า', storeNotifier),
             ),
             Container(
                 alignment: Alignment.centerLeft,
@@ -245,7 +246,7 @@ class _StoreProfilePageState extends State<StoreProfilePage> {
     );
   }
 
-  Widget salesType(String headerText) {
+  Widget salesType(String headerText, StoreNotifier storeNotifier) {
     return Column(
       children: [
         Container(
@@ -256,28 +257,31 @@ class _StoreProfilePageState extends State<StoreProfilePage> {
             style: FontCollection.bodyTextStyle,
           ),
         ),
-        ListView.builder(
-          shrinkWrap: true,
-          itemCount: kindOfFood.length,
-          physics: NeverScrollableScrollPhysics(),
-          itemBuilder: (context, index) {
-            return BuildCheckBox(
-              title: kindOfFood[index],
-              value: isSelectedKindOfFood[index],
-              onChanged: (value) {
-                setState(() {
-                  isSelectedKindOfFood[index] = value;
-                });
-                // print(isSelectedKindOfFood);
-              },
-            );
-          },
+        Container(
+          child: buildKindOfFood(storeNotifier),
         ),
+        // ListView.builder(
+        //   shrinkWrap: true,
+        //   itemCount: kindOfFood.length,
+        //   physics: NeverScrollableScrollPhysics(),
+        //   itemBuilder: (context, index) {
+        //     return BuildCheckBox(
+        //       title: kindOfFood[index],
+        //       value: isSelectedKindOfFood[index],
+        //       onChanged: (value) {
+        //         setState(() {
+        //           isSelectedKindOfFood[index] = value;
+        //         });
+        //         // print(isSelectedKindOfFood);
+        //       },
+        //     );
+        //   },
+        // ),
       ],
     );
   }
 
-  Widget storeType(String headerText) {
+  Widget storeType(String headerText,) {
     return Column(
       children: [
         Container(
@@ -294,22 +298,11 @@ class _StoreProfilePageState extends State<StoreProfilePage> {
   }
 
   Widget buildDropdown() {
-    return DropdownButton(
+    return BuildDropdown(
+      hintText: 'ประเถทร้านค้า',
       value: selectedTypeOfStore,
-      iconSize: 30,
-      icon: Icon(
-        Icons.keyboard_arrow_down,
-        color: Colors.black,
-      ),
-      isExpanded: true,
-      items: typeOfStore
-          .map(
-            (type) => DropdownMenuItem(
-              value: type,
-              child: Text(type),
-            ),
-          )
-          .toList(),
+      width: MediaQuery.of(context).size.width,
+      dropdownValues: typeOfStore,
       onChanged: (value) {
         setState(() {
           selectedTypeOfStore = value;
@@ -317,4 +310,49 @@ class _StoreProfilePageState extends State<StoreProfilePage> {
       },
     );
   }
+
+  Widget buildKindOfFood(StoreNotifier storeNotifier) {
+    List<Widget> chips = [];
+
+    for (int i = 0; i < kindOfFood.length; i++) {
+      FilterChip filterChip = FilterChip(
+        selected: isSelectedKindOfFood[i],
+        label: Padding(
+          padding: const EdgeInsets.fromLTRB(5,5,10,5),
+          child: Text(
+            kindOfFood[i],
+            style: FontCollection.smallBodyTextStyle,
+          ),
+        ),
+        pressElevation: 5,
+        backgroundColor: CollectionsColors.white,
+        selectedColor: CollectionsColors.yellow,
+        onSelected: (bool selected) {
+          setState(() {
+            isSelectedKindOfFood[i] = selected;
+          });
+
+          if (selected) {
+            storeNotifier.kindOfFood.add(kindOfFood[i]);
+          } else {
+            storeNotifier.kindOfFood.remove(kindOfFood[i]);
+          }
+          // setState(() {
+          //   isSelectedKindOfFood[i] = selected;
+          //   _productType.add(i);
+          //   setState(() {});
+          // });
+        },
+      );
+      chips.add(Padding(
+          padding: EdgeInsets.symmetric(horizontal: 5), child: filterChip));
+    }
+
+    return Wrap(
+      spacing: 10.0,
+      runSpacing: 5.0,
+      children: chips,
+    );
+  }
+  
 }
