@@ -8,9 +8,10 @@ import 'package:cs_senior_project_merchant/models/address.dart';
 import 'package:cs_senior_project_merchant/notifiers/address_notifier.dart';
 import 'package:cs_senior_project_merchant/notifiers/location_notifier.dart';
 import 'package:cs_senior_project_merchant/notifiers/store_notifier.dart';
+import 'package:cs_senior_project_merchant/screens/store/address.dart';
 import 'package:cs_senior_project_merchant/screens/store/select_address.dart';
-import 'package:cs_senior_project_merchant/widgets/button_widget.dart';
 import 'package:cs_senior_project_merchant/services/store_service.dart';
+import 'package:cs_senior_project_merchant/widgets/button_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -22,17 +23,51 @@ class EditAddress extends StatefulWidget {
 }
 
 class _EditAddressState extends State<EditAddress> {
+  Address _currentAddress;
   TextEditingController addressName = new TextEditingController();
   TextEditingController addressDetail = new TextEditingController();
 
   @override
   void initState() {
+    AddressNotifier address =
+        Provider.of<AddressNotifier>(context, listen: false);
+    _currentAddress = address.currentAddress;
     super.initState();
+  }
+
+  _saveAddress() {
+    StoreNotifier store = Provider.of<StoreNotifier>(context, listen: false);
+    LocationNotifier location =
+        Provider.of<LocationNotifier>(context, listen: false);
+
+    _currentAddress.geoPoint = GeoPoint(
+      location.currentPosition.latitude,
+      location.currentPosition.longitude,
+    );
+
+    saveAddress(_currentAddress, store.store.storeId, true);
+    Navigator.pop(context);
+  }
+
+  _deleteFood(Address address) {
+    StoreNotifier store = Provider.of<StoreNotifier>(context, listen: false);
+    AddressNotifier addressNotifier =
+        Provider.of<AddressNotifier>(context, listen: false);
+    addressNotifier.deleteAddress(address);
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute<void>(
+        builder: (BuildContext context) => AddressPage(
+          storeId: store.store.storeId,
+        ),
+      ),
+      (route) => false,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    LocationNotifier locationNotifier = Provider.of<LocationNotifier>(context);
+    StoreNotifier store = Provider.of<StoreNotifier>(context, listen: false);
 
     return Scaffold(
       appBar: RoundedAppBar(
@@ -79,9 +114,7 @@ class _EditAddressState extends State<EditAddress> {
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20),
                             color: CollectionsColors.grey),
-                        child: Text(locationNotifier.currentAddress != null
-                            ? locationNotifier.currentAddress
-                            : 'กรุณาเลือกที่อยู่'),
+                        child: Text(_currentAddress.address),
                       ),
                       Container(
                         child: buildTextFormField(
@@ -93,23 +126,26 @@ class _EditAddressState extends State<EditAddress> {
                             }
                             return null;
                           },
-                          addressName,
-                          '',
+                          _currentAddress.addressName,
+                          onChanged: (value) {
+                            _currentAddress.addressName = value;
+                          },
                         ),
                       ),
                       Container(
                         child: buildTextFormField(
-                          'รายละเอียดสถานที่',
-                          TextInputType.text,
-                          (value) {
-                            if (value.isEmpty) {
-                              return 'โปรดกรอก';
-                            }
-                            return null;
-                          },
-                          addressDetail,
-                          '',
-                        ),
+                            'รายละเอียดสถานที่',
+                            TextInputType.text,
+                            (value) {
+                              if (value.isEmpty) {
+                                return 'โปรดกรอก';
+                              }
+                              return null;
+                            },
+                            _currentAddress.addressDetail,
+                            onChanged: (value) {
+                              _currentAddress.addressDetail = value;
+                            }),
                       ),
                     ],
                   ),
@@ -120,7 +156,10 @@ class _EditAddressState extends State<EditAddress> {
                 margin: EdgeInsets.only(top: 20),
                 child: StadiumButtonWidget(
                   text: 'บันทึก',
-                  onClicked: () {},
+                  onClicked: () {
+                    FocusScope.of(context).requestFocus(new FocusNode());
+                    _saveAddress();
+                  },
                 ),
               ),
               Container(
@@ -139,7 +178,8 @@ class _EditAddressState extends State<EditAddress> {
                             ),
                             actions: [
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Container(
                                     child: TextButton(
@@ -149,14 +189,21 @@ class _EditAddressState extends State<EditAddress> {
                                       child: Text(
                                         'ยกเลิก',
                                         style: TextStyle(
-                                            fontSize: 16, color: CollectionsColors.red),
+                                            fontSize: 16,
+                                            color: CollectionsColors.red),
                                       ),
                                     ),
                                   ),
                                   Container(
                                     child: ButtonWidget(
                                       text: 'ยืนยัน',
-                                      onClicked: () {},
+                                      onClicked: () {
+                                        deleteAddress(
+                                          _currentAddress,
+                                          store.store.storeId,
+                                          _deleteFood,
+                                        );
+                                      },
                                     ),
                                   ),
                                 ],
@@ -177,22 +224,17 @@ class _EditAddressState extends State<EditAddress> {
     );
   }
 
-  Widget buildTextFormField(
-      String labelText,
-      TextInputType keyboardType,
-      String Function(String) validator,
-      TextEditingController controller,
-      String hintText,
+  Widget buildTextFormField(String labelText, TextInputType keyboardType,
+      String Function(String) validator, String initialValue,
       {Function(String) onChanged}) {
     return Padding(
       padding: const EdgeInsets.only(top: 20),
       child: BuildTextField(
         labelText: labelText,
-        hintText: hintText,
         onChanged: onChanged,
         textInputType: keyboardType,
-        textEditingController: controller,
         validator: validator,
+        initialValue: initialValue,
       ),
     );
   }

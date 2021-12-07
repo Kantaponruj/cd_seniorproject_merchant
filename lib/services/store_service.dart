@@ -7,6 +7,7 @@ import 'package:cs_senior_project_merchant/models/dateTime.dart';
 import 'package:cs_senior_project_merchant/models/store.dart';
 import 'package:cs_senior_project_merchant/notifiers/address_notifier.dart';
 import 'package:cs_senior_project_merchant/notifiers/dateTime_notifier.dart';
+import 'package:cs_senior_project_merchant/screens/store/edit_address.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:uuid/uuid.dart';
 import 'package:path/path.dart' as path;
@@ -149,12 +150,29 @@ Future<void> getAddress(AddressNotifier addressNotifier, String storeId) async {
   addressNotifier.addressList = _addressList;
 }
 
-saveAddress(Address address, String storeId, Function addAddress) async {
+saveAddress(Address address, String storeId, bool isUpdating,
+    {Function addAddress}) async {
   CollectionReference addressRef =
       firebaseFirestore.collection('stores').doc(storeId).collection('address');
 
-  DocumentReference documentRef = await addressRef.add(address.toMap());
-  await documentRef.set(address.toMap(), SetOptions(merge: true));
+  if (isUpdating) {
+    await addressRef.doc(address.addressId).update(address.toMap());
+  } else {
+    DocumentReference documentRef = await addressRef.add(address.toMap());
+    address.addressId = documentRef.id;
+    await documentRef.set(address.toMap(), SetOptions(merge: true));
 
-  addAddress(address);
+    addAddress(address);
+  }
+}
+
+deleteAddress(Address address, String storeId, Function onDeletedFood) {
+  firebaseFirestore
+      .collection('stores')
+      .doc(storeId)
+      .collection('address')
+      .doc(address.addressId)
+      .delete();
+
+  onDeletedFood(address);
 }

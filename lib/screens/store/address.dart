@@ -68,7 +68,12 @@ class _AddressPageState extends State<AddressPage> {
                         ),
                         trailing: GestureDetector(
                           onTap: () {
-                            Navigator.of(context).push(MaterialPageRoute(builder: (context) => EditAddress(),),);
+                            addressNotifier.currentAddress = address;
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => EditAddress(),
+                              ),
+                            );
                           },
                           child: Icon(Icons.edit),
                         ),

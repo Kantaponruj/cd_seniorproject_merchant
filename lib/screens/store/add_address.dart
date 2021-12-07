@@ -50,7 +50,8 @@ class _AddAddressState extends State<AddAddress> {
     _currentAddress.addressName = addressName.text.trim();
     _currentAddress.addressDetail = addressDetail.text.trim();
 
-    saveAddress(_currentAddress, store.store.storeId, _onAddAddress);
+    saveAddress(_currentAddress, store.store.storeId, false,
+        addAddress: _onAddAddress);
   }
 
   @override
@@ -156,8 +157,13 @@ class _AddAddressState extends State<AddAddress> {
     );
   }
 
-  Widget buildTextFormField(String labelText, TextInputType keyboardType,
-      String Function(String) validator, TextEditingController controller, String hintText, {Function(String) onChanged}) {
+  Widget buildTextFormField(
+      String labelText,
+      TextInputType keyboardType,
+      String Function(String) validator,
+      TextEditingController controller,
+      String hintText,
+      {Function(String) onChanged}) {
     return Padding(
       padding: const EdgeInsets.only(top: 20),
       child: BuildTextField(
