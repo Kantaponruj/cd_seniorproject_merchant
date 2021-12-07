@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cs_senior_project_merchant/asset/color.dart';
 import 'package:cs_senior_project_merchant/asset/text_style.dart';
+import 'package:cs_senior_project_merchant/models/order.dart';
 import 'package:cs_senior_project_merchant/notifiers/location_notifier.dart';
 import 'package:cs_senior_project_merchant/notifiers/order_notifier.dart';
 import 'package:cs_senior_project_merchant/notifiers/store_notifier.dart';
@@ -23,6 +24,8 @@ class OrderPage extends StatefulWidget {
 }
 
 class _OrderPageState extends State<OrderPage> {
+  List<OrderDetail> _orderList = [];
+
   @override
   void initState() {
     StoreNotifier storeNotifier =
@@ -33,12 +36,12 @@ class _OrderPageState extends State<OrderPage> {
         Provider.of<LocationNotifier>(context, listen: false);
     locationNotifier.initialization();
 
-    OrderNotifier orderNotifier =
-        Provider.of<OrderNotifier>(context, listen: false);
+    // OrderNotifier orderNotifier =
+    //     Provider.of<OrderNotifier>(context, listen: false);
 
     updateLocation();
 
-    getOrderDelivery(orderNotifier, storeNotifier.user.uid);
+    // getOrderDelivery(orderNotifier, storeNotifier.user.uid);
     super.initState();
   }
 
@@ -75,6 +78,7 @@ class _OrderPageState extends State<OrderPage> {
   @override
   Widget build(BuildContext context) {
     StoreNotifier storeNotifier = Provider.of<StoreNotifier>(context);
+    OrderNotifier orderNotifier = Provider.of<OrderNotifier>(context);
 
     return SafeArea(
       child: Scaffold(
@@ -91,9 +95,20 @@ class _OrderPageState extends State<OrderPage> {
               stream: getOrders(storeNotifier.user.uid, widget.typeOrder),
               builder: (BuildContext context,
                   AsyncSnapshot<QuerySnapshot> snapshot) {
+                _orderList.clear();
+
                 if (!snapshot.hasData) {
                   return LoadingWidget();
                 }
+
+                if (widget.typeOrder == 'delivery-orders') {
+                  snapshot.data.docs.forEach((document) {
+                    OrderDetail order = OrderDetail.fromMap(document.data());
+                    _orderList.add(order);
+                  });
+                }
+
+                orderNotifier.orderList = _orderList;
 
                 return Container(
                   child: Column(

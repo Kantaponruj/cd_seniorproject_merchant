@@ -17,8 +17,10 @@ class OrderNotifier with ChangeNotifier {
   OrderDetail get currentOrder => _currentOrder;
 
   set orderList(List<OrderDetail> orderList) {
-    _orderList = orderList;
-    notifyListeners();
+    Future.delayed(Duration(seconds: 1), () {
+      _orderList = orderList;
+      notifyListeners();
+    });
   }
 
   set currentOrder(OrderDetail order) {
