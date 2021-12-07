@@ -292,7 +292,6 @@ class _RegisterPageState extends State<RegisterPage> {
           return null;
         }
       },
-      maxLine: null,
     );
   }
 

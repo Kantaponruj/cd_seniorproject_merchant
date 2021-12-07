@@ -49,20 +49,17 @@ class _EditAddressState extends State<EditAddress> {
     Navigator.pop(context);
   }
 
+  int count;
+
   _deleteFood(Address address) {
     StoreNotifier store = Provider.of<StoreNotifier>(context, listen: false);
     AddressNotifier addressNotifier =
         Provider.of<AddressNotifier>(context, listen: false);
     addressNotifier.deleteAddress(address);
-    Navigator.pushAndRemoveUntil(
-      context,
-      MaterialPageRoute<void>(
-        builder: (BuildContext context) => AddressPage(
-          storeId: store.store.storeId,
-        ),
-      ),
-      (route) => false,
-    );
+    count = 0;
+    Navigator.popUntil(context, (route) {
+      return count++ == 2;
+    });
   }
 
   @override
@@ -184,7 +181,9 @@ class _EditAddressState extends State<EditAddress> {
                                   Container(
                                     child: TextButton(
                                       onPressed: () {
-                                        Navigator.pop(context);
+                                        setState(() {
+                                          Navigator.pop(context);
+                                        });
                                       },
                                       child: Text(
                                         'ยกเลิก',
