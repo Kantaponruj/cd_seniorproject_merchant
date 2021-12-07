@@ -69,7 +69,7 @@ updateMenuAndImage(
     var uudid = Uuid().v4();
 
     final Reference firebaseStorageRef =
-        FirebaseStorage.instance.ref().child('menu/$uudid$fileExtension');
+        FirebaseStorage.instance.ref().child('menu_img/$uudid$fileExtension');
 
     await firebaseStorageRef.putFile(localFile).catchError((onError) {
       print(onError);

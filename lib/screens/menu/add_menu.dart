@@ -188,11 +188,12 @@ class _AddMenuPageState extends State<AddMenuPage> {
                       return Column(
                         children: [
                           showOption(
-                            topping.topic,
-                            topping.selectedNumberTopping,
-                            topping.detail,
-                            topping,
-                            topping.type,
+                            '', '', '', topping, '',
+                            // topping.topic,
+                            // topping.selectedNumberTopping,
+                            // topping.detail,
+                            // topping,
+                            // topping.type,
                             () {
                               setState(() {
                                 _subtoppingList.clear();
@@ -244,7 +245,7 @@ class _AddMenuPageState extends State<AddMenuPage> {
                     onClickAddOptionalButton
                         ? 'ปิดเพิ่มตัวเลือกเพิ่มเติม'
                         : 'เพิ่มตัวเลือกเพิ่มเติม',
-                        () {
+                    () {
                       setState(() {
                         onClickAddOptionalButton = !onClickAddOptionalButton;
                         isUpdatingTopping = false;
