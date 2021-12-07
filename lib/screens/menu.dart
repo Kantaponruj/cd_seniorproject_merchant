@@ -87,6 +87,7 @@ class _MenuPageState extends State<MenuPage> {
         floatingActionButton: FloatingActionButton(
           onPressed: () {
             menuNotfier.currentMenu = null;
+            menuNotfier.toppingList.clear();
             Navigator.of(context).push(MaterialPageRoute(
               builder: (context) => AddMenuPage(isUpdating: false),
             ));

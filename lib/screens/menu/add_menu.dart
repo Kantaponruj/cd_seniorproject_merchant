@@ -91,7 +91,7 @@ class _AddMenuPageState extends State<AddMenuPage> {
     _selectedType = type.first;
     _selectedNumberTopping = number.first;
     _imageUrl = _currentMenu.image;
-    statusSubTopping = false;
+    // statusSubTopping = false;
     super.initState();
   }
 
@@ -100,7 +100,7 @@ class _AddMenuPageState extends State<AddMenuPage> {
     if (!widget.isUpdating) {
       menuNotfier.addMenu(menu);
     }
-    Navigator.pushNamedAndRemoveUntil(context, '/menu', (route) => false);
+    Navigator.pop(context);
   }
 
   _menuDeleted(Menu menu) {
@@ -188,12 +188,11 @@ class _AddMenuPageState extends State<AddMenuPage> {
                       return Column(
                         children: [
                           showOption(
-                            '', '', '', topping, '',
-                            // topping.topic,
-                            // topping.selectedNumberTopping,
-                            // topping.detail,
-                            // topping,
-                            // topping.type,
+                            topping.topic,
+                            topping.selectedNumberTopping,
+                            topping.detail,
+                            topping,
+                            topping.type,
                             () {
                               setState(() {
                                 _subtoppingList.clear();
@@ -207,7 +206,7 @@ class _AddMenuPageState extends State<AddMenuPage> {
                                     'name': subtopping['name'],
                                     'price': subtopping['price'],
                                     'haveSubTopping':
-                                        subtopping['haveSubTopping'].toString(),
+                                        subtopping['haveSubTopping'],
                                   });
                                 });
                               });
@@ -644,6 +643,7 @@ class _AddMenuPageState extends State<AddMenuPage> {
               child: ListView.builder(
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
+                itemCount: _subtoppingList.length,
                 itemBuilder: (context, index) {
                   return Row(
                     children: [
@@ -667,17 +667,14 @@ class _AddMenuPageState extends State<AddMenuPage> {
                               children: [
                                 PopupMenuItem(
                                   child: BuildIconText(
-                                    icon: Icons.edit,
-                                    text: 'แก้ไขรายการ',
-                                  ),
-                                  value: 'edit',
-                                ),
-                                PopupMenuItem(
-                                  child: BuildIconText(
                                     icon: Icons.delete,
                                     text: 'ลบรายการ',
                                   ),
                                   value: 'delete',
+                                  onTap: () {
+                                    _subtoppingList.removeAt(index);
+                                    setState(() {});
+                                  },
                                 ),
                               ],
                             ),
@@ -687,7 +684,6 @@ class _AddMenuPageState extends State<AddMenuPage> {
                     ],
                   );
                 },
-                itemCount: _subtoppingList.length,
               ),
             ),
             Container(
@@ -722,7 +718,7 @@ class _AddMenuPageState extends State<AddMenuPage> {
                     _subtoppingList.add({
                       'name': subtoppingName.text.trim(),
                       'price': subtoppingPrice.text.trim(),
-                      'haveSubTopping': statusSubTopping,
+                      'haveSubTopping': false,
                     });
                   });
                   subtoppingName.clear();
@@ -1047,17 +1043,7 @@ class _AddMenuPageState extends State<AddMenuPage> {
                 padding: EdgeInsets.symmetric(vertical: 10),
                 child: Row(
                   children: [
-                    // Container(
-                    //   alignment: Alignment.topLeft,
-                    //   padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
-                    //   child: Text(
-                    //     'รายละเอียด ',
-                    //     style: FontCollection.smallBodyTextStyle,
-                    //   ),
-                    // ),
                     Expanded(
-                      // alignment: Alignment.topLeft,
-                      // padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
                       child: AutoSizeText(
                         detail,
                         style: FontCollection.smallBodyTextStyle,
@@ -1092,8 +1078,6 @@ class _AddMenuPageState extends State<AddMenuPage> {
   bool value = false;
 
   Widget listAddOn(Topping topping, int i, String toppingType) {
-    bool value = false;
-
     return Container(
       width: MediaQuery.of(context).size.width,
       child: Row(
@@ -1139,6 +1123,9 @@ class _AddMenuPageState extends State<AddMenuPage> {
   }
 
   Widget priceToggle(Topping topping, int i) {
+    MenuNotfier menu = Provider.of<MenuNotfier>(context);
+    StoreNotifier store = Provider.of<StoreNotifier>(context);
+
     return Container(
       child: Row(
         children: [
@@ -1154,11 +1141,17 @@ class _AddMenuPageState extends State<AddMenuPage> {
               width: 80,
               activeText: 'มี',
               inactiveText: 'หมด',
-              value: statusSubTopping,
+              value: topping.subTopping[i]['haveSubTopping'],
               onToggle: (val) {
                 setState(() {
-                  statusSubTopping = val;
+                  topping.subTopping[i]['haveSubTopping'] = val;
                 });
+                updateSubToppingStatus(
+                  store.store.storeId,
+                  menu.currentMenu.menuId,
+                  topping.toppingId,
+                  topping.subTopping,
+                );
               },
             ),
           ),
