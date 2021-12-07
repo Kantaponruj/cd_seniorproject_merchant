@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cs_senior_project_merchant/asset/color.dart';
 import 'package:cs_senior_project_merchant/asset/text_style.dart';
 import 'package:cs_senior_project_merchant/component/storeCard.dart';
@@ -78,14 +79,18 @@ class _StorePageState extends State<StorePage> {
 
         return Container(
           child: textCase == 1
-              ? Text(
+              ? AutoSizeText(
                   daysArr[0] + " - " + daysArr[daysArr.length - 1],
                   style: FontCollection.bodyTextStyle,
+            maxLines: 2,
                 )
               : Row(
                   children: [
-                    Text(daysArr.join(', '),
-                        style: FontCollection.bodyTextStyle)
+                    Expanded(
+                      child: AutoSizeText(daysArr.join(', '),
+                          style: FontCollection.bodyTextStyle,
+                        maxLines: 2,),
+                    ),
                   ],
                 ),
         );
@@ -292,7 +297,7 @@ class _StorePageState extends State<StorePage> {
                                       padding: EdgeInsets.all(20),
                                       child: Column(
                                         children: [
-                                          ListView.builder(
+                                          ListView.separated(
                                             physics:
                                                 NeverScrollableScrollPhysics(),
                                             shrinkWrap: true,
@@ -301,19 +306,23 @@ class _StorePageState extends State<StorePage> {
                                             itemBuilder: (context, index) {
                                               return Container(
                                                 padding:
-                                                    EdgeInsets.only(bottom: 10),
+                                                    EdgeInsets.fromLTRB(0, 10, 0, 10),
                                                 child: Row(
+                                                  mainAxisSize: MainAxisSize.min,
                                                   mainAxisAlignment:
                                                       MainAxisAlignment
                                                           .spaceBetween,
                                                   children: [
-                                                    showDateTime(
-                                                        index,
-                                                        dateTimeNotifier
-                                                                .dateTimeList[
-                                                            index]),
+                                                    Expanded(
+                                                      child: showDateTime(
+                                                          index,
+                                                          dateTimeNotifier
+                                                                  .dateTimeList[
+                                                              index]),
+                                                    ),
                                                     Container(
-                                                      child: Text(
+                                                      alignment: Alignment.topRight,
+                                                      child: AutoSizeText(
                                                         dateTimeNotifier
                                                                 .dateTimeList[
                                                                     index]
@@ -325,12 +334,17 @@ class _StorePageState extends State<StorePage> {
                                                                 .closeTime,
                                                         style: FontCollection
                                                             .bodyTextStyle,
+                                                        maxLines: 2,
                                                       ),
                                                     ),
                                                   ],
                                                 ),
                                               );
+
                                             },
+                                           separatorBuilder: (context, index) {
+                                             return Divider(color: Colors.grey);
+                                           },
                                           )
                                         ],
                                       ),

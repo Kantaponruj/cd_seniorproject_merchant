@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cs_senior_project_merchant/asset/text_style.dart';
 import 'package:cs_senior_project_merchant/component/roundAppBar.dart';
 import 'package:cs_senior_project_merchant/models/dateTime.dart';
@@ -95,14 +96,18 @@ class _OpeningHoursPageState extends State<OpeningHoursPage> {
 
         return Container(
           child: textCase == 1
-              ? Text(
+              ? AutoSizeText(
                   daysArr[0] + " - " + daysArr[daysArr.length - 1],
                   style: FontCollection.bodyTextStyle,
+            maxLines: 2,
                 )
               : Row(
                   children: [
-                    Text(daysArr.join(', '),
-                        style: FontCollection.bodyTextStyle)
+                    Expanded(
+                      child: Text(daysArr.join(', '),
+                          style: FontCollection.bodyTextStyle,
+                        maxLines: 2,),
+                    )
                   ],
                 ),
         );
@@ -126,6 +131,7 @@ class _OpeningHoursPageState extends State<OpeningHoursPage> {
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
             Container(
               alignment: Alignment.centerLeft,
@@ -138,7 +144,7 @@ class _OpeningHoursPageState extends State<OpeningHoursPage> {
               padding: const EdgeInsets.all(10.0),
               child: Divider(),
             ),
-            ListView.builder(
+            ListView.separated(
               physics: NeverScrollableScrollPhysics(),
               shrinkWrap: true,
               itemCount: dateTimeNotifier.dateTimeList.length,
@@ -148,17 +154,18 @@ class _OpeningHoursPageState extends State<OpeningHoursPage> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      showDateTime(index, dateTimeNotifier.dateTimeList[index]),
-                      Container(
+                      Expanded(child: showDateTime(index, dateTimeNotifier.dateTimeList[index])),
+                      Expanded(
                         child: Row(
                           children: [
-                            Container(
-                              child: Text(
+                            Expanded(
+                              child: AutoSizeText(
                                 dateTimeNotifier.dateTimeList[index].openTime +
                                     " - " +
                                     dateTimeNotifier
                                         .dateTimeList[index].closeTime,
                                 style: FontCollection.bodyTextStyle,
+                                maxLines: 2,
                               ),
                             ),
                             GestureDetector(
@@ -190,6 +197,9 @@ class _OpeningHoursPageState extends State<OpeningHoursPage> {
                     ],
                   ),
                 );
+              },
+              separatorBuilder: (context, index) {
+                return Divider(color: Colors.grey);
               },
             )
           ],
