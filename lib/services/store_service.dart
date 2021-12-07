@@ -7,7 +7,6 @@ import 'package:cs_senior_project_merchant/models/dateTime.dart';
 import 'package:cs_senior_project_merchant/models/store.dart';
 import 'package:cs_senior_project_merchant/notifiers/address_notifier.dart';
 import 'package:cs_senior_project_merchant/notifiers/dateTime_notifier.dart';
-import 'package:cs_senior_project_merchant/screens/store/edit_address.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:uuid/uuid.dart';
 import 'package:path/path.dart' as path;
@@ -102,6 +101,7 @@ updateImageStore(String storeId, File localFile) async {
 addDateAndTime(
   DateTimeModel dateTime,
   String storeId,
+  bool isUpdating,
   Function onSaveDateTime,
 ) async {
   CollectionReference storeRef = firebaseFirestore
@@ -109,10 +109,25 @@ addDateAndTime(
       .doc(storeId)
       .collection('openingHours');
 
-  DocumentReference documentRef = await storeRef.add(dateTime.toMap());
-  await documentRef.set(dateTime.toMap(), SetOptions(merge: true));
-
+  if (isUpdating) {
+    await storeRef.doc(dateTime.docId).update(dateTime.toMap());
+  } else {
+    DocumentReference documentRef = await storeRef.add(dateTime.toMap());
+    dateTime.docId = documentRef.id;
+    await documentRef.set(dateTime.toMap(), SetOptions(merge: true));
+  }
   onSaveDateTime(dateTime);
+}
+
+deleteDateAndTime(DateTimeModel dateTime, String storeId, Function onDeleted) {
+  firebaseFirestore
+      .collection('stores')
+      .doc(storeId)
+      .collection('openingHours')
+      .doc(dateTime.docId)
+      .delete();
+
+  onDeleted(dateTime);
 }
 
 Future<void> getDateAndTime(

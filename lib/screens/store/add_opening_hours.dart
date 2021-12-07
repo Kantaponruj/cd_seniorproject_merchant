@@ -38,23 +38,69 @@ class _AddOpeningHoursState extends State<AddOpeningHours> {
   String _openTime;
   String _closeTime;
 
+  TimeOfDay openTime;
+  TimeOfDay closedTime;
+
   @override
   void initState() {
     DateTimeNotifier dateTimeNotifier =
         Provider.of<DateTimeNotifier>(context, listen: false);
+    if (widget.isEdit) {
+      _selectedDateTime = dateTimeNotifier.currentDateTime;
+    } else {
+      _selectedDateTime = DateTimeModel();
+    }
 
-    _selectedDateTime = DateTimeModel();
+    _dates = _selectedDateTime.dates;
+    _openTime = _selectedDateTime.openTime;
+    _closeTime = _selectedDateTime.closeTime;
 
-    getDateAndTime(dateTimeNotifier, widget.storeId);
+    _selectedDateTime.dates.forEach((date) {
+      for (int i = 0; i < _isSelected.length; i++) {
+        if (date == i) {
+          _isSelected[i] = true;
+        }
+      }
+    });
+
+    openTime = widget.isEdit
+        ? TimeOfDay(
+            hour: int.parse(_selectedDateTime.openTime.characters
+                .getRange(0, 2)
+                .toString()),
+            minute: int.parse(_selectedDateTime.openTime.characters
+                .getRange(3, 5)
+                .toString()))
+        : null;
+    closedTime = widget.isEdit
+        ? TimeOfDay(
+            hour: int.parse(_selectedDateTime.closeTime.characters
+                .getRange(0, 2)
+                .toString()),
+            minute: int.parse(_selectedDateTime.closeTime.characters
+                .getRange(3, 5)
+                .toString()))
+        : null;
     super.initState();
   }
 
   _onSaveDateTime(DateTimeModel dateTime) {
     DateTimeNotifier dateTimeNotifier =
         Provider.of<DateTimeNotifier>(context, listen: false);
-    dateTimeNotifier.addDateTime(
-        dateTime, dateTimeNotifier.dateTimeList.length);
+    if (!widget.isEdit) {
+      dateTimeNotifier.addDateTime(
+          dateTime, dateTimeNotifier.dateTimeList.length);
+    }
     Navigator.pop(context);
+    getDateAndTime(dateTimeNotifier, widget.storeId);
+  }
+
+  _onDeleteDateTime(DateTimeModel dateTime) {
+    DateTimeNotifier dateTimeNotifier =
+        Provider.of<DateTimeNotifier>(context, listen: false);
+    dateTimeNotifier.deleteDateAndTime(dateTime);
+    Navigator.pop(context);
+    getDateAndTime(dateTimeNotifier, widget.storeId);
   }
 
   _handleSaveDateTime(String storeId) {
@@ -62,7 +108,11 @@ class _AddOpeningHoursState extends State<AddOpeningHours> {
     _selectedDateTime.closeTime = _closeTime;
     _selectedDateTime.dates = _dates;
 
-    addDateAndTime(_selectedDateTime, storeId, _onSaveDateTime);
+    if (widget.isEdit) {
+      addDateAndTime(_selectedDateTime, storeId, true, _onSaveDateTime);
+    } else {
+      addDateAndTime(_selectedDateTime, storeId, false, _onSaveDateTime);
+    }
   }
 
   @override
@@ -78,17 +128,23 @@ class _AddOpeningHoursState extends State<AddOpeningHours> {
           mainAxisSize: MainAxisSize.min,
           children: [
             widget.isEdit
-                ? Container(
-                    margin: EdgeInsets.fromLTRB(0, 20, 0, 20),
-                    alignment: Alignment.topRight,
-                    child: Text(
-                      'ลบรายการนี้',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.grey,
-                        decoration: TextDecoration.underline,
+                ? GestureDetector(
+                    child: Container(
+                      margin: EdgeInsets.fromLTRB(0, 20, 0, 20),
+                      alignment: Alignment.topRight,
+                      child: Text(
+                        'ลบรายการนี้',
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.grey,
+                          decoration: TextDecoration.underline,
+                        ),
                       ),
                     ),
+                    onTap: () {
+                      deleteDateAndTime(
+                          _selectedDateTime, widget.storeId, _onDeleteDateTime);
+                    },
                   )
                 : SizedBox.shrink(),
             Container(
@@ -239,7 +295,14 @@ class _AddOpeningHoursState extends State<AddOpeningHours> {
         onSelected: (bool selected) {
           setState(() {
             _isSelected[i] = selected;
-            _dates.add(i);
+            print(_isSelected);
+            if (selected) {
+              _dates.add(i);
+            } else {
+              _dates.removeWhere((date) => date == i);
+              print(_dates);
+            }
+            _dates.sort();
             setState(() {});
           });
         },
@@ -254,9 +317,6 @@ class _AddOpeningHoursState extends State<AddOpeningHours> {
       children: chips,
     );
   }
-
-  TimeOfDay openTime;
-  TimeOfDay closedTime;
 
   String getText(String whatTime) {
     TimeOfDay time;

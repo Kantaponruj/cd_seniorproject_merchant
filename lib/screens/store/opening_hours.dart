@@ -156,12 +156,15 @@ class _OpeningHoursPageState extends State<OpeningHoursPage> {
                               child: Text(
                                 dateTimeNotifier.dateTimeList[index].openTime +
                                     " - " +
-                                    dateTimeNotifier.dateTimeList[index].closeTime,
+                                    dateTimeNotifier
+                                        .dateTimeList[index].closeTime,
                                 style: FontCollection.bodyTextStyle,
                               ),
                             ),
                             GestureDetector(
                               onTap: () {
+                                dateTimeNotifier.currentDateTime =
+                                    dateTimeNotifier.dateTimeList[index];
                                 showDialog(
                                   barrierDismissible: false,
                                   context: context,
@@ -175,7 +178,10 @@ class _OpeningHoursPageState extends State<OpeningHoursPage> {
                               },
                               child: Container(
                                 padding: EdgeInsets.only(left: 15),
-                                child: Icon(Icons.edit, color: Colors.grey,),
+                                child: Icon(
+                                  Icons.edit,
+                                  color: Colors.grey,
+                                ),
                               ),
                             ),
                           ],
