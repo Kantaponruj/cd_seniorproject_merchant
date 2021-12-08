@@ -92,6 +92,8 @@ flutter:
     - assets/images/house-marker-icon.png
     - assets/images/restaurant-marker-icon.png
     - assets/images/driver-marker-icon.png
+    - assets/images/marker_foodstall.png
+    - assets/images/marker_foodtruck.png
     - assets/images/stalltruckr_merchant_logo.png
     - assets/images/default-photo.png
 

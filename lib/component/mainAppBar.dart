@@ -60,10 +60,10 @@ class _MainAppbarState extends State<MainAppbar>
             ),
             IconButton(
               onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => StorePage()));
+                // Navigator.push(
+                //     context,
+                //     MaterialPageRoute(
+                //         builder: (context) => StorePage()));
               },
               icon: Icon(
                 Icons.history,
