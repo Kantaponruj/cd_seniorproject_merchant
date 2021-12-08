@@ -322,6 +322,7 @@ class _AddMenuPageState extends State<AddMenuPage> {
                 'ชื่อรายการอาหาร',
                 null,
                 _currentMenu.name,
+                'กรอกชื่อรายการ',
                 (String value) {
                   _currentMenu.name = value;
                 },
@@ -333,6 +334,7 @@ class _AddMenuPageState extends State<AddMenuPage> {
                 'รายละเอียด',
                 null,
                 _currentMenu.description,
+                'กรอกรายละเอียด',
                 (String value) {
                   _currentMenu.description = value;
                 },
@@ -345,6 +347,7 @@ class _AddMenuPageState extends State<AddMenuPage> {
                 (String value) {
                   _currentMenu.price = value;
                 },
+                'ราคา',
               ),
             ),
             Container(
@@ -409,7 +412,7 @@ class _AddMenuPageState extends State<AddMenuPage> {
   }
 
   Widget buildTextField(String headerText, TextEditingController controller,
-      String initialValue, Function onSaved) {
+      String initialValue, String hintText, Function onSaved) {
     return Container(
       child: Column(
         children: [
@@ -421,13 +424,10 @@ class _AddMenuPageState extends State<AddMenuPage> {
               style: FontCollection.bodyTextStyle,
             ),
           ),
-          TextFormField(
+          BuildPlainTextField(
             initialValue: initialValue,
-            controller: controller,
-            decoration: InputDecoration(
-              border:
-                  OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-            ),
+            textEditingController: controller,
+            hintText: hintText,
             onSaved: onSaved,
           ),
         ],
@@ -462,7 +462,7 @@ class _AddMenuPageState extends State<AddMenuPage> {
     );
   }
 
-  Widget buildPrice(String initialValue, Function onSaved, {String hintText}) {
+  Widget buildPrice(String initialValue, Function onSaved, String hintText) {
     return Row(
       children: [
         Container(
@@ -475,13 +475,9 @@ class _AddMenuPageState extends State<AddMenuPage> {
         ),
         SizedBox(
           width: 100,
-          child: TextFormField(
+          child: BuildPlainTextField(
             initialValue: initialValue,
-            decoration: InputDecoration(
-              hintText: hintText,
-              border:
-                  OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-            ),
+            hintText: hintText,
             onSaved: onSaved,
           ),
         ),
@@ -621,6 +617,7 @@ class _AddMenuPageState extends State<AddMenuPage> {
                 'ชื่อตัวเลือก',
                 toppingName,
                 null,
+                'กรอกชื่อตัวเลือก',
                 (String value) {},
               ),
             ),
@@ -630,6 +627,7 @@ class _AddMenuPageState extends State<AddMenuPage> {
                 'รายละเอียด',
                 toppingDetail,
                 null,
+                'กรอกรายละเอียด',
                 (String value) {},
               ),
             ),

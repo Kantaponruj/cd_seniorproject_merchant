@@ -33,18 +33,50 @@ class _IndividualMapPageState extends State<IndividualMapPage> {
     OrderNotifier order = Provider.of<OrderNotifier>(context);
 
     return Scaffold(
-      floatingActionButtonLocation: FloatingActionButtonLocation.startTop,
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.transparent,
+      appBar: AppBar(
+        backgroundColor: Colors.white,
         elevation: 0,
-        onPressed: () {
-          Navigator.of(context).pop();
-        },
-        child: Icon(
-          Icons.arrow_back,
-          color: Colors.black,
+        toolbarHeight: 80,
+        iconTheme: IconThemeData(
+          color: Colors.black, //change your color here
+        ),
+        title: Row(
+          children: [
+            Container(
+              child: Text(
+                'ระยะทาง ${order.distance} กม.',
+                style: FontCollection.bodyTextStyle,
+              ),
+            ),
+            Container(
+                child: Text(
+              ' ${order.arrivableTime}นาที',
+              style: FontCollection.bodyTextStyle,
+            )),
+          ],
         ),
       ),
+      // floatingActionButtonLocation: FloatingActionButtonLocation.startTop,
+      // floatingActionButton: FloatingActionButton(
+      //   backgroundColor: Colors.transparent,
+      //   elevation: 0,
+      //   onPressed: () {
+      //     Navigator.of(context).pop();
+      //   },
+      //   child: Icon(
+      //     Icons.arrow_back,
+      //     color: Colors.black,
+      //   ),
+      // ),
+      // appBar: AppBar(
+      //   title: Row(
+      //     children: [
+      //       Container(
+      //         child: Text('เวลาที่ใช้ในการส่งอาหาร ${order.arrivableTime}นาที'),
+      //       ),
+      //     ],
+      //   ),
+      // ),
       body: Stack(
         // fit: StackFit.expand,
         children: [
@@ -88,16 +120,18 @@ class _IndividualMapPageState extends State<IndividualMapPage> {
     String orderStatus = 'จัดส่งเรียบร้อยแล้ว';
 
     return Scaffold(
+      extendBodyBehindAppBar: false,
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
         automaticallyImplyLeading: false,
-        toolbarHeight: 80,
+        toolbarHeight: 100,
         elevation: 0,
         title: Container(
           child: Column(
             children: [
               Container(
+                padding: EdgeInsets.only(top: 20),
                 alignment: Alignment.topCenter,
                 child: buildDragHandle(),
               ),
@@ -113,112 +147,114 @@ class _IndividualMapPageState extends State<IndividualMapPage> {
           ),
         ),
       ),
-      body: Container(
-        margin: EdgeInsets.fromLTRB(30, 0, 30, 20),
-        child: Column(
-          children: [
-            Text('เวลาที่ใช้ในการส่งอาหาร ${order.arrivableTime}นาที'),
-            Text('ระยะทาง ${order.distance} กม.'),
-            Container(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  buildIconText(
-                    Icons.access_time,
-                    '${widget.order['timeOrdered']} น.',
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (BuildContext context) => OrderDetailPage(
-                            storeId: storeNotifier.store.storeId,
-                            order: widget.order,
-                            isConfirm: true,
+      body: SingleChildScrollView(
+        child: Container(
+          margin: EdgeInsets.fromLTRB(30, 0, 30, 20),
+          child: Column(
+            children: [
+              Container(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    buildIconText(
+                      Icons.access_time,
+                      '${widget.order['timeOrdered']} น.',
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (BuildContext context) => OrderDetailPage(
+                              storeId: storeNotifier.store.storeId,
+                              order: widget.order,
+                              isConfirm: true,
+                            ),
                           ),
-                        ),
-                      );
-                    },
-                    child: Text(
-                      'รายละเอียดคำสั่งซื้อ',
-                      style: FontCollection.underlineButtonTextStyle,
+                        );
+                      },
+                      child: Text(
+                        'รายละเอียดคำสั่งซื้อ',
+                        style: FontCollection.underlineButtonTextStyle,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            customerInfo(),
-            Container(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    child: Text(
-                      'ราคารวม',
-                      style: FontCollection.topicTextStyle,
+              customerInfo(),
+              Container(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      child: Text(
+                        'ราคารวม',
+                        style: FontCollection.topicTextStyle,
+                      ),
                     ),
-                  ),
-                  Container(
-                    child: Text(
-                      '${widget.order['netPrice']} บาท',
-                      style: FontCollection.topicTextStyle,
+                    Container(
+                      child: Text(
+                        '${widget.order['netPrice']} บาท',
+                        style: FontCollection.topicTextStyle,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            Container(
-              padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
-              child: StadiumButtonWidget(
-                text: 'จัดส่งเรียบร้อยแล้ว',
-                onClicked: () {
-                  setState(() {
-                    // _orderDetail.documentId = widget.order['documentId'];
-                    _orderDetail.orderId = widget.order['orderId'];
-                    _orderDetail.customerId = widget.order['customerId'];
-                    _orderDetail.customerName = widget.order['customerName'];
-                    _orderDetail.phone = widget.order['phone'];
-                    _orderDetail.address = widget.order['address'];
-                    _orderDetail.addressDetail = widget.order['addressDetail'];
-                    _orderDetail.message = widget.order['message'];
-                    _orderDetail.netPrice = widget.order['netPrice'];
-                    _orderDetail.dateOrdered = widget.order['dateOrdered'];
-                    _orderDetail.timeOrdered = widget.order['timeOrdered'];
-                    _orderDetail.startWaitingTime =
-                        widget.order['startWaitingTime'];
-                    _orderDetail.endWaitingTime =
-                        widget.order['endWaitingTime'];
-                    _orderDetail.amountOfMenu = widget.order['amountOfMenu'];
-                    _orderDetail.geoPoint = widget.order['geoPoint'];
-                    _orderDetail.typeOrder = widget.order['typeOrder'];
-                  });
+              Container(
+                padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
+                child: StadiumButtonWidget(
+                  text: 'จัดส่งเรียบร้อยแล้ว',
+                  onClicked: () {
+                    setState(() {
+                      // _orderDetail.documentId = widget.order['documentId'];
+                      _orderDetail.orderId = widget.order['orderId'];
+                      _orderDetail.customerId = widget.order['customerId'];
+                      _orderDetail.customerName = widget.order['customerName'];
+                      _orderDetail.phone = widget.order['phone'];
+                      _orderDetail.address = widget.order['address'];
+                      _orderDetail.addressDetail =
+                          widget.order['addressDetail'];
+                      _orderDetail.message = widget.order['message'];
+                      _orderDetail.netPrice = widget.order['netPrice'];
+                      _orderDetail.dateOrdered = widget.order['dateOrdered'];
+                      _orderDetail.timeOrdered = widget.order['timeOrdered'];
+                      _orderDetail.startWaitingTime =
+                          widget.order['startWaitingTime'];
+                      _orderDetail.endWaitingTime =
+                          widget.order['endWaitingTime'];
+                      _orderDetail.amountOfMenu = widget.order['amountOfMenu'];
+                      _orderDetail.geoPoint = widget.order['geoPoint'];
+                      _orderDetail.typeOrder = widget.order['typeOrder'];
+                    });
 
-                  updateStatusOrder(
-                    widget.order['customerId'],
-                    widget.order['storeId'],
-                    widget.order['orderId'],
-                    widget.order['documentId'],
-                    orderStatus,
-                  );
+                    updateStatusOrder(
+                      widget.order['customerId'],
+                      widget.order['storeId'],
+                      widget.order['orderId'],
+                      widget.order['documentId'],
+                      orderStatus,
+                    );
 
-                  saveOrderToHistory(storeNotifier.store.storeId, _orderDetail);
-                  saveOrderMenuToHistory(
-                    storeNotifier.store.storeId,
-                    widget.orderMenu,
-                  );
-                  completedOrder(
-                    storeNotifier.store.storeId,
-                    widget.order['documentId'],
-                  );
+                    saveOrderToHistory(
+                        storeNotifier.store.storeId, _orderDetail);
+                    saveOrderMenuToHistory(
+                      storeNotifier.store.storeId,
+                      widget.orderMenu,
+                    );
+                    completedOrder(
+                      storeNotifier.store.storeId,
+                      widget.order['documentId'],
+                    );
 
-                  Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(builder: (context) => MainBottombar()),
-                    (route) => false,
-                  );
-                },
+                    Navigator.of(context).pushAndRemoveUntil(
+                      MaterialPageRoute(builder: (context) => MainBottombar()),
+                      (route) => false,
+                    );
+                  },
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

@@ -127,6 +127,7 @@ class _MenuPageState extends State<MenuPage> {
 
   Widget gridView(String categoryName) {
     MenuNotfier menuNotfier = Provider.of<MenuNotfier>(context);
+
     List<dynamic> menuCategory = [];
 
     menuNotfier.menuList.forEach((menu) {
@@ -177,11 +178,27 @@ class _MenuPageState extends State<MenuPage> {
                   height: 150,
                   width: 150,
                   child: SizedBox(
-                    child: Image.network(
-                      menu.image != null
-                          ? menu.image
-                          : 'https://www.testingxperts.com/wp-content/uploads/2019/02/placeholder-img.jpg',
+                    child: menu.image != null
+                        ? Image.network(
+                      menu.image,
+                      errorBuilder: (BuildContext context,
+                          Object exception, StackTrace stackTrace) {
+                        return Image.asset(
+                          'assets/images/default-photo.png',
+                          fit: BoxFit.cover,
+                          width: double.infinity,
+                          height: double.infinity,
+                        );
+                      },
                       fit: BoxFit.cover,
+                      width: double.infinity,
+                      height: double.infinity,
+                    )
+                        : Image.asset(
+                      'assets/images/default-photo.png',
+                      fit: BoxFit.cover,
+                      width: double.infinity,
+                      height: double.infinity,
                     ),
                   ),
                 ),

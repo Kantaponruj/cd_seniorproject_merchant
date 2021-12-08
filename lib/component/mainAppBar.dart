@@ -44,6 +44,9 @@ class _MainAppbarState extends State<MainAppbar>
           toolbarHeight: 120,
           backgroundColor: CollectionsColors.white,
           elevation: 0,
+          iconTheme: IconThemeData(
+            color: Colors.black, //change your color here
+          ),
           title: titleText(),
           actions: [
             IconButton(
@@ -58,18 +61,18 @@ class _MainAppbarState extends State<MainAppbar>
                 color: Colors.black,
               ),
             ),
-            IconButton(
-              onPressed: () {
-                // Navigator.push(
-                //     context,
-                //     MaterialPageRoute(
-                //         builder: (context) => StorePage()));
-              },
-              icon: Icon(
-                Icons.history,
-                color: Colors.black,
-              ),
-            ),
+            // IconButton(
+            //   onPressed: () {
+            //     // Navigator.push(
+            //     //     context,
+            //     //     MaterialPageRoute(
+            //     //         builder: (context) => StorePage()));
+            //   },
+            //   icon: Icon(
+            //     Icons.history,
+            //     color: Colors.black,
+            //   ),
+            // ),
           ],
           // flexibleSpace: Container(
           //   height: 400,

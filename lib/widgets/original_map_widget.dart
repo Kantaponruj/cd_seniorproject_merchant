@@ -135,6 +135,12 @@ class _OriginalMapWidgetState extends State<OriginalMapWidget> {
           infoWindow: InfoWindow(
             title: orderNotifier.orderList[index]['customerName'],
             snippet: orderNotifier.orderList[index]['address'],
+            onTap: () {
+              _openOnGoogleMapApp(
+                orderNotifier.orderList[index]['geoPoint'].latitude,
+                orderNotifier.orderList[index]['geoPoint'].longitude,
+              );
+            },
           ),
           onTap: () {
             polylineCoordinates.clear();
@@ -154,7 +160,7 @@ class _OriginalMapWidgetState extends State<OriginalMapWidget> {
         children: [
           Container(
             child: GoogleMap(
-              padding: EdgeInsets.only(bottom: 20,top: 100),
+              padding: EdgeInsets.only(bottom: 20, top: 100),
               myLocationEnabled: true,
               polylines: _polylines,
               initialCameraPosition: CameraPosition(
