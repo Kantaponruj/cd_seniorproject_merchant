@@ -4,10 +4,13 @@ import 'package:cs_senior_project_merchant/notifiers/location_notifier.dart';
 import 'package:cs_senior_project_merchant/widgets/loading_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_place_picker/google_maps_place_picker.dart';
+import 'package:google_maps_widget/google_maps_widget.dart';
 import 'package:provider/provider.dart';
 
 class SelectAddress extends StatefulWidget {
-  const SelectAddress({Key key}) : super(key: key);
+  const SelectAddress({Key key, @required this.isUpdating}) : super(key: key);
+
+  final bool isUpdating;
 
   @override
   _SelectAddressState createState() => _SelectAddressState();
@@ -48,7 +51,20 @@ class _SelectAddressState extends State<SelectAddress> {
                       onPlacePicked: (selectedPlace) {
                         location.currentAddress =
                             selectedPlace.formattedAddress;
+                        location.newPosition = LatLng(
+                          selectedPlace.geometry.location.lat,
+                          selectedPlace.geometry.location.lng,
+                        );
+
+                        if (widget.isUpdating) {
+                          location.newAddress = selectedPlace.formattedAddress;
+                        }
+
                         Navigator.pop(context);
+                        print(LatLng(
+                          selectedPlace.geometry.location.lat,
+                          selectedPlace.geometry.location.lng,
+                        ));
                       },
                       autocompleteLanguage: 'TH',
                     ),

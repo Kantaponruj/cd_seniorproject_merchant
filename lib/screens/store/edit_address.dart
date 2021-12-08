@@ -8,7 +8,6 @@ import 'package:cs_senior_project_merchant/models/address.dart';
 import 'package:cs_senior_project_merchant/notifiers/address_notifier.dart';
 import 'package:cs_senior_project_merchant/notifiers/location_notifier.dart';
 import 'package:cs_senior_project_merchant/notifiers/store_notifier.dart';
-import 'package:cs_senior_project_merchant/screens/store/address.dart';
 import 'package:cs_senior_project_merchant/screens/store/select_address.dart';
 import 'package:cs_senior_project_merchant/services/store_service.dart';
 import 'package:cs_senior_project_merchant/widgets/button_widget.dart';
@@ -24,14 +23,15 @@ class EditAddress extends StatefulWidget {
 
 class _EditAddressState extends State<EditAddress> {
   Address _currentAddress;
-  TextEditingController addressName = new TextEditingController();
-  TextEditingController addressDetail = new TextEditingController();
 
   @override
   void initState() {
+    LocationNotifier location =
+        Provider.of<LocationNotifier>(context, listen: false);
     AddressNotifier address =
         Provider.of<AddressNotifier>(context, listen: false);
     _currentAddress = address.currentAddress;
+    location.resetNewPosition();
     super.initState();
   }
 
@@ -40,19 +40,20 @@ class _EditAddressState extends State<EditAddress> {
     LocationNotifier location =
         Provider.of<LocationNotifier>(context, listen: false);
 
-    _currentAddress.geoPoint = GeoPoint(
-      location.currentPosition.latitude,
-      location.currentPosition.longitude,
-    );
+    if (location.newAddress != '') {
+      _currentAddress.address = location.newAddress;
+      _currentAddress.geoPoint = GeoPoint(
+          location.newPosition.latitude, location.newPosition.longitude);
+    }
 
     saveAddress(_currentAddress, store.store.storeId, true);
+    location.resetNewPosition();
     Navigator.pop(context);
   }
 
   int count;
 
-  _deleteFood(Address address) {
-    StoreNotifier store = Provider.of<StoreNotifier>(context, listen: false);
+  _deleteAddress(Address address) {
     AddressNotifier addressNotifier =
         Provider.of<AddressNotifier>(context, listen: false);
     addressNotifier.deleteAddress(address);
@@ -64,7 +65,8 @@ class _EditAddressState extends State<EditAddress> {
 
   @override
   Widget build(BuildContext context) {
-    StoreNotifier store = Provider.of<StoreNotifier>(context, listen: false);
+    StoreNotifier store = Provider.of<StoreNotifier>(context);
+    LocationNotifier location = Provider.of<LocationNotifier>(context);
 
     return Scaffold(
       appBar: RoundedAppBar(
@@ -90,7 +92,8 @@ class _EditAddressState extends State<EditAddress> {
                             onPressed: () {
                               Navigator.of(context).push(
                                 MaterialPageRoute(
-                                  builder: (context) => SelectAddress(),
+                                  builder: (context) =>
+                                      SelectAddress(isUpdating: true),
                                 ),
                               );
                             },
@@ -111,7 +114,11 @@ class _EditAddressState extends State<EditAddress> {
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20),
                             color: CollectionsColors.grey),
-                        child: Text(_currentAddress.address),
+                        child: Text(
+                          location.newAddress != ''
+                              ? location.newAddress
+                              : _currentAddress.address,
+                        ),
                       ),
                       Container(
                         child: buildTextFormField(
@@ -200,7 +207,7 @@ class _EditAddressState extends State<EditAddress> {
                                         deleteAddress(
                                           _currentAddress,
                                           store.store.storeId,
-                                          _deleteFood,
+                                          _deleteAddress,
                                         );
                                       },
                                     ),

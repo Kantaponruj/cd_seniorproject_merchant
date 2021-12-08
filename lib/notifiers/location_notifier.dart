@@ -7,6 +7,8 @@ class LocationNotifier with ChangeNotifier {
   Geolocator geolocator = Geolocator();
   Position _currentPosition;
   String _currentAddress;
+  LatLng _newPosition = LatLng(0, 0);
+  String _newAddress = '';
 
   Map<MarkerId, Marker> _marker;
   final MarkerId markerIdUser = MarkerId("userLocation");
@@ -18,6 +20,8 @@ class LocationNotifier with ChangeNotifier {
   LatLng get initialPosition => _initialPosition;
   Position get currentPosition => _currentPosition;
   String get currentAddress => _currentAddress;
+  LatLng get newPosition => _newPosition;
+  String get newAddress => _newAddress;
   Map<MarkerId, Marker> get marker => _marker;
   Set<Marker> get markers => _markers;
 
@@ -32,6 +36,21 @@ class LocationNotifier with ChangeNotifier {
   set currentAddress(String address) {
     _currentAddress = address;
     notifyListeners();
+  }
+
+  set newPosition(LatLng position) {
+    _newPosition = position;
+    notifyListeners();
+  }
+
+  set newAddress(String address) {
+    _newAddress = address;
+    notifyListeners();
+  }
+
+  resetNewPosition() {
+    _newPosition = LatLng(0, 0);
+    _newAddress = '';
   }
 
   Future<Position> _determinePosition() async {

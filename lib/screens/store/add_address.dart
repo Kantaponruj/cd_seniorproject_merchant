@@ -12,6 +12,7 @@ import 'package:cs_senior_project_merchant/screens/store/select_address.dart';
 import 'package:cs_senior_project_merchant/widgets/button_widget.dart';
 import 'package:cs_senior_project_merchant/services/store_service.dart';
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
 class AddAddress extends StatefulWidget {
@@ -29,6 +30,10 @@ class _AddAddressState extends State<AddAddress> {
 
   @override
   void initState() {
+    LocationNotifier location =
+        Provider.of<LocationNotifier>(context, listen: false);
+    location.initialization();
+    location.resetNewPosition();
     _currentAddress = Address();
     super.initState();
   }
@@ -44,14 +49,18 @@ class _AddAddressState extends State<AddAddress> {
     StoreNotifier store = Provider.of<StoreNotifier>(context, listen: false);
 
     _currentAddress.address = locationNotifier.currentAddress;
-    _currentAddress.geoPoint = GeoPoint(
-        locationNotifier.currentPosition.latitude,
-        locationNotifier.currentPosition.longitude);
+    _currentAddress.geoPoint = locationNotifier.newPosition != LatLng(0, 0)
+        ? GeoPoint(locationNotifier.newPosition.latitude,
+            locationNotifier.newPosition.longitude)
+        : GeoPoint(locationNotifier.currentPosition.latitude,
+            locationNotifier.currentPosition.longitude);
     _currentAddress.addressName = addressName.text.trim();
     _currentAddress.addressDetail = addressDetail.text.trim();
 
     saveAddress(_currentAddress, store.store.storeId, false,
         addAddress: _onAddAddress);
+
+    locationNotifier.resetNewPosition();
   }
 
   @override
@@ -82,7 +91,8 @@ class _AddAddressState extends State<AddAddress> {
                             onPressed: () {
                               Navigator.of(context).push(
                                 MaterialPageRoute(
-                                  builder: (context) => SelectAddress(),
+                                  builder: (context) =>
+                                      SelectAddress(isUpdating: false),
                                 ),
                               );
                             },
