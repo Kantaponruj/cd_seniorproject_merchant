@@ -2,6 +2,7 @@ import 'package:cs_senior_project_merchant/asset/color.dart';
 import 'package:cs_senior_project_merchant/asset/text_style.dart';
 import 'package:cs_senior_project_merchant/component/bottomBar.dart';
 import 'package:cs_senior_project_merchant/models/order.dart';
+import 'package:cs_senior_project_merchant/notifiers/order_notifier.dart';
 import 'package:cs_senior_project_merchant/notifiers/store_notifier.dart';
 import 'package:cs_senior_project_merchant/screens/order/orderDetail.dart';
 import 'package:cs_senior_project_merchant/widgets/button_widget.dart';
@@ -29,6 +30,8 @@ class _IndividualMapPageState extends State<IndividualMapPage> {
 
   @override
   Widget build(BuildContext context) {
+    OrderNotifier order = Provider.of<OrderNotifier>(context);
+
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.startTop,
       floatingActionButton: FloatingActionButton(
@@ -52,10 +55,7 @@ class _IndividualMapPageState extends State<IndividualMapPage> {
             maxHeight: 420,
             panelBuilder: (scrollController) => ClipRRect(
               borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
-              child: buildSlidingPanel(
-                // scrollController: scrollController,
-                // panelController: panelController,
-              ),
+              child: buildSlidingPanel(order),
             ),
             body: Padding(
               padding: EdgeInsets.fromLTRB(0, 0, 0, 80),
@@ -83,10 +83,7 @@ class _IndividualMapPageState extends State<IndividualMapPage> {
         ),
       );
 
-  Widget buildSlidingPanel(
-    // @required PanelController panelController,
-    // @required ScrollController scrollController,
-  ) {
+  Widget buildSlidingPanel(OrderNotifier order) {
     StoreNotifier storeNotifier = Provider.of<StoreNotifier>(context);
     String orderStatus = 'จัดส่งเรียบร้อยแล้ว';
 
@@ -120,6 +117,8 @@ class _IndividualMapPageState extends State<IndividualMapPage> {
         margin: EdgeInsets.fromLTRB(30, 0, 30, 20),
         child: Column(
           children: [
+            Text('เวลาที่ใช้ในการส่งอาหาร ${order.arrivableTime}นาที'),
+            Text('ระยะทาง ${order.distance} กม.'),
             Container(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,

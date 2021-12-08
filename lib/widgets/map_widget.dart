@@ -1,5 +1,6 @@
 import 'package:cs_senior_project_merchant/asset/color.dart';
 import 'package:cs_senior_project_merchant/asset/constant.dart';
+import 'package:cs_senior_project_merchant/notifiers/order_notifier.dart';
 import 'package:cs_senior_project_merchant/notifiers/store_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
@@ -61,7 +62,9 @@ class _MapWidgetState extends State<MapWidget> {
 
   @override
   Widget build(BuildContext context) {
+    OrderNotifier order = Provider.of<OrderNotifier>(context);
     StoreNotifier store = Provider.of<StoreNotifier>(context);
+
     final routeColor = CollectionsColors.navy;
     final routeWidth = 5;
     final storeName = "จุดเริ่มต้น";
@@ -90,23 +93,14 @@ class _MapWidgetState extends State<MapWidget> {
             ),
             sourceName: storeName,
             destinationName: customerName,
-            totalTimeCallback: (time) => print(time),
-            totalDistanceCallback: (distance) => print(distance),
-            // showPolyline: false,
-            // polylines: _polylines,
-            // onMapCreated: (GoogleMapController controller) {
-            //   mapController = controller;
-            //   setPolylines(
-            //     LatLng(
-            //       double.parse(widget.order['geoPoint'].latitude.toString()),
-            //       double.parse(widget.order['geoPoint'].longitude.toString()),
-            //     ),
-            //     LatLng(
-            //       store.store.realtimeLocation.latitude,
-            //       store.store.realtimeLocation.longitude,
-            //     ),
-            //   );
-            // },
+            totalTimeCallback: (time) {
+              String estimateTime = time.substring(0, 2);
+              order.getArrivableTime(estimateTime);
+            },
+            totalDistanceCallback: (distance) {
+              String estimateDistance = distance.substring(0, 4);
+              order.getDistance(estimateDistance);
+            },
           )
         : GoogleMapsWidget(
             apiKey: GOOGLE_MAPS_API_KEY,
@@ -143,8 +137,14 @@ class _MapWidgetState extends State<MapWidget> {
             sourceName: storeName,
             destinationName: customerName,
             driverName: driverName,
-            totalTimeCallback: (time) => print(time),
-            totalDistanceCallback: (distance) => print(distance),
+            totalTimeCallback: (time) {
+              String estimateTime = time.substring(0, 2);
+              order.getArrivableTime(estimateTime);
+            },
+            totalDistanceCallback: (distance) {
+              String estimateDistance = distance.substring(0, 3);
+              order.getDistance(estimateDistance);
+            },
           );
   }
 }

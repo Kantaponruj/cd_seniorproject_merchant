@@ -9,11 +9,17 @@ class OrderNotifier with ChangeNotifier {
 
   OrderDetail _currentOrder;
 
+  String _arrivableTime;
+  String _distance;
+
   UnmodifiableListView get orderList => UnmodifiableListView(_orderList);
   UnmodifiableListView<OrderMenu> get orderMenuList =>
       UnmodifiableListView(_orderMenuList);
 
   OrderDetail get currentOrder => _currentOrder;
+
+  String get arrivableTime => _arrivableTime;
+  String get distance => _distance;
 
   set orderList(List orderList) {
     Future.delayed(Duration(seconds: 1), () {
@@ -29,6 +35,16 @@ class OrderNotifier with ChangeNotifier {
 
   set orderMenuList(List<OrderMenu> orderMenuList) {
     _orderMenuList = orderMenuList;
+    notifyListeners();
+  }
+
+  getArrivableTime(String time) {
+    _arrivableTime = time;
+    notifyListeners();
+  }
+
+  getDistance(String distance) {
+    _distance = distance;
     notifyListeners();
   }
 }
