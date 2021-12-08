@@ -37,7 +37,7 @@ class OrderDetailPage extends StatefulWidget {
 }
 
 class _OrderDetailPageState extends State<OrderDetailPage> {
-  String orderStatus;
+  String orderStatus = 'ยืนยันคำสั่งซื้อ';
   String topicTime;
   OrderMenu menu = OrderMenu();
   bool check;
@@ -71,12 +71,25 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
     return check;
   }
 
+  bool checkStatusPick() {
+    if (orderStatus == 'ยืนยันคำสั่งซื้อ') {
+      setState(() {
+        check = true;
+      });
+    } else {
+      setState(() {
+        check = false;
+      });
+    }
+    return check;
+  }
+
   @override
   Widget build(BuildContext context) {
     OrderNotifier orderNotifier = Provider.of<OrderNotifier>(context);
     // StoreNotifier storeNotifier = Provider.of<StoreNotifier>(context);
 
-    return widget.isDelivery
+    return (widget.isDelivery)
         ? Scaffold(
             // extendBodyBehindAppBar: true,
             backgroundColor: CollectionsColors.grey,
@@ -364,11 +377,10 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                 ),
               ),
             ),
-            bottomNavigationBar: checkStatus()
+            bottomNavigationBar: widget.order['orderStatus'] == 'ยืนยันคำสั่งซื้อ'
                 ? BottomOrder(
-                    isConfirmed: true,
+              text: 'ยืนยันการจัดส่ง',
                     onPressed: () {
-                      orderStatus = 'ยืนยันการจัดส่ง';
                       setState(() {
                         updateStatusOrder(
                           widget.order['customerId'],
@@ -389,9 +401,8 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                     },
                   )
                 : BottomOrder(
-                    isConfirmed: false,
+              text: 'ยืนยันคำสั่งซื้อ',
                     onPressed: () {
-                      orderStatus = 'ยืนยันคำสั่งซื้อ';
                       setState(() {
                         updateStatusOrder(
                           widget.order['customerId'],
@@ -416,24 +427,13 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                   children: [
                     Padding(
                         padding: EdgeInsets.fromLTRB(0, 15, 0, 0),
-                        child: customerDeliCard(
+                        child: customerPickCard(
                           widget.order['customerName'],
                           widget.order['phone'],
-                          widget.order['address'],
                           () async {
                             String number = widget.order['phone'];
                             // launch('tel://$number');
                             await FlutterPhoneDirectCaller.callNumber(number);
-                          },
-                          () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (BuildContext context) =>
-                                    IndividualMap(
-                                  order: widget.order,
-                                ),
-                              ),
-                            );
                           },
                         )
                         // ),
@@ -443,29 +443,36 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                       canEdit: false,
                       child: Container(
                         padding: EdgeInsets.all(20),
-                        child: Column(
+                        child: Row(
                           children: [
                             BuildIconText(
                               icon: Icons.calendar_today,
                               text: widget.order['dateOrdered'],
                             ),
-                            Divider(
-                              color: Colors.white,
+                            Container(
+                              padding: EdgeInsets.only(left: 50),
+                              child: BuildIconText(
+                                icon: Icons.access_time,
+                                text: widget.order['timeOrdered'] + ' น.',
+                              ),
                             ),
-                            Row(
-                              children: [
-                                BuildIconText(
-                                  icon: Icons.schedule,
-                                  text: '${widget.order['startWaitingTime']}',
-                                ),
-                                widget.order['endWaitingTime'] != null
-                                    ? BuildIconText(
-                                        text:
-                                            ' จนถึง   ${widget.order['endWaitingTime']} น.',
-                                      )
-                                    : SizedBox(),
-                              ],
-                            ),
+                            // Divider(
+                            //   color: Colors.white,
+                            // ),
+                            // Row(
+                            //   children: [
+                            //     BuildIconText(
+                            //       icon: Icons.schedule,
+                            //       text: '${widget.order['startWaitingTime']}',
+                            //     ),
+                            //     widget.order['endWaitingTime'] != null
+                            //         ? BuildIconText(
+                            //             text:
+                            //                 ' จนถึง   ${widget.order['endWaitingTime']} น.',
+                            //           )
+                            //         : SizedBox(),
+                            //   ],
+                            // ),
                           ],
                         ),
                       ),
@@ -592,10 +599,15 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                                             ),
                                           ),
                                         ),
-                                        Container(
-                                          child: ButtonWidget(
-                                            text: 'ยืนยัน',
-                                            onClicked: () {},
+                                        Expanded(
+                                          flex: 2,
+                                          child: Container(
+                                            alignment: Alignment.centerRight,
+                                            child: Text(
+                                              'บาท',
+                                              style:
+                                                  FontCollection.bodyTextStyle,
+                                            ),
                                           ),
                                         ),
                                       ],
@@ -627,7 +639,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                     widget.isConfirm
                         ? SizedBox.shrink()
                         : Container(
-                            margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
+                            margin: EdgeInsets.fromLTRB(0, 20, 0, 20),
                             child: TextButton(
                               onPressed: () {
                                 showDialog(
@@ -665,19 +677,12 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                                                 child: ButtonWidget(
                                                   text: 'ยืนยัน',
                                                   onClicked: () {
-                                                    int count = 0;
-
-                                                    deletedOrder(
-                                                      widget.storeId,
-                                                      widget
-                                                          .order['documentId'],
-                                                      widget.typeOrder,
-                                                    );
-
-                                                    Navigator.popUntil(context,
-                                                        (route) {
-                                                      return count++ == 2;
-                                                    });
+                                                    // int count = 0;
+                                                    //
+                                                    // Navigator.popUntil(context,
+                                                    //     (route) {
+                                                    //   return count++ == 2;
+                                                    // });
                                                   },
                                                 ),
                                               ),
@@ -701,34 +706,22 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                 ),
               ),
             ),
-            bottomNavigationBar: checkStatus()
+            bottomNavigationBar: widget.order['orderStatus'] == 'ยืนยันคำสั่งซื้อ'
                 ? BottomOrder(
-                    isConfirmed: true,
+                    text: 'ปรุงอาหารเสร็จเรียบร้อย',
                     onPressed: () {
-                      orderStatus = 'ยืนยันการจัดส่ง';
                       setState(() {
-                        updateStatusOrder(
-                          widget.order['customerId'],
-                          widget.order['storeId'],
-                          widget.order['orderId'],
-                          widget.order['documentId'],
-                          orderStatus,
-                        );
                         Navigator.of(context).pushReplacement(
                           MaterialPageRoute(
-                            builder: (context) => CustomerMapPage(
-                              order: widget.order,
-                              orderMenu: menu,
-                            ),
+                            builder: (context) => BottomAppBar(),
                           ),
                         );
                       });
                     },
                   )
                 : BottomOrder(
-                    isConfirmed: false,
+                    text: 'ยืนยันคำสั่งซื้อ',
                     onPressed: () {
-                      orderStatus = 'ยืนยันคำสั่งซื้อ';
                       setState(() {
                         updateStatusOrder(
                           widget.order['customerId'],
@@ -967,6 +960,63 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                 ),
         ],
       ),
+    );
+  }
+
+  Widget customerPickCard(
+    String name,
+    String phoneNumber,
+    VoidCallback onClickedContact,
+  ) {
+    return BuildCard(
+      headerText: 'ข้อมูลผู้สั่งซื้อ',
+      child: Container(
+        padding: EdgeInsets.fromLTRB(0, 10, 5, 20),
+        child: Column(
+          children: [
+            ListTile(
+              leading: CircleAvatar(
+                backgroundColor: CollectionsColors.navy,
+                radius: 35.0,
+                child: Icon(
+                  Icons.person,
+                  color: CollectionsColors.white,
+                ),
+              ),
+              title: Text(
+                name,
+                style: FontCollection.bodyTextStyle,
+                textAlign: TextAlign.left,
+              ),
+              subtitle: Text(
+                phoneNumber,
+                style: FontCollection.bodyTextStyle,
+              ),
+              trailing: Container(
+                width: width,
+                height: height,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color: CollectionsColors.yellow,
+                  shape: BoxShape.circle,
+                  boxShadow: [
+                    BoxShadow(
+                        color: Colors.grey.withOpacity(0.7),
+                        blurRadius: 1,
+                        offset: Offset(-0.5, 2))
+                  ],
+                ),
+                child: Icon(
+                  Icons.call,
+                  color: Colors.white,
+                ),
+              ),
+              onTap: onClickedContact,
+            ),
+          ],
+        ),
+      ),
+      canEdit: false,
     );
   }
 }
