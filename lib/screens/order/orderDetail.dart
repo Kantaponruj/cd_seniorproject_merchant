@@ -102,7 +102,8 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                           () {
                             Navigator.of(context).push(
                               MaterialPageRoute(
-                                builder: (BuildContext context) => IndividualMap(
+                                builder: (BuildContext context) =>
+                                    IndividualMap(
                                   order: widget.order,
                                 ),
                               ),
@@ -381,6 +382,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                             builder: (context) => CustomerMapPage(
                               order: widget.order,
                               orderMenu: menu,
+                              typeOrder: widget.typeOrder,
                             ),
                           ),
                         );
@@ -427,7 +429,8 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                           () {
                             Navigator.of(context).push(
                               MaterialPageRoute(
-                                builder: (BuildContext context) => IndividualMap(
+                                builder: (BuildContext context) =>
+                                    IndividualMap(
                                   order: widget.order,
                                 ),
                               ),
@@ -567,6 +570,8 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                                       ],
                                     ),
                                     Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
                                       children: [
                                         Expanded(
                                           flex: 7,
@@ -588,15 +593,10 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                                             ),
                                           ),
                                         ),
-                                        Expanded(
-                                          flex: 2,
-                                          child: Container(
-                                            alignment: Alignment.centerRight,
-                                            child: Text(
-                                              'บาท',
-                                              style: FontCollection
-                                                  .bodyBoldTextStyle,
-                                            ),
+                                        Container(
+                                          child: ButtonWidget(
+                                            text: 'ยืนยัน',
+                                            onClicked: () {},
                                           ),
                                         ),
                                       ],
@@ -665,7 +665,21 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                                               Container(
                                                 child: ButtonWidget(
                                                   text: 'ยืนยัน',
-                                                  onClicked: () {},
+                                                  onClicked: () {
+                                                    int count = 0;
+
+                                                    deletedOrder(
+                                                      widget.storeId,
+                                                      widget
+                                                          .order['documentId'],
+                                                      widget.typeOrder,
+                                                    );
+
+                                                    Navigator.popUntil(context,
+                                                        (route) {
+                                                      return count++ == 2;
+                                                    });
+                                                  },
                                                 ),
                                               ),
                                             ],

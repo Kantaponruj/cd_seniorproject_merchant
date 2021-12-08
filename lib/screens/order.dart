@@ -178,18 +178,24 @@ class _OrderPageState extends State<OrderPage> {
             switch (order['orderStatus']) {
               case 'ยืนยันคำสั่งซื้อ':
                 return OrderDetailPage(
-                    storeId: storeId,
-                    order: order,
-                    isConfirm: false,
-                    typeOrder: widget.typeOrder);
+                  storeId: storeId,
+                  order: order,
+                  isConfirm: false,
+                  typeOrder: widget.typeOrder,
+                  isDelivery:
+                      widget.typeOrder == 'delivery-orders' ? true : false,
+                );
               case 'ยืนยันการจัดส่ง':
                 return CustomerMapPage(order: order);
               default:
                 return OrderDetailPage(
-                    storeId: storeId,
-                    order: order,
-                    isConfirm: false,
-                    typeOrder: widget.typeOrder);
+                  storeId: storeId,
+                  order: order,
+                  isConfirm: false,
+                  typeOrder: widget.typeOrder,
+                  isDelivery:
+                      widget.typeOrder == 'delivery-orders' ? true : false,
+                );
             }
           }
 

@@ -15,10 +15,15 @@ import 'package:provider/provider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class CustomerMapPage extends StatefulWidget {
-  CustomerMapPage({Key key, @required this.order, @required this.orderMenu})
+  CustomerMapPage(
+      {Key key,
+      @required this.order,
+      @required this.orderMenu,
+      @required this.typeOrder})
       : super(key: key);
   final order;
   final OrderMenu orderMenu;
+  final String typeOrder;
 
   @override
   _CustomerMapPageState createState() => _CustomerMapPageState();
@@ -206,7 +211,7 @@ class _CustomerMapPageState extends State<CustomerMapPage> {
                   text: 'จัดส่งเรียบร้อยแล้ว',
                   onClicked: () {
                     setState(() {
-                      // _orderDetail.documentId = widget.order['documentId'];
+                      _orderDetail.documentId = widget.order['documentId'];
                       _orderDetail.orderId = widget.order['orderId'];
                       _orderDetail.customerId = widget.order['customerId'];
                       _orderDetail.customerName = widget.order['customerName'];
@@ -236,7 +241,9 @@ class _CustomerMapPageState extends State<CustomerMapPage> {
                     );
 
                     saveOrderToHistory(
-                        storeNotifier.store.storeId, _orderDetail);
+                      storeNotifier.store.storeId,
+                      _orderDetail,
+                    );
                     saveOrderMenuToHistory(
                       storeNotifier.store.storeId,
                       widget.orderMenu,
@@ -244,6 +251,7 @@ class _CustomerMapPageState extends State<CustomerMapPage> {
                     completedOrder(
                       storeNotifier.store.storeId,
                       widget.order['documentId'],
+                      widget.typeOrder,
                     );
 
                     Navigator.of(context).pushAndRemoveUntil(

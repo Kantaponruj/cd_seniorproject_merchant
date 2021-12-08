@@ -81,11 +81,11 @@ updateStatusOrder(
   print('Updated Status');
 }
 
-completedOrder(String storeId, String documentId) {
+completedOrder(String storeId, String documentId, String typeOrder) {
   firebaseFirestore
       .collection('stores')
       .doc(storeId)
-      .collection('delivery-orders')
+      .collection(typeOrder)
       .doc(documentId)
       .delete();
 }
@@ -115,4 +115,13 @@ saveOrderMenuToHistory(String storeId, OrderMenu orderMenu) async {
 
   DocumentReference documentRef = await historyRef.add(orderMenu.toMap());
   await documentRef.set(orderMenu.toMap(), SetOptions(merge: true));
+}
+
+deletedOrder(String storeId, String documentId, String typeOrder) {
+  firebaseFirestore
+      .collection('stores')
+      .doc(storeId)
+      .collection(typeOrder)
+      .doc(documentId)
+      .delete();
 }
