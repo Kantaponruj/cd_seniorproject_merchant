@@ -24,7 +24,7 @@ class OrderPage extends StatefulWidget {
 }
 
 class _OrderPageState extends State<OrderPage> {
-  List<OrderDetail> _orderList = [];
+  List<QueryDocumentSnapshot> _orderList = [];
 
   @override
   void initState() {
@@ -36,12 +36,7 @@ class _OrderPageState extends State<OrderPage> {
         Provider.of<LocationNotifier>(context, listen: false);
     locationNotifier.initialization();
 
-    // OrderNotifier orderNotifier =
-    //     Provider.of<OrderNotifier>(context, listen: false);
-
     updateLocation();
-
-    // getOrderDelivery(orderNotifier, storeNotifier.user.uid);
     super.initState();
   }
 
@@ -103,8 +98,8 @@ class _OrderPageState extends State<OrderPage> {
 
                 if (widget.typeOrder == 'delivery-orders') {
                   snapshot.data.docs.forEach((document) {
-                    OrderDetail order = OrderDetail.fromMap(document.data());
-                    _orderList.add(order);
+                    // OrderDetail order = OrderDetail.fromMap(document.data());
+                    _orderList.add(document);
                   });
                 }
 
