@@ -126,6 +126,7 @@ class _AddMenuPageState extends State<AddMenuPage> {
       _menuUploaded,
       storeNotifier.store.storeId,
     );
+    getMenu(menuNotfier, storeNotifier.store.storeId);
   }
 
   getLocalImage() async {
