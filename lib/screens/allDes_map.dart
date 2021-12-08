@@ -206,7 +206,6 @@ class _AllDestinationPageState extends State<AllDestinationPage> {
                               children: [
                                 showOrders(
                                   nextStartPoint.first['order'],
-                                  'My location',
                                   nextStartPoint.first['name'],
                                   nextStartPoint.first['distance'].toString(),
                                   1,
@@ -220,8 +219,7 @@ class _AllDestinationPageState extends State<AllDestinationPage> {
                                     return index == nextStartPoint.length - 1
                                         ? Container()
                                         : showOrders(
-                                            nextStartPoint[index]['order'],
-                                            nextStartPoint[index]['name'],
+                                            nextStartPoint[index + 1]['order'],
                                             nextStartPoint[index + 1]['name'],
                                             nextStartPoint[index + 1]
                                                     ['distance']
@@ -242,11 +240,9 @@ class _AllDestinationPageState extends State<AllDestinationPage> {
         ));
   }
 
-
   Widget showOrders(
     final order,
-    String startPoint,
-    String stopPoint,
+    String customerName,
     String distance,
     int index,
   ) {
@@ -294,7 +290,7 @@ class _AllDestinationPageState extends State<AllDestinationPage> {
             Container(
               padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
               child: Text(
-                stopPoint,
+                customerName,
                 style: FontCollection.bodyTextStyle,
               ),
             ),
