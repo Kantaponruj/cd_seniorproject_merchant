@@ -179,17 +179,17 @@ class _OriginalMapWidgetState extends State<OriginalMapWidget> {
     );
   }
 
-  void updatePinOnMap() async {
-    Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
-    CameraPosition cameraPosition = CameraPosition(
-      target: currentLocation,
-      zoom: 16,
-      bearing: 30,
-      tilt: 80,
-    );
+  // void updatePinOnMap() async {
+  //   Position position = await Geolocator.getCurrentPosition(
+  //       desiredAccuracy: LocationAccuracy.high);
+  //   CameraPosition cameraPosition = CameraPosition(
+  //     target: currentLocation,
+  //     zoom: 16,
+  //     bearing: 30,
+  //     tilt: 80,
+  //   );
 
-    final GoogleMapController controller = await _controller.future;
-    controller.animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
-  }
+  //   final GoogleMapController controller = await _controller.future;
+  //   controller.animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
+  // }
 }
