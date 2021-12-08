@@ -9,6 +9,7 @@ import 'package:cs_senior_project_merchant/screens/order/customer_map.dart';
 import 'package:cs_senior_project_merchant/screens/order/individual_map.dart';
 import 'package:cs_senior_project_merchant/services/order_service.dart';
 import 'package:cs_senior_project_merchant/widgets/bottomOrder_widget.dart';
+import 'package:cs_senior_project_merchant/widgets/button_widget.dart';
 import 'package:cs_senior_project_merchant/widgets/icontext_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -291,7 +292,52 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                   : Container(
                       margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
                       child: TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return ClipRRect(
+                                borderRadius: BorderRadius.circular(30),
+                                child: AlertDialog(
+                                  title: Text(
+                                    'ยืนยันที่จะลบข้อมูลที่อยู่นี้หรือไม่',
+                                    style: FontCollection.bodyTextStyle,
+                                  ),
+                                  actions: [
+                                    Row(
+                                      mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Container(
+                                          child: TextButton(
+                                            onPressed: () {
+                                              setState(() {
+                                                Navigator.pop(context);
+                                              });
+                                            },
+                                            child: Text(
+                                              'ยกเลิก',
+                                              style: TextStyle(
+                                                  fontSize: 16,
+                                                  color: CollectionsColors.red),
+                                            ),
+                                          ),
+                                        ),
+                                        Container(
+                                          child: ButtonWidget(
+                                            text: 'ยืนยัน',
+                                            onClicked: () {
+                                            },
+                                          ),
+                                        ),
+                                      ],
+                                    )
+                                  ],
+                                ),
+                              );
+                            },
+                          );
+                        },
                         child: Text(
                           'ยกเลิกคำสั่งซื้อ',
                           style: FontCollection.underlineButtonTextStyle,
@@ -572,4 +618,5 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
       ),
     );
   }
+
 }
