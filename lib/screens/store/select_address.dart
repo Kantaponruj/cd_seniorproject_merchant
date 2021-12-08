@@ -61,10 +61,6 @@ class _SelectAddressState extends State<SelectAddress> {
                         }
 
                         Navigator.pop(context);
-                        print(LatLng(
-                          selectedPlace.geometry.location.lat,
-                          selectedPlace.geometry.location.lng,
-                        ));
                       },
                       autocompleteLanguage: 'TH',
                     ),

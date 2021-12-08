@@ -97,8 +97,12 @@ class _AddMenuPageState extends State<AddMenuPage> {
 
   _menuUploaded(Menu menu) {
     MenuNotfier menuNotfier = Provider.of<MenuNotfier>(context, listen: false);
+    StoreNotifier storeNotifier =
+        Provider.of<StoreNotifier>(context, listen: false);
     if (!widget.isUpdating) {
       menuNotfier.addMenu(menu);
+    } else {
+      getMenu(menuNotfier, storeNotifier.store.storeId);
     }
     Navigator.pop(context);
   }
@@ -126,7 +130,6 @@ class _AddMenuPageState extends State<AddMenuPage> {
       _menuUploaded,
       storeNotifier.store.storeId,
     );
-    getMenu(menuNotfier, storeNotifier.store.storeId);
   }
 
   getLocalImage() async {
