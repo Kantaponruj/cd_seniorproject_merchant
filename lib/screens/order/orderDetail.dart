@@ -23,12 +23,14 @@ class OrderDetailPage extends StatefulWidget {
     @required this.order,
     @required this.typeOrder,
     @required this.isConfirm,
+    @required this.isDelivery,
   }) : super(key: key);
 
   final String storeId;
   final order;
   final bool isConfirm;
   final String typeOrder;
+  final bool isDelivery;
 
   @override
   _OrderDetailPageState createState() => _OrderDetailPageState();
@@ -58,7 +60,6 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
 
   bool checkStatus() {
     if (orderStatus == 'ยืนยันคำสั่งซื้อ') {
-      print('ยืนยันคำสั่งซื้อ');
       setState(() {
         check = true;
       });
@@ -75,321 +76,658 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
     OrderNotifier orderNotifier = Provider.of<OrderNotifier>(context);
     // StoreNotifier storeNotifier = Provider.of<StoreNotifier>(context);
 
-    return Scaffold(
-      // extendBodyBehindAppBar: true,
-      backgroundColor: CollectionsColors.grey,
-      appBar: RoundedAppBar(
-        appBarTittle: 'ข้อมูลการสั่งซื้ออาหาร',
-      ),
-      body: SingleChildScrollView(
-        child: Container(
-          padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
-          child: Column(
-            children: [
-              Padding(
-                  padding: EdgeInsets.fromLTRB(0, 15, 0, 0),
-                  child: customerDeliCard(
-                    widget.order['customerName'],
-                    widget.order['phone'],
-                    widget.order['address'],
-                    () async {
-                      String number = widget.order['phone'];
-                      // launch('tel://$number');
-                      await FlutterPhoneDirectCaller.callNumber(number);
-                    },
-                    () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (BuildContext context) => CustomerMap(
-                            order: widget.order,
-                          ),
-                        ),
-                      );
-                    },
-                  )
-                  // ),
-                  ),
-              BuildCard(
-                headerText: topicTime,
-                canEdit: false,
-                child: Container(
-                  padding: EdgeInsets.all(20),
-                  child: Column(
-                    children: [
-                      BuildIconText(
-                        icon: Icons.calendar_today,
-                        text: widget.order['dateOrdered'],
-                      ),
-                      Divider(
-                        color: Colors.white,
-                      ),
-                      Row(
-                        children: [
-                          BuildIconText(
-                            icon: Icons.schedule,
-                            text: '${widget.order['startWaitingTime']}',
-                          ),
-                          widget.order['endWaitingTime'] != null
-                              ? BuildIconText(
-                                  text:
-                                      ' จนถึง   ${widget.order['endWaitingTime']} น.',
-                                )
-                              : SizedBox(),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              // itemBuilder(menuNotifier),
-              BuildCard(
-                headerText: 'รายการอาหารทั้งหมด',
-                canEdit: false,
-                child: Container(
-                  margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                  child: Column(
-                    children: [
-                      Container(
-                        child: ListView.separated(
-                          physics: NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          itemCount: orderNotifier.orderMenuList.length,
-                          itemBuilder: (context, index) {
-                            menu = orderNotifier.orderMenuList[index];
-                            return listOrder(menu);
+    return widget.isDelivery
+        ? Scaffold(
+            // extendBodyBehindAppBar: true,
+            backgroundColor: CollectionsColors.grey,
+            appBar: RoundedAppBar(
+              appBarTittle: 'ข้อมูลการสั่งซื้ออาหาร',
+            ),
+            body: SingleChildScrollView(
+              child: Container(
+                padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+                child: Column(
+                  children: [
+                    Padding(
+                        padding: EdgeInsets.fromLTRB(0, 15, 0, 0),
+                        child: customerDeliCard(
+                          widget.order['customerName'],
+                          widget.order['phone'],
+                          widget.order['address'],
+                          () async {
+                            String number = widget.order['phone'];
+                            // launch('tel://$number');
+                            await FlutterPhoneDirectCaller.callNumber(number);
                           },
-                          separatorBuilder: (context, index) => Divider(
-                            color: Colors.grey,
-                          ),
+                          () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (BuildContext context) => IndividualMap(
+                                  order: widget.order,
+                                ),
+                              ),
+                            );
+                          },
+                        )
+                        // ),
+                        ),
+                    BuildCard(
+                      headerText: topicTime,
+                      canEdit: false,
+                      child: Container(
+                        padding: EdgeInsets.all(20),
+                        child: Column(
+                          children: [
+                            BuildIconText(
+                              icon: Icons.calendar_today,
+                              text: widget.order['dateOrdered'],
+                            ),
+                            Divider(
+                              color: Colors.white,
+                            ),
+                            Row(
+                              children: [
+                                BuildIconText(
+                                  icon: Icons.schedule,
+                                  text: '${widget.order['startWaitingTime']}',
+                                ),
+                                widget.order['endWaitingTime'] != null
+                                    ? BuildIconText(
+                                        text:
+                                            ' จนถึง   ${widget.order['endWaitingTime']} น.',
+                                      )
+                                    : SizedBox(),
+                              ],
+                            ),
+                          ],
                         ),
                       ),
-                      Divider(
-                        color: Colors.grey,
-                      ),
-                      Container(
-                          margin: EdgeInsets.only(top: 20),
-                          child: Column(
-                            children: [
-                              Row(
-                                children: [
-                                  Expanded(
-                                    flex: 7,
-                                    child: Text(
-                                      'ราคาอาหารทั้งหมด',
-                                      style: FontCollection.bodyTextStyle,
-                                    ),
-                                  ),
-                                  Expanded(
-                                    flex: 3,
-                                    child: Container(
-                                      alignment: Alignment.centerRight,
-                                      child: Text(
-                                        widget.order['subTotal'].toString(),
-                                        style: FontCollection.bodyTextStyle,
-                                      ),
-                                    ),
-                                  ),
-                                  Expanded(
-                                    flex: 2,
-                                    child: Container(
-                                      alignment: Alignment.centerRight,
-                                      child: Text(
-                                        'บาท',
-                                        style: FontCollection.bodyTextStyle,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  Expanded(
-                                    flex: 7,
-                                    child: Text(
-                                      'ค่าส่ง',
-                                      style: FontCollection.bodyTextStyle,
-                                    ),
-                                  ),
-                                  Expanded(
-                                    flex: 3,
-                                    child: Container(
-                                      alignment: Alignment.centerRight,
-                                      child: Text(
-                                        widget.order['shippingFee'].toString(),
-                                        style: FontCollection.bodyTextStyle,
-                                      ),
-                                    ),
-                                  ),
-                                  Expanded(
-                                    flex: 2,
-                                    child: Container(
-                                      alignment: Alignment.centerRight,
-                                      child: Text(
-                                        'บาท',
-                                        style: FontCollection.bodyTextStyle,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  Expanded(
-                                    flex: 7,
-                                    child: Text(
-                                      'ราคาสุทธิ',
-                                      style: FontCollection.bodyBoldTextStyle,
-                                    ),
-                                  ),
-                                  Expanded(
-                                    flex: 3,
-                                    child: Container(
-                                      alignment: Alignment.centerRight,
-                                      child: Text(
-                                        widget.order['netPrice'].toString(),
-                                        style: FontCollection.bodyBoldTextStyle,
-                                      ),
-                                    ),
-                                  ),
-                                  Expanded(
-                                    flex: 2,
-                                    child: Container(
-                                      alignment: Alignment.centerRight,
-                                      child: Text(
-                                        'บาท',
-                                        style: FontCollection.bodyBoldTextStyle,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          )),
-                    ],
-                  ),
-                ),
-              ),
-              // Add message card
-              BuildCard(
-                headerText: 'ข้อความเพิ่มเติม',
-                canEdit: false,
-                child: Container(
-                  width: MediaQuery.of(context).size.width,
-                  padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      widget.order['message'] ?? 'ไม่มีข้อความเพิ่มเติม',
-                      style: FontCollection.bodyTextStyle,
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 3,
                     ),
-                  ),
-                ),
-              ),
-              widget.isConfirm
-                  ? SizedBox.shrink()
-                  : Container(
-                      margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
-                      child: TextButton(
-                        onPressed: () {
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return ClipRRect(
-                                borderRadius: BorderRadius.circular(30),
-                                child: AlertDialog(
-                                  title: Text(
-                                    'ยืนยันที่จะลบข้อมูลที่อยู่นี้หรือไม่',
-                                    style: FontCollection.bodyTextStyle,
-                                  ),
-                                  actions: [
+                    // itemBuilder(menuNotifier),
+                    BuildCard(
+                      headerText: 'รายการอาหารทั้งหมด',
+                      canEdit: false,
+                      child: Container(
+                        margin:
+                            EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                        child: Column(
+                          children: [
+                            Container(
+                              child: ListView.separated(
+                                physics: NeverScrollableScrollPhysics(),
+                                shrinkWrap: true,
+                                itemCount: orderNotifier.orderMenuList.length,
+                                itemBuilder: (context, index) {
+                                  menu = orderNotifier.orderMenuList[index];
+                                  return listOrder(menu);
+                                },
+                                separatorBuilder: (context, index) => Divider(
+                                  color: Colors.grey,
+                                ),
+                              ),
+                            ),
+                            Divider(
+                              color: Colors.grey,
+                            ),
+                            Container(
+                                margin: EdgeInsets.only(top: 20),
+                                child: Column(
+                                  children: [
                                     Row(
-                                      mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Container(
-                                          child: TextButton(
-                                            onPressed: () {
-                                              setState(() {
-                                                Navigator.pop(context);
-                                              });
-                                            },
+                                        Expanded(
+                                          flex: 7,
+                                          child: Text(
+                                            'ราคาอาหารทั้งหมด',
+                                            style: FontCollection.bodyTextStyle,
+                                          ),
+                                        ),
+                                        Expanded(
+                                          flex: 3,
+                                          child: Container(
+                                            alignment: Alignment.centerRight,
                                             child: Text(
-                                              'ยกเลิก',
-                                              style: TextStyle(
-                                                  fontSize: 16,
-                                                  color: CollectionsColors.red),
+                                              widget.order['subTotal']
+                                                  .toString(),
+                                              style:
+                                                  FontCollection.bodyTextStyle,
                                             ),
                                           ),
                                         ),
-                                        Container(
-                                          child: ButtonWidget(
-                                            text: 'ยืนยัน',
-                                            onClicked: () {
-                                            },
+                                        Expanded(
+                                          flex: 2,
+                                          child: Container(
+                                            alignment: Alignment.centerRight,
+                                            child: Text(
+                                              'บาท',
+                                              style:
+                                                  FontCollection.bodyTextStyle,
+                                            ),
                                           ),
                                         ),
                                       ],
-                                    )
+                                    ),
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          flex: 7,
+                                          child: Text(
+                                            'ค่าส่ง',
+                                            style: FontCollection.bodyTextStyle,
+                                          ),
+                                        ),
+                                        Expanded(
+                                          flex: 3,
+                                          child: Container(
+                                            alignment: Alignment.centerRight,
+                                            child: Text(
+                                              widget.order['shippingFee']
+                                                  .toString(),
+                                              style:
+                                                  FontCollection.bodyTextStyle,
+                                            ),
+                                          ),
+                                        ),
+                                        Expanded(
+                                          flex: 2,
+                                          child: Container(
+                                            alignment: Alignment.centerRight,
+                                            child: Text(
+                                              'บาท',
+                                              style:
+                                                  FontCollection.bodyTextStyle,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          flex: 7,
+                                          child: Text(
+                                            'ราคาสุทธิ',
+                                            style: FontCollection
+                                                .bodyBoldTextStyle,
+                                          ),
+                                        ),
+                                        Expanded(
+                                          flex: 3,
+                                          child: Container(
+                                            alignment: Alignment.centerRight,
+                                            child: Text(
+                                              widget.order['netPrice']
+                                                  .toString(),
+                                              style: FontCollection
+                                                  .bodyBoldTextStyle,
+                                            ),
+                                          ),
+                                        ),
+                                        Expanded(
+                                          flex: 2,
+                                          child: Container(
+                                            alignment: Alignment.centerRight,
+                                            child: Text(
+                                              'บาท',
+                                              style: FontCollection
+                                                  .bodyBoldTextStyle,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ],
-                                ),
-                              );
-                            },
-                          );
-                        },
-                        child: Text(
-                          'ยกเลิกคำสั่งซื้อ',
-                          style: FontCollection.underlineButtonTextStyle,
+                                )),
+                          ],
                         ),
                       ),
                     ),
-
-              ///End Column
-            ],
-          ),
-        ),
-      ),
-      bottomNavigationBar: checkStatus()
-          ? BottomOrder(
-              isConfirmed: true,
-              onPressed: () {
-                orderStatus = 'ยืนยันการจัดส่ง';
-                setState(() {
-                  updateStatusOrder(
-                    widget.order['customerId'],
-                    widget.order['storeId'],
-                    widget.order['orderId'],
-                    widget.order['documentId'],
-                    orderStatus,
-                  );
-                  Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(
-                      builder: (context) => IndividualMapPage(
-                        order: widget.order,
-                        orderMenu: menu,
+                    // Add message card
+                    BuildCard(
+                      headerText: 'ข้อความเพิ่มเติม',
+                      canEdit: false,
+                      child: Container(
+                        width: MediaQuery.of(context).size.width,
+                        padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            widget.order['message'] ?? 'ไม่มีข้อความเพิ่มเติม',
+                            style: FontCollection.bodyTextStyle,
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 3,
+                          ),
+                        ),
                       ),
                     ),
-                  );
-                });
-              },
-            )
-          : BottomOrder(
-              isConfirmed: false,
-              onPressed: () {
-                orderStatus = 'ยืนยันคำสั่งซื้อ';
-                setState(() {
-                  updateStatusOrder(
-                    widget.order['customerId'],
-                    widget.order['storeId'],
-                    widget.order['orderId'],
-                    widget.order['documentId'],
-                    orderStatus,
-                  );
-                });
-              },
+                    widget.isConfirm
+                        ? SizedBox.shrink()
+                        : Container(
+                            margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
+                            child: TextButton(
+                              onPressed: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return ClipRRect(
+                                      borderRadius: BorderRadius.circular(30),
+                                      child: AlertDialog(
+                                        title: Text(
+                                          'ยืนยันที่จะลบข้อมูลที่อยู่นี้หรือไม่',
+                                          style: FontCollection.bodyTextStyle,
+                                        ),
+                                        actions: [
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Container(
+                                                child: TextButton(
+                                                  onPressed: () {
+                                                    setState(() {
+                                                      Navigator.pop(context);
+                                                    });
+                                                  },
+                                                  child: Text(
+                                                    'ยกเลิก',
+                                                    style: TextStyle(
+                                                        fontSize: 16,
+                                                        color: CollectionsColors
+                                                            .red),
+                                                  ),
+                                                ),
+                                              ),
+                                              Container(
+                                                child: ButtonWidget(
+                                                  text: 'ยืนยัน',
+                                                  onClicked: () {},
+                                                ),
+                                              ),
+                                            ],
+                                          )
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                );
+                              },
+                              child: Text(
+                                'ยกเลิกคำสั่งซื้อ',
+                                style: FontCollection.underlineButtonTextStyle,
+                              ),
+                            ),
+                          ),
+
+                    ///End Column
+                  ],
+                ),
+              ),
             ),
-    );
+            bottomNavigationBar: checkStatus()
+                ? BottomOrder(
+                    isConfirmed: true,
+                    onPressed: () {
+                      orderStatus = 'ยืนยันการจัดส่ง';
+                      setState(() {
+                        updateStatusOrder(
+                          widget.order['customerId'],
+                          widget.order['storeId'],
+                          widget.order['orderId'],
+                          widget.order['documentId'],
+                          orderStatus,
+                        );
+                        Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(
+                            builder: (context) => CustomerMapPage(
+                              order: widget.order,
+                              orderMenu: menu,
+                            ),
+                          ),
+                        );
+                      });
+                    },
+                  )
+                : BottomOrder(
+                    isConfirmed: false,
+                    onPressed: () {
+                      orderStatus = 'ยืนยันคำสั่งซื้อ';
+                      setState(() {
+                        updateStatusOrder(
+                          widget.order['customerId'],
+                          widget.order['storeId'],
+                          widget.order['orderId'],
+                          widget.order['documentId'],
+                          orderStatus,
+                        );
+                      });
+                    },
+                  ),
+          )
+        : Scaffold(
+            backgroundColor: CollectionsColors.grey,
+            appBar: RoundedAppBar(
+              appBarTittle: 'ข้อมูลการสั่งซื้ออาหาร',
+            ),
+            body: SingleChildScrollView(
+              child: Container(
+                padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+                child: Column(
+                  children: [
+                    Padding(
+                        padding: EdgeInsets.fromLTRB(0, 15, 0, 0),
+                        child: customerDeliCard(
+                          widget.order['customerName'],
+                          widget.order['phone'],
+                          widget.order['address'],
+                          () async {
+                            String number = widget.order['phone'];
+                            // launch('tel://$number');
+                            await FlutterPhoneDirectCaller.callNumber(number);
+                          },
+                          () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (BuildContext context) => IndividualMap(
+                                  order: widget.order,
+                                ),
+                              ),
+                            );
+                          },
+                        )
+                        // ),
+                        ),
+                    BuildCard(
+                      headerText: topicTime,
+                      canEdit: false,
+                      child: Container(
+                        padding: EdgeInsets.all(20),
+                        child: Column(
+                          children: [
+                            BuildIconText(
+                              icon: Icons.calendar_today,
+                              text: widget.order['dateOrdered'],
+                            ),
+                            Divider(
+                              color: Colors.white,
+                            ),
+                            Row(
+                              children: [
+                                BuildIconText(
+                                  icon: Icons.schedule,
+                                  text: '${widget.order['startWaitingTime']}',
+                                ),
+                                widget.order['endWaitingTime'] != null
+                                    ? BuildIconText(
+                                        text:
+                                            ' จนถึง   ${widget.order['endWaitingTime']} น.',
+                                      )
+                                    : SizedBox(),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    // itemBuilder(menuNotifier),
+                    BuildCard(
+                      headerText: 'รายการอาหารทั้งหมด',
+                      canEdit: false,
+                      child: Container(
+                        margin:
+                            EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                        child: Column(
+                          children: [
+                            Container(
+                              child: ListView.separated(
+                                physics: NeverScrollableScrollPhysics(),
+                                shrinkWrap: true,
+                                itemCount: orderNotifier.orderMenuList.length,
+                                itemBuilder: (context, index) {
+                                  menu = orderNotifier.orderMenuList[index];
+                                  return listOrder(menu);
+                                },
+                                separatorBuilder: (context, index) => Divider(
+                                  color: Colors.grey,
+                                ),
+                              ),
+                            ),
+                            Divider(
+                              color: Colors.grey,
+                            ),
+                            Container(
+                                margin: EdgeInsets.only(top: 20),
+                                child: Column(
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          flex: 7,
+                                          child: Text(
+                                            'ราคาอาหารทั้งหมด',
+                                            style: FontCollection.bodyTextStyle,
+                                          ),
+                                        ),
+                                        Expanded(
+                                          flex: 3,
+                                          child: Container(
+                                            alignment: Alignment.centerRight,
+                                            child: Text(
+                                              widget.order['subTotal']
+                                                  .toString(),
+                                              style:
+                                                  FontCollection.bodyTextStyle,
+                                            ),
+                                          ),
+                                        ),
+                                        Expanded(
+                                          flex: 2,
+                                          child: Container(
+                                            alignment: Alignment.centerRight,
+                                            child: Text(
+                                              'บาท',
+                                              style:
+                                                  FontCollection.bodyTextStyle,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          flex: 7,
+                                          child: Text(
+                                            'ค่าส่ง',
+                                            style: FontCollection.bodyTextStyle,
+                                          ),
+                                        ),
+                                        Expanded(
+                                          flex: 3,
+                                          child: Container(
+                                            alignment: Alignment.centerRight,
+                                            child: Text(
+                                              widget.order['shippingFee']
+                                                  .toString(),
+                                              style:
+                                                  FontCollection.bodyTextStyle,
+                                            ),
+                                          ),
+                                        ),
+                                        Expanded(
+                                          flex: 2,
+                                          child: Container(
+                                            alignment: Alignment.centerRight,
+                                            child: Text(
+                                              'บาท',
+                                              style:
+                                                  FontCollection.bodyTextStyle,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          flex: 7,
+                                          child: Text(
+                                            'ราคาสุทธิ',
+                                            style: FontCollection
+                                                .bodyBoldTextStyle,
+                                          ),
+                                        ),
+                                        Expanded(
+                                          flex: 3,
+                                          child: Container(
+                                            alignment: Alignment.centerRight,
+                                            child: Text(
+                                              widget.order['netPrice']
+                                                  .toString(),
+                                              style: FontCollection
+                                                  .bodyBoldTextStyle,
+                                            ),
+                                          ),
+                                        ),
+                                        Expanded(
+                                          flex: 2,
+                                          child: Container(
+                                            alignment: Alignment.centerRight,
+                                            child: Text(
+                                              'บาท',
+                                              style: FontCollection
+                                                  .bodyBoldTextStyle,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                )),
+                          ],
+                        ),
+                      ),
+                    ),
+                    // Add message card
+                    BuildCard(
+                      headerText: 'ข้อความเพิ่มเติม',
+                      canEdit: false,
+                      child: Container(
+                        width: MediaQuery.of(context).size.width,
+                        padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            widget.order['message'] ?? 'ไม่มีข้อความเพิ่มเติม',
+                            style: FontCollection.bodyTextStyle,
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 3,
+                          ),
+                        ),
+                      ),
+                    ),
+                    widget.isConfirm
+                        ? SizedBox.shrink()
+                        : Container(
+                            margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
+                            child: TextButton(
+                              onPressed: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return ClipRRect(
+                                      borderRadius: BorderRadius.circular(30),
+                                      child: AlertDialog(
+                                        title: Text(
+                                          'ยืนยันที่จะลบข้อมูลที่อยู่นี้หรือไม่',
+                                          style: FontCollection.bodyTextStyle,
+                                        ),
+                                        actions: [
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Container(
+                                                child: TextButton(
+                                                  onPressed: () {
+                                                    setState(() {
+                                                      Navigator.pop(context);
+                                                    });
+                                                  },
+                                                  child: Text(
+                                                    'ยกเลิก',
+                                                    style: TextStyle(
+                                                        fontSize: 16,
+                                                        color: CollectionsColors
+                                                            .red),
+                                                  ),
+                                                ),
+                                              ),
+                                              Container(
+                                                child: ButtonWidget(
+                                                  text: 'ยืนยัน',
+                                                  onClicked: () {},
+                                                ),
+                                              ),
+                                            ],
+                                          )
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                );
+                              },
+                              child: Text(
+                                'ยกเลิกคำสั่งซื้อ',
+                                style: FontCollection.underlineButtonTextStyle,
+                              ),
+                            ),
+                          ),
+
+                    ///End Column
+                  ],
+                ),
+              ),
+            ),
+            bottomNavigationBar: checkStatus()
+                ? BottomOrder(
+                    isConfirmed: true,
+                    onPressed: () {
+                      orderStatus = 'ยืนยันการจัดส่ง';
+                      setState(() {
+                        updateStatusOrder(
+                          widget.order['customerId'],
+                          widget.order['storeId'],
+                          widget.order['orderId'],
+                          widget.order['documentId'],
+                          orderStatus,
+                        );
+                        Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(
+                            builder: (context) => CustomerMapPage(
+                              order: widget.order,
+                              orderMenu: menu,
+                            ),
+                          ),
+                        );
+                      });
+                    },
+                  )
+                : BottomOrder(
+                    isConfirmed: false,
+                    onPressed: () {
+                      orderStatus = 'ยืนยันคำสั่งซื้อ';
+                      setState(() {
+                        updateStatusOrder(
+                          widget.order['customerId'],
+                          widget.order['storeId'],
+                          widget.order['orderId'],
+                          widget.order['documentId'],
+                          orderStatus,
+                        );
+                      });
+                    },
+                  ),
+          );
   }
 
   // Widget listOrder(OrderMenu menu) => Container(
@@ -618,5 +956,4 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
       ),
     );
   }
-
 }
