@@ -6,6 +6,8 @@ import 'package:cs_senior_project_merchant/asset/text_style.dart';
 import 'package:cs_senior_project_merchant/component/roundAppBar.dart';
 import 'package:cs_senior_project_merchant/notifiers/location_notifier.dart';
 import 'package:cs_senior_project_merchant/notifiers/order_notifier.dart';
+import 'package:cs_senior_project_merchant/notifiers/store_notifier.dart';
+import 'package:cs_senior_project_merchant/screens/order/orderDetail.dart';
 import 'package:cs_senior_project_merchant/widgets/icontext_widget.dart';
 import 'package:cs_senior_project_merchant/widgets/original_map_widget.dart';
 import 'package:flutter/cupertino.dart';
@@ -163,7 +165,7 @@ class _AllDestinationPageState extends State<AllDestinationPage> {
     double mapHeight = MediaQuery.of(context).size.height * 0.6;
 
     return Scaffold(
-      extendBodyBehindAppBar: true,
+        extendBodyBehindAppBar: true,
         backgroundColor: Colors.white,
         appBar: RoundedAppBar(
           appBarTittle: 'All destination',
@@ -236,6 +238,9 @@ class _AllDestinationPageState extends State<AllDestinationPage> {
 
   Widget showOrders(
       String startPoint, String stopPoint, String distance, int index) {
+    OrderNotifier orderNotifier = Provider.of<OrderNotifier>(context);
+    StoreNotifier storeNotifier = Provider.of<StoreNotifier>(context);
+
     return Container(
       // decoration: BoxDecoration(
       //   borderRadius: BorderRadius.circular(20),
@@ -244,6 +249,14 @@ class _AllDestinationPageState extends State<AllDestinationPage> {
       padding: EdgeInsets.all(10),
       // margin: EdgeInsets.only(bottom: 5),
       child: ListTile(
+        onTap: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => OrderDetailPage(
+                      storeId: storeNotifier.user.uid,
+                      order: orderNotifier)));
+        },
         leading: Container(
           padding: EdgeInsets.all(15),
           decoration: BoxDecoration(
