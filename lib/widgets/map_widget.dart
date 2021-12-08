@@ -69,7 +69,7 @@ class _MapWidgetState extends State<MapWidget> {
     final driverName = "ฉัน";
     final storeIcon = "assets/images/restaurant-marker-icon.png";
     final customerIcon = "assets/images/house-marker-icon.png";
-    final driverIcon = "assets/images/driver-marker-icon.png";
+    final driverIcon = "assets/images/marker_foodstall.png";
 
     return widget.isPreview
         ? GoogleMapsWidget(
