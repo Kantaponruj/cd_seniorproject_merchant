@@ -382,7 +382,6 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                             builder: (context) => CustomerMapPage(
                               order: widget.order,
                               orderMenu: menu,
-                              typeOrder: widget.typeOrder,
                             ),
                           ),
                         );

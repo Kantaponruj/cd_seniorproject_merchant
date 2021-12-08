@@ -68,6 +68,7 @@ class OrderMenu {
   int amount;
   String other;
   List topping;
+  String storeId;
 
   OrderMenu();
 
@@ -78,6 +79,7 @@ class OrderMenu {
     amount = data['amount'];
     other = data['other'];
     topping = data['topping'];
+    storeId = data['storeId'];
   }
 
   Map<String, dynamic> toMap() {
@@ -87,7 +89,8 @@ class OrderMenu {
       'totalPrice': totalPrice,
       'amount': amount,
       'other': other,
-      'topping': topping
+      'topping': topping,
+      'storeId': storeId,
     };
   }
 }

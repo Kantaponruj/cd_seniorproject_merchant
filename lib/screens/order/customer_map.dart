@@ -15,15 +15,13 @@ import 'package:provider/provider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class CustomerMapPage extends StatefulWidget {
-  CustomerMapPage(
-      {Key key,
-      @required this.order,
-      @required this.orderMenu,
-      @required this.typeOrder})
-      : super(key: key);
+  CustomerMapPage({
+    Key key,
+    @required this.order,
+    @required this.orderMenu,
+  }) : super(key: key);
   final order;
   final OrderMenu orderMenu;
-  final String typeOrder;
 
   @override
   _CustomerMapPageState createState() => _CustomerMapPageState();
@@ -173,6 +171,8 @@ class _CustomerMapPageState extends State<CustomerMapPage> {
                               storeId: storeNotifier.store.storeId,
                               order: widget.order,
                               isConfirm: true,
+                              isDelivery: true,
+                              typeOrder: 'delivery-orders',
                             ),
                           ),
                         );
@@ -251,7 +251,7 @@ class _CustomerMapPageState extends State<CustomerMapPage> {
                     completedOrder(
                       storeNotifier.store.storeId,
                       widget.order['documentId'],
-                      widget.typeOrder,
+                      'delivery-orders',
                     );
 
                     Navigator.of(context).pushAndRemoveUntil(
