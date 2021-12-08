@@ -238,6 +238,7 @@ class _CustomerMapPageState extends State<CustomerMapPage> {
                       widget.order['orderId'],
                       widget.order['documentId'],
                       orderStatus,
+                      'delivery-orders',
                     );
 
                     saveOrderToHistory(

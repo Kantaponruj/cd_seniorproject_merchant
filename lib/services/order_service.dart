@@ -63,6 +63,7 @@ updateStatusOrder(
   String orderId,
   String docId,
   String orderStatus,
+  String typeOrder,
 ) {
   firebaseFirestore
       .collection('users')
@@ -74,7 +75,7 @@ updateStatusOrder(
   firebaseFirestore
       .collection('stores')
       .doc(storeId)
-      .collection('delivery-orders')
+      .collection(typeOrder)
       .doc(docId)
       .update({'orderStatus': orderStatus});
 
