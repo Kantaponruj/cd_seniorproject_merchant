@@ -58,21 +58,22 @@ class _AllDestinationPageState extends State<AllDestinationPage> {
 
     for (int i = 0; i < orderNotifier.orderList.length; i++) {
       LatLng endPoint = LatLng(
-        orderNotifier.orderList[i].geoPoint.latitude,
-        orderNotifier.orderList[i].geoPoint.longitude,
+        orderNotifier.orderList[i]['geoPoint'].latitude,
+        orderNotifier.orderList[i]['geoPoint'].longitude,
       );
       setPolylines(
+        orderNotifier.orderList[i],
         locationNotifier.initialPosition,
         endPoint,
-        orderNotifier.orderList[i].customerName,
+        orderNotifier.orderList[i]['customerName'],
         orderNotifier.orderList.length,
       );
     }
     super.initState();
   }
 
-  void setPolylines(
-      LatLng startPoint, LatLng endPoint, String customer, int length) async {
+  void setPolylines(final order, LatLng startPoint, LatLng endPoint,
+      String customer, int length) async {
     PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
       GOOGLE_MAPS_API_KEY,
       PointLatLng(startPoint.latitude, startPoint.longitude),
@@ -95,6 +96,7 @@ class _AllDestinationPageState extends State<AllDestinationPage> {
         print('start: ${startPoint.latitude}, ${startPoint.longitude}');
         print('desination: ${customer}');
         calculateDistance(
+          order,
           customer,
           LatLng(endPoint.latitude, endPoint.longitude),
           length,
@@ -103,7 +105,7 @@ class _AllDestinationPageState extends State<AllDestinationPage> {
     }
   }
 
-  void calculateDistance(String name, LatLng point, int length) {
+  void calculateDistance(final order, String name, LatLng point, int length) {
     double totalDistance = 0.0;
 
     for (int i = 0; i < polylineCoordinates.length - 1; i++) {
@@ -123,7 +125,8 @@ class _AllDestinationPageState extends State<AllDestinationPage> {
       allPoints.add({
         'name': name,
         'point': point,
-        'distance': double.parse(_placeDistance)
+        'distance': double.parse(_placeDistance),
+        'order': order,
       });
       if (distanceList.length == length) {
         sortDistance(name, point);
@@ -148,6 +151,7 @@ class _AllDestinationPageState extends State<AllDestinationPage> {
     print('new round');
     for (int i = 0; i < allPoints.length; i++) {
       setPolylines(
+        allPoints[i]['order'],
         nextStartPoint[nextStartPoint.length - 1]['point'],
         allPoints[i]['point'],
         allPoints[i]['name'],
@@ -160,7 +164,6 @@ class _AllDestinationPageState extends State<AllDestinationPage> {
 
   @override
   Widget build(BuildContext context) {
-    double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     double mapHeight = MediaQuery.of(context).size.height * 0.6;
 
@@ -202,10 +205,12 @@ class _AllDestinationPageState extends State<AllDestinationPage> {
                           ? Column(
                               children: [
                                 showOrders(
-                                    'My location',
-                                    nextStartPoint.first['name'],
-                                    nextStartPoint.first['distance'].toString(),
-                                    1),
+                                  nextStartPoint.first['order'],
+                                  'My location',
+                                  nextStartPoint.first['name'],
+                                  nextStartPoint.first['distance'].toString(),
+                                  1,
+                                ),
                                 ListView.builder(
                                   shrinkWrap: true,
                                   padding: EdgeInsets.zero,
@@ -215,6 +220,7 @@ class _AllDestinationPageState extends State<AllDestinationPage> {
                                     return index == nextStartPoint.length - 1
                                         ? Container()
                                         : showOrders(
+                                            nextStartPoint[index]['order'],
                                             nextStartPoint[index]['name'],
                                             nextStartPoint[index + 1]['name'],
                                             nextStartPoint[index + 1]
@@ -238,24 +244,29 @@ class _AllDestinationPageState extends State<AllDestinationPage> {
 
 
   Widget showOrders(
-      String startPoint, String stopPoint, String distance, int index) {
-    OrderNotifier orderNotifier = Provider.of<OrderNotifier>(context);
+    final order,
+    String startPoint,
+    String stopPoint,
+    String distance,
+    int index,
+  ) {
     StoreNotifier storeNotifier = Provider.of<StoreNotifier>(context);
 
     return Container(
-      // decoration: BoxDecoration(
-      //   borderRadius: BorderRadius.circular(20),
-      //   color: CollectionsColors.yellow,
-      // ),
       padding: EdgeInsets.all(10),
-      // margin: EdgeInsets.only(bottom: 5),
       child: ListTile(
         onTap: () {
           Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => OrderDetailPage(
-                      storeId: storeNotifier.user.uid, order: orderNotifier)));
+            context,
+            MaterialPageRoute(
+              builder: (context) => OrderDetailPage(
+                storeId: storeNotifier.store.storeId,
+                order: order,
+                typeOrder: 'delivery-orders',
+                isConfirm: false,
+              ),
+            ),
+          );
         },
         leading: Container(
           padding: EdgeInsets.all(15),
@@ -294,10 +305,6 @@ class _AllDestinationPageState extends State<AllDestinationPage> {
                 text: distance,
                 color: CollectionsColors.yellow,
               ),
-              // Text(
-              //   'Distance: ' + distance,
-              //   style: FontCollection.bodyTextStyle,
-              // ),
             ),
           ],
         ),

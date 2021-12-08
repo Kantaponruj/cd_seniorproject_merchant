@@ -126,25 +126,22 @@ class _OriginalMapWidgetState extends State<OriginalMapWidget> {
       orderNotifier.orderList.length,
       (index) {
         return Marker(
-          markerId: MarkerId(orderNotifier.orderList[index].orderId),
+          markerId: MarkerId(orderNotifier.orderList[index]['orderId']),
           icon: BitmapDescriptor.defaultMarkerWithHue(_marker),
           position: LatLng(
-            orderNotifier.orderList[index].geoPoint.latitude,
-            orderNotifier.orderList[index].geoPoint.longitude,
+            orderNotifier.orderList[index]['geoPoint'].latitude,
+            orderNotifier.orderList[index]['geoPoint'].longitude,
           ),
           infoWindow: InfoWindow(
-            title: orderNotifier.orderList[index].customerName,
-            snippet: orderNotifier.orderList[index].address,
-            onTap: () => _openOnGoogleMapApp(
-                orderNotifier.orderList[index].geoPoint.latitude,
-                orderNotifier.orderList[index].geoPoint.longitude),
+            title: orderNotifier.orderList[index]['customerName'],
+            snippet: orderNotifier.orderList[index]['address'],
           ),
           onTap: () {
             polylineCoordinates.clear();
             setPolylines(
               LatLng(
-                orderNotifier.orderList[index].geoPoint.latitude,
-                orderNotifier.orderList[index].geoPoint.longitude,
+                orderNotifier.orderList[index]['geoPoint'].latitude,
+                orderNotifier.orderList[index]['geoPoint'].longitude,
               ),
             );
           },
@@ -157,8 +154,7 @@ class _OriginalMapWidgetState extends State<OriginalMapWidget> {
         children: [
           Container(
             child: GoogleMap(
-              mapToolbarEnabled: false,
-              padding: EdgeInsets.only(bottom: 20, top: 100),
+              padding: EdgeInsets.only(bottom: 20,top: 100),
               myLocationEnabled: true,
               polylines: _polylines,
               initialCameraPosition: CameraPosition(

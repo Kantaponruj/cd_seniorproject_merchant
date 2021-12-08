@@ -12,7 +12,6 @@ import 'package:cs_senior_project_merchant/widgets/bottomOrder_widget.dart';
 import 'package:cs_senior_project_merchant/widgets/icontext_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_icons/flutter_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 
@@ -21,8 +20,8 @@ class OrderDetailPage extends StatefulWidget {
     Key key,
     @required this.storeId,
     @required this.order,
-    this.isConfirm,
-    this.typeOrder,
+    @required this.typeOrder,
+    @required this.isConfirm,
   }) : super(key: key);
 
   final String storeId;
