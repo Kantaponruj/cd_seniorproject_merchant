@@ -1,10 +1,14 @@
+import 'dart:async';
+
 import 'package:cs_senior_project_merchant/asset/constant.dart';
 import 'package:cs_senior_project_merchant/notifiers/location_notifier.dart';
 import 'package:cs_senior_project_merchant/notifiers/order_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 const _marker = 350.0;
 
@@ -19,10 +23,13 @@ class OriginalMapWidget extends StatefulWidget {
 
 class _OriginalMapWidgetState extends State<OriginalMapWidget> {
   GoogleMapController mapController;
+  Completer<GoogleMapController> _controller = Completer();
 
   List<LatLng> polylineCoordinates = [];
   PolylinePoints polylinePoints;
   Set<Polyline> _polylines = Set<Polyline>();
+
+  LatLng currentLocation;
 
   // String _placeDistance;
 
@@ -38,7 +45,14 @@ class _OriginalMapWidgetState extends State<OriginalMapWidget> {
   @override
   void initState() {
     polylinePoints = PolylinePoints();
+    setInitialLocation();
     super.initState();
+  }
+
+  void setInitialLocation() async {
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+    currentLocation = await LatLng(position.latitude, position.longitude);
   }
 
   void setPolylines(LatLng customerPoint) async {
@@ -98,6 +112,16 @@ class _OriginalMapWidgetState extends State<OriginalMapWidget> {
     OrderNotifier orderNotifier = Provider.of<OrderNotifier>(context);
     LocationNotifier locationNotifier = Provider.of<LocationNotifier>(context);
 
+    _openOnGoogleMapApp(double latitude, double longitude) async {
+      String googleUrl =
+          'https://www.google.com/maps/search/?api=1&query=$latitude,$longitude';
+      if (await canLaunch(googleUrl)) {
+        await launch(googleUrl);
+      } else {
+        // Could not open the map.
+      }
+    }
+
     Iterable _markers = Iterable.generate(
       orderNotifier.orderList.length,
       (index) {
@@ -111,6 +135,9 @@ class _OriginalMapWidgetState extends State<OriginalMapWidget> {
           infoWindow: InfoWindow(
             title: orderNotifier.orderList[index].customerName,
             snippet: orderNotifier.orderList[index].address,
+            onTap: () => _openOnGoogleMapApp(
+                orderNotifier.orderList[index].geoPoint.latitude,
+                orderNotifier.orderList[index].geoPoint.longitude),
           ),
           onTap: () {
             polylineCoordinates.clear();
@@ -130,7 +157,8 @@ class _OriginalMapWidgetState extends State<OriginalMapWidget> {
         children: [
           Container(
             child: GoogleMap(
-              padding: EdgeInsets.only(bottom: 20,top: 100),
+              mapToolbarEnabled: false,
+              padding: EdgeInsets.only(bottom: 20, top: 100),
               myLocationEnabled: true,
               polylines: _polylines,
               initialCameraPosition: CameraPosition(
@@ -147,5 +175,19 @@ class _OriginalMapWidgetState extends State<OriginalMapWidget> {
         ],
       ),
     );
+  }
+
+  void updatePinOnMap() async {
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+    CameraPosition cameraPosition = CameraPosition(
+      target: currentLocation,
+      zoom: 16,
+      bearing: 30,
+      tilt: 80,
+    );
+
+    final GoogleMapController controller = await _controller.future;
+    controller.animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
   }
 }

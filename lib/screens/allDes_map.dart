@@ -236,6 +236,7 @@ class _AllDestinationPageState extends State<AllDestinationPage> {
         ));
   }
 
+
   Widget showOrders(
       String startPoint, String stopPoint, String distance, int index) {
     OrderNotifier orderNotifier = Provider.of<OrderNotifier>(context);
@@ -254,8 +255,7 @@ class _AllDestinationPageState extends State<AllDestinationPage> {
               context,
               MaterialPageRoute(
                   builder: (context) => OrderDetailPage(
-                      storeId: storeNotifier.user.uid,
-                      order: orderNotifier)));
+                      storeId: storeNotifier.user.uid, order: orderNotifier)));
         },
         leading: Container(
           padding: EdgeInsets.all(15),
@@ -303,63 +303,6 @@ class _AllDestinationPageState extends State<AllDestinationPage> {
         ),
         trailing: Icon(Icons.navigate_next),
       ),
-      // Row(
-      //   children: [
-      //     Expanded(
-      //       flex: 3,
-      //       child: Container(
-      //         padding: EdgeInsets.all(10),
-      //         decoration: BoxDecoration(
-      //           shape: BoxShape.circle,
-      //           // color: CollectionsColors.white,
-      //           border: Border.all(
-      //             width: 1,
-      //             color: Colors.black,
-      //           ),
-      //         ),
-      //         child: Text(
-      //           index.toString(),
-      //           textAlign: TextAlign.center,
-      //           style: TextStyle(
-      //             color: Colors.black,
-      //             fontSize: 16,
-      //             fontWeight: FontWeight.w700,
-      //           ),
-      //         ),
-      //       ),
-      //     ),
-      //     // Container(
-      //     //   child: Text(
-      //     //     index.toString() + '. ' + startPoint + ' to ',
-      //     //     style: FontCollection.bodyTextStyle,
-      //     //   ),
-      //     // ),
-      //     Expanded(
-      //       flex: 5,
-      //       child: Container(
-      //         padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
-      //         child: Text(
-      //           stopPoint,
-      //           style: FontCollection.bodyTextStyle,
-      //         ),
-      //       ),
-      //     ),
-      //     Expanded(
-      //       flex: 4,
-      //       child: Padding(
-      //         padding: EdgeInsets.only(left: 20),
-      //         child: BuildIconText(
-      //           icon: Icons.location_on,
-      //           text: distance,
-      //         ),
-      //         // Text(
-      //         //   'Distance: ' + distance,
-      //         //   style: FontCollection.bodyTextStyle,
-      //         // ),
-      //       ),
-      //     ),
-      //   ],
-      // ),
     );
   }
 }
