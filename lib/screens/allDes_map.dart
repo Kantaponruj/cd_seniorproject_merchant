@@ -260,6 +260,7 @@ class _AllDestinationPageState extends State<AllDestinationPage> {
                 order: order,
                 typeOrder: 'delivery-orders',
                 isConfirm: false,
+                isDelivery: true,
               ),
             ),
           );
