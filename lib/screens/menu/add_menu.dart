@@ -29,7 +29,7 @@ class AddMenuPage extends StatefulWidget {
 
 class _AddMenuPageState extends State<AddMenuPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  bool status = false;
+  // bool status;
   bool onClickAddOptionalButton = false;
   bool isUpdatingTopping = false;
   int toppingIndex;
@@ -46,7 +46,7 @@ class _AddMenuPageState extends State<AddMenuPage> {
   TextEditingController toppingDetail = new TextEditingController();
 
   List<Map<String, dynamic>> _subtoppingList = [];
-  bool statusSubTopping;
+  bool statusSubTopping = false;
   TextEditingController subtoppingName = new TextEditingController();
   TextEditingController subtoppingPrice = new TextEditingController();
 
@@ -91,7 +91,6 @@ class _AddMenuPageState extends State<AddMenuPage> {
     _selectedType = type.first;
     _selectedNumberTopping = number.first;
     _imageUrl = _currentMenu.image;
-    // statusSubTopping = false;
     super.initState();
   }
 
@@ -108,9 +107,12 @@ class _AddMenuPageState extends State<AddMenuPage> {
   }
 
   _menuDeleted(Menu menu) {
+    int count = 0;
     MenuNotfier menuNotfier = Provider.of<MenuNotfier>(context, listen: false);
     menuNotfier.deleteMenu(menu);
-    Navigator.pushNamedAndRemoveUntil(context, '/menu', (route) => false);
+    Navigator.popUntil(context, (route) {
+      return count++ == 1;
+    });
   }
 
   handleSaveMenu(MenuNotfier menuNotfier) {
@@ -120,7 +122,7 @@ class _AddMenuPageState extends State<AddMenuPage> {
     _formKey.currentState.save();
 
     _currentMenu.categoryFood = _selectedCategory;
-    _currentMenu.haveMenu = status;
+    // _currentMenu.haveMenu = status;
 
     updateMenuAndImage(
       _currentMenu,
@@ -394,18 +396,24 @@ class _AddMenuPageState extends State<AddMenuPage> {
         width: 100,
         activeText: 'เปิด',
         inactiveText: 'ปิด',
-        value: _currentMenu.haveMenu ?? status,
+        value: _currentMenu.haveMenu,
         onToggle: (val) {
-          setState(
-            () {
-              _currentMenu.haveMenu = val;
-              updateMenu(
-                store.store.storeId,
-                _currentMenu.menuId,
-                {'haveMenu': val},
-              );
-            },
-          );
+          widget.isUpdating
+              ? setState(
+                  () {
+                    _currentMenu.haveMenu = val;
+                    updateMenu(
+                      store.store.storeId,
+                      _currentMenu.menuId,
+                      {'haveMenu': val},
+                    );
+                  },
+                )
+              : setState(
+                  () {
+                    _currentMenu.haveMenu = val;
+                  },
+                );
         },
       ),
     );
@@ -478,6 +486,7 @@ class _AddMenuPageState extends State<AddMenuPage> {
           child: BuildPlainTextField(
             initialValue: initialValue,
             hintText: hintText,
+            keyboardType: TextInputType.number,
             onSaved: onSaved,
           ),
         ),
@@ -720,12 +729,12 @@ class _AddMenuPageState extends State<AddMenuPage> {
                     _subtoppingList.add({
                       'name': subtoppingName.text.trim(),
                       'price': subtoppingPrice.text.trim(),
-                      'haveSubTopping': false,
+                      'haveSubTopping': statusSubTopping
                     });
                   });
                   subtoppingName.clear();
                   subtoppingPrice.clear();
-                  print(_subtoppingList);
+                  // print(_subtoppingList);
                 },
               ),
             ),
@@ -837,6 +846,7 @@ class _AddMenuPageState extends State<AddMenuPage> {
             child: BuildPlainTextField(
               hintText: 'ราคา',
               textEditingController: subtoppingPrice,
+              keyboardType: TextInputType.number,
               validator: (String value) {
                 if (value.isEmpty) {
                   return 'โปรดกรอก';
@@ -1145,15 +1155,19 @@ class _AddMenuPageState extends State<AddMenuPage> {
               inactiveText: 'หมด',
               value: topping.subTopping[i]['haveSubTopping'],
               onToggle: (val) {
-                setState(() {
-                  topping.subTopping[i]['haveSubTopping'] = val;
-                });
-                updateSubToppingStatus(
-                  store.store.storeId,
-                  menu.currentMenu.menuId,
-                  topping.toppingId,
-                  topping.subTopping,
-                );
+                widget.isUpdating && topping.toppingId != null
+                    ? setState(() {
+                        topping.subTopping[i]['haveSubTopping'] = val;
+                        updateSubToppingStatus(
+                          store.store.storeId,
+                          menu.currentMenu.menuId,
+                          topping.toppingId,
+                          topping.subTopping,
+                        );
+                      })
+                    : setState(() {
+                        topping.subTopping[i]['haveSubTopping'] = val;
+                      });
               },
             ),
           ),

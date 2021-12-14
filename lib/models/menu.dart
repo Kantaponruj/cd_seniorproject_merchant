@@ -5,7 +5,7 @@ class Menu {
   String price;
   String image;
   String categoryFood;
-  bool haveMenu;
+  bool haveMenu = false;
 
   Menu();
 
