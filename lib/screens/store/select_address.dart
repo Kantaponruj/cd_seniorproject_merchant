@@ -42,6 +42,9 @@ class _SelectAddressState extends State<SelectAddress> {
                   child: Flexible(
                     flex: 15,
                     child: PlacePicker(
+                      hidePlaceDetailsWhenDraggingPin: true,
+                      usePinPointingSearch: true,
+                      resizeToAvoidBottomInset: true,
                       apiKey: GOOGLE_MAPS_API_KEY,
                       initialPosition: location.initialPosition,
                       automaticallyImplyAppBarLeading: false,

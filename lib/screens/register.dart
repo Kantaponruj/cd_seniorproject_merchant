@@ -9,6 +9,7 @@ import 'package:cs_senior_project_merchant/component/textformfield.dart';
 import 'package:cs_senior_project_merchant/notifiers/store_notifier.dart';
 import 'package:cs_senior_project_merchant/widgets/button_widget.dart';
 import 'package:cs_senior_project_merchant/widgets/loading_widget.dart';
+import 'package:cs_senior_project_merchant/widgets/slider_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
@@ -667,14 +668,12 @@ class _RegisterPageState extends State<RegisterPage> {
   double _price = 20.0;
 
   Widget priceSelected(StoreNotifier storeNotifier) {
-    return SfSlider(
+    return BuildSlider(
       min: 0.0,
       max: 40.0,
       interval: 5,
       stepSize: 5,
-      showTicks: true,
       minorTicksPerInterval: 0,
-      showLabels: true,
       value: _price,
       onChanged: (dynamic newValue) {
         setState(() {
@@ -688,14 +687,12 @@ class _RegisterPageState extends State<RegisterPage> {
   double _distance = 5.0;
 
   Widget distanceSelected(StoreNotifier storeNotifier) {
-    return SfSlider(
+    return BuildSlider(
       min: 0.0,
       max: 16.0,
       interval: 2,
       stepSize: 1,
-      showTicks: true,
       minorTicksPerInterval: 1,
-      showLabels: true,
       value: _distance,
       onChanged: (dynamic newValue) {
         setState(() {
