@@ -10,6 +10,7 @@ import 'package:cs_senior_project_merchant/notifiers/store_notifier.dart';
 import 'package:cs_senior_project_merchant/screens/login.dart';
 import 'package:cs_senior_project_merchant/services/store_service.dart';
 import 'package:cs_senior_project_merchant/widgets/button_widget.dart';
+import 'package:cs_senior_project_merchant/widgets/slider_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
@@ -206,9 +207,28 @@ class _StoreProfilePageState extends State<StoreProfilePage> {
               child: salesType('ประเภทสินค้า', storeNotifier),
             ),
             Container(
-                alignment: Alignment.centerLeft,
-                padding: EdgeInsets.only(top: 20),
-                child: storeType('ประเภทร้านค้า')),
+              alignment: Alignment.centerLeft,
+              padding: EdgeInsets.only(top: 20),
+              child: storeType('ประเภทร้านค้า'),
+            ),
+            selectedTypeOfStore == 'ร้านค้ารถเข็น'
+                ? Column(
+                    children: [
+                      Container(
+                        alignment: Alignment.topLeft,
+                        margin: EdgeInsets.fromLTRB(0, 20, 0, 20),
+                        child: Text(
+                          'ราคาค่าส่งเริ่มต้น',
+                          style: FontCollection.bodyTextStyle,
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.fromLTRB(0, 0, 0, 20),
+                        child: priceSelected(storeNotifier),
+                      ),
+                    ],
+                  )
+                : SizedBox.shrink(),
           ],
         ),
       ),
@@ -353,6 +373,25 @@ class _StoreProfilePageState extends State<StoreProfilePage> {
       spacing: 10.0,
       runSpacing: 5.0,
       children: chips,
+    );
+  }
+
+  double _price = 20.0;
+
+  Widget priceSelected(StoreNotifier storeNotifier) {
+    return BuildSlider(
+      min: 0.0,
+      max: 40.0,
+      interval: 5,
+      stepSize: 5,
+      minorTicksPerInterval: 0,
+      value: _price,
+      onChanged: (dynamic newValue) {
+        setState(() {
+          _price = newValue;
+          storeNotifier.shippingfee = newValue.toString();
+        });
+      },
     );
   }
 }
