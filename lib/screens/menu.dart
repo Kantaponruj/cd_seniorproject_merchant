@@ -21,8 +21,6 @@ class MenuPage extends StatefulWidget {
 class _MenuPageState extends State<MenuPage> {
   final controller = ScrollController();
 
-  // List<String> categories = [];
-
   @override
   void initState() {
     MenuNotfier menuNotfier = Provider.of<MenuNotfier>(context, listen: false);
@@ -35,13 +33,6 @@ class _MenuPageState extends State<MenuPage> {
   @override
   Widget build(BuildContext context) {
     MenuNotfier menuNotfier = Provider.of<MenuNotfier>(context);
-
-    // menuNotfier.menuList.forEach((menu) {
-    //   if (categories.contains(menu.categoryFood)) {
-    //   } else {
-    //     categories.add(menu.categoryFood);
-    //   }
-    // });
 
     return SafeArea(
       child: Scaffold(
@@ -103,7 +94,6 @@ class _MenuPageState extends State<MenuPage> {
         padding: EdgeInsets.all(16),
         scrollDirection: Axis.horizontal,
         physics: NeverScrollableScrollPhysics(),
-        // separatorBuilder: (context, index) => Divider(),
         itemCount: categories.length,
         itemBuilder: (context, index) {
           return Container(
@@ -180,26 +170,26 @@ class _MenuPageState extends State<MenuPage> {
                   child: SizedBox(
                     child: menu.image != null
                         ? Image.network(
-                      menu.image,
-                      errorBuilder: (BuildContext context,
-                          Object exception, StackTrace stackTrace) {
-                        return Image.asset(
-                          'assets/images/default-photo.png',
-                          fit: BoxFit.cover,
-                          width: double.infinity,
-                          height: double.infinity,
-                        );
-                      },
-                      fit: BoxFit.cover,
-                      width: double.infinity,
-                      height: double.infinity,
-                    )
+                            menu.image,
+                            errorBuilder: (BuildContext context,
+                                Object exception, StackTrace stackTrace) {
+                              return Image.asset(
+                                'assets/images/default-photo.png',
+                                fit: BoxFit.cover,
+                                width: double.infinity,
+                                height: double.infinity,
+                              );
+                            },
+                            fit: BoxFit.cover,
+                            width: double.infinity,
+                            height: double.infinity,
+                          )
                         : Image.asset(
-                      'assets/images/default-photo.png',
-                      fit: BoxFit.cover,
-                      width: double.infinity,
-                      height: double.infinity,
-                    ),
+                            'assets/images/default-photo.png',
+                            fit: BoxFit.cover,
+                            width: double.infinity,
+                            height: double.infinity,
+                          ),
                   ),
                 ),
                 Container(

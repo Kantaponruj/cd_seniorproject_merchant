@@ -74,26 +74,3 @@ class Topping {
     subTopping = data['subTopping'];
   }
 }
-
-// class SubTopping {
-//   String subToppingId;
-//   String name;
-//   String price;
-//   bool haveSubTopping;
-
-//   SubTopping({this.name, this.price, this.haveSubTopping});
-
-//   @override
-//   String toString() {
-//     return '{ ${this.name}, ${this.price}, ${this.haveSubTopping} }';
-//   }
-
-//   Map<String, dynamic> toMap() {
-//     return {
-//       'subToppingId': subToppingId,
-//       'name': name,
-//       'price': price,
-//       'haveSubTopping': haveSubTopping
-//     };
-//   }
-// }

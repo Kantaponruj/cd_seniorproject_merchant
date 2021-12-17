@@ -3,7 +3,6 @@ import 'package:cs_senior_project_merchant/asset/constant.dart';
 import 'package:cs_senior_project_merchant/notifiers/order_notifier.dart';
 import 'package:cs_senior_project_merchant/notifiers/store_notifier.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_widget/google_maps_widget.dart';
 import 'package:provider/provider.dart';
 
@@ -18,48 +17,6 @@ class MapWidget extends StatefulWidget {
 }
 
 class _MapWidgetState extends State<MapWidget> {
-  // GoogleMapController mapController;
-  // List<LatLng> polylineCoordinates = [];
-  // PolylinePoints polylinePoints;
-  // Set<Polyline> _polylines = Set<Polyline>();
-
-  // @override
-  // void initState() {
-  //   polylinePoints = PolylinePoints();
-  //   super.initState();
-  // }
-
-  // void setPolylines(LatLng customerPoint, LatLng storePoint) async {
-  //   PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
-  //     GOOGLE_MAPS_API_KEY,
-  //     PointLatLng(
-  //       storePoint.latitude,
-  //       storePoint.longitude,
-  //     ),
-  //     PointLatLng(
-  //       customerPoint.latitude,
-  //       customerPoint.longitude,
-  //     ),
-  //     travelMode: TravelMode.walking,
-  //   );
-
-  //   if (result.status == 'OK') {
-  //     result.points.forEach((PointLatLng point) {
-  //       polylineCoordinates.add(LatLng(point.latitude, point.longitude));
-  //     });
-
-  //     setState(() {
-  //       _polylines.add(Polyline(
-  //         width: 5,
-  //         polylineId: PolylineId('polyLine'),
-  //         color: Color(0xFF0E7AC7),
-  //         points: polylineCoordinates,
-  //       ));
-  //       // calculateDistance();
-  //     });
-  //   }
-  // }
-
   @override
   Widget build(BuildContext context) {
     OrderNotifier order = Provider.of<OrderNotifier>(context);

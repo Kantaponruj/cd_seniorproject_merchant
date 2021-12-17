@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cs_senior_project_merchant/asset/color.dart';
 import 'package:cs_senior_project_merchant/asset/text_style.dart';
-import 'package:cs_senior_project_merchant/models/order.dart';
 import 'package:cs_senior_project_merchant/notifiers/location_notifier.dart';
 import 'package:cs_senior_project_merchant/notifiers/order_notifier.dart';
 import 'package:cs_senior_project_merchant/notifiers/store_notifier.dart';
@@ -78,13 +77,6 @@ class _OrderPageState extends State<OrderPage> {
     return SafeArea(
       child: Scaffold(
         backgroundColor: CollectionsColors.grey,
-        // appBar: MainAppbar(
-        //   appBarTitle: 'คำสั่งซื้อ',
-        //   map: () {
-        //     Navigator.push(context,
-        //         MaterialPageRoute(builder: (context) => AllDestinationPage()));
-        //   },
-        // ),
         body: SingleChildScrollView(
           child: StreamBuilder(
               stream: getOrders(storeNotifier.user.uid, widget.typeOrder),
@@ -98,7 +90,6 @@ class _OrderPageState extends State<OrderPage> {
 
                 if (widget.typeOrder == 'delivery-orders') {
                   snapshot.data.docs.forEach((document) {
-                    // OrderDetail order = OrderDetail.fromMap(document.data());
                     _orderList.add(document);
                   });
                 }

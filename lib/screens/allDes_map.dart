@@ -34,8 +34,6 @@ class _AllDestinationPageState extends State<AllDestinationPage> {
   List<LatLng> polylineCoordinates = [];
   PolylinePoints polylinePoints;
 
-  // Set<Polyline> _polylines = Set<Polyline>();
-
   String _placeDistance;
 
   double _coordinateDistance(lat1, lon1, lat2, lon2) {
@@ -78,7 +76,6 @@ class _AllDestinationPageState extends State<AllDestinationPage> {
       GOOGLE_MAPS_API_KEY,
       PointLatLng(startPoint.latitude, startPoint.longitude),
       PointLatLng(endPoint.latitude, endPoint.longitude),
-      // travelMode: TravelMode.bicycling,
     );
 
     if (result.status == 'OK') {
@@ -87,14 +84,8 @@ class _AllDestinationPageState extends State<AllDestinationPage> {
       });
 
       setState(() {
-        // _polylines.add(Polyline(
-        //   width: 5,
-        //   polylineId: PolylineId('polyLine'),
-        //   // color: Color(0xFF0E7AC7),
-        //   points: polylineCoordinates,
-        // ));
-        print('start: ${startPoint.latitude}, ${startPoint.longitude}');
-        print('desination: ${customer}');
+        // print('start: ${startPoint.latitude}, ${startPoint.longitude}');
+        // print('desination: ${customer}');
         calculateDistance(
           order,
           customer,
@@ -121,7 +112,7 @@ class _AllDestinationPageState extends State<AllDestinationPage> {
       _placeDistance = totalDistance.toStringAsFixed(2);
       distanceList.add(double.parse(_placeDistance));
       polylineCoordinates.clear();
-      print('DISTANCE: $_placeDistance km');
+      // print('DISTANCE: $_placeDistance km');
       allPoints.add({
         'name': name,
         'point': point,
@@ -136,7 +127,7 @@ class _AllDestinationPageState extends State<AllDestinationPage> {
 
   void sortDistance(String name, LatLng point) {
     distanceList.sort();
-    print('sort: ${distanceList}');
+    // print('sort: ${distanceList}');
 
     allPoints.forEach((data) {
       if (data['distance'] == distanceList.first) {
@@ -270,10 +261,6 @@ class _AllDestinationPageState extends State<AllDestinationPage> {
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             color: CollectionsColors.orange,
-            // border: Border.all(
-            //   width: 1,
-            //   color: Colors.black,
-            // ),
           ),
           child: Text(
             index.toString(),

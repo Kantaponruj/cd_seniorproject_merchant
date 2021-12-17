@@ -82,14 +82,16 @@ class _StorePageState extends State<StorePage> {
               ? AutoSizeText(
                   daysArr[0] + " - " + daysArr[daysArr.length - 1],
                   style: FontCollection.bodyTextStyle,
-            maxLines: 2,
+                  maxLines: 2,
                 )
               : Row(
                   children: [
                     Expanded(
-                      child: AutoSizeText(daysArr.join(', '),
-                          style: FontCollection.bodyTextStyle,
-                        maxLines: 2,),
+                      child: AutoSizeText(
+                        daysArr.join(', '),
+                        style: FontCollection.bodyTextStyle,
+                        maxLines: 2,
+                      ),
                     ),
                   ],
                 ),
@@ -174,7 +176,6 @@ class _StorePageState extends State<StorePage> {
                                             child: EditButton(
                                               editText: 'แก้ไขข้อมูล',
                                               onClicked: () {
-                                                // storeNotifier.reloadUserModel();
                                                 Navigator.of(context).push(
                                                   MaterialPageRoute(
                                                     builder: (context) =>
@@ -305,10 +306,11 @@ class _StorePageState extends State<StorePage> {
                                                 .dateTimeList.length,
                                             itemBuilder: (context, index) {
                                               return Container(
-                                                padding:
-                                                    EdgeInsets.fromLTRB(0, 10, 0, 10),
+                                                padding: EdgeInsets.fromLTRB(
+                                                    0, 10, 0, 10),
                                                 child: Row(
-                                                  mainAxisSize: MainAxisSize.min,
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
                                                   mainAxisAlignment:
                                                       MainAxisAlignment
                                                           .spaceBetween,
@@ -321,7 +323,8 @@ class _StorePageState extends State<StorePage> {
                                                               index]),
                                                     ),
                                                     Container(
-                                                      alignment: Alignment.topRight,
+                                                      alignment:
+                                                          Alignment.topRight,
                                                       child: AutoSizeText(
                                                         dateTimeNotifier
                                                                 .dateTimeList[
@@ -340,11 +343,11 @@ class _StorePageState extends State<StorePage> {
                                                   ],
                                                 ),
                                               );
-
                                             },
-                                           separatorBuilder: (context, index) {
-                                             return Divider(color: Colors.grey);
-                                           },
+                                            separatorBuilder: (context, index) {
+                                              return Divider(
+                                                  color: Colors.grey);
+                                            },
                                           )
                                         ],
                                       ),
@@ -359,64 +362,6 @@ class _StorePageState extends State<StorePage> {
                                       ),
                                     ),
                             ),
-                            // storeCard(
-                            //   onClicked: () {},
-                            //   headerText: 'รูปแบบการจัดส่ง',
-                            //   child: Container(
-                            //     padding: EdgeInsets.all(20),
-                            //     child: Row(
-                            //       mainAxisAlignment:
-                            //           MainAxisAlignment.spaceEvenly,
-                            //       children: [
-                            //         saleType(
-                            //           Icons.directions_walk,
-                            //           'รับด้วยตนเอง',
-                            //           _isPickUp,
-                            //           () {
-                            //             if (_isPickUp == false) {
-                            //               setState(() {
-                            //                 _isPickUp = true;
-                            //                 storeNotifier.updateUserData({
-                            //                   'isPickUp': true,
-                            //                 });
-                            //               });
-                            //             } else {
-                            //               setState(() {
-                            //                 _isPickUp = false;
-                            //                 storeNotifier.updateUserData({
-                            //                   'isPickUp': false,
-                            //                 });
-                            //               });
-                            //             }
-                            //           },
-                            //         ),
-                            //         saleType(
-                            //           Icons.local_shipping,
-                            //           'บริการจัดส่ง',
-                            //           _isDelivery,
-                            //           () {
-                            //             if (_isDelivery == false) {
-                            //               setState(() {
-                            //                 _isDelivery = true;
-                            //                 storeNotifier.updateUserData({
-                            //                   'isDelivery': true,
-                            //                 });
-                            //               });
-                            //             } else {
-                            //               setState(() {
-                            //                 _isDelivery = false;
-                            //                 storeNotifier.updateUserData({
-                            //                   'isDelivery': false,
-                            //                 });
-                            //               });
-                            //             }
-                            //           },
-                            //         ),
-                            //       ],
-                            //     ),
-                            //   ),
-                            //   canEdit: false,
-                            // ),
                             storeCard(
                               onClicked: () async {
                                 await Navigator.push(

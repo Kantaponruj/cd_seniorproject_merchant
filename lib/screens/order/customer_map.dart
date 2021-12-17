@@ -59,29 +59,7 @@ class _CustomerMapPageState extends State<CustomerMapPage> {
           ],
         ),
       ),
-      // floatingActionButtonLocation: FloatingActionButtonLocation.startTop,
-      // floatingActionButton: FloatingActionButton(
-      //   backgroundColor: Colors.transparent,
-      //   elevation: 0,
-      //   onPressed: () {
-      //     Navigator.of(context).pop();
-      //   },
-      //   child: Icon(
-      //     Icons.arrow_back,
-      //     color: Colors.black,
-      //   ),
-      // ),
-      // appBar: AppBar(
-      //   title: Row(
-      //     children: [
-      //       Container(
-      //         child: Text('เวลาที่ใช้ในการส่งอาหาร ${order.arrivableTime}นาที'),
-      //       ),
-      //     ],
-      //   ),
-      // ),
       body: Stack(
-        // fit: StackFit.expand,
         children: [
           SlidingUpPanel(
             color: Theme.of(context).backgroundColor,
@@ -303,7 +281,6 @@ class _CustomerMapPageState extends State<CustomerMapPage> {
           Container(
             width: width,
             height: height,
-            // alignment: Alignment.centerRight,
             child: MaterialButton(
               color: CollectionsColors.yellow,
               textColor: Colors.white,
@@ -313,7 +290,6 @@ class _CustomerMapPageState extends State<CustomerMapPage> {
               shape: CircleBorder(),
               onPressed: () async {
                 String number = widget.order['phone'];
-                // launch('tel://$number');
                 await FlutterPhoneDirectCaller.callNumber(number);
               },
             ),

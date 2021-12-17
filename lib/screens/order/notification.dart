@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 class Store extends StatefulWidget {
   static const routeName = '/notifications';
 
@@ -8,9 +7,7 @@ class Store extends StatefulWidget {
   _StoreState createState() => _StoreState();
 }
 
-
 class _StoreState extends State<Store> {
-
   @override
   void initState() {
     super.initState();
@@ -27,11 +24,6 @@ class _StoreState extends State<Store> {
             borderRadius: BorderRadius.vertical(
               bottom: Radius.circular(30),
             ),
-            // gradient: LinearGradient(
-            //   begin: Alignment.centerLeft,
-            //   end: Alignment.centerRight,
-            //   colors: <Color>[Color(0xFFF2954E), Color(0xFFFAD161)],
-            // ),
           ),
         ),
         shape: RoundedRectangleBorder(

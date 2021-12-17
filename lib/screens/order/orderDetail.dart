@@ -2,7 +2,6 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cs_senior_project_merchant/asset/color.dart';
 import 'package:cs_senior_project_merchant/asset/text_style.dart';
 import 'package:cs_senior_project_merchant/component/bottomBar.dart';
-import 'package:cs_senior_project_merchant/component/mainAppBar.dart';
 import 'package:cs_senior_project_merchant/component/orderCard.dart';
 import 'package:cs_senior_project_merchant/component/roundAppBar.dart';
 import 'package:cs_senior_project_merchant/models/order.dart';
@@ -44,7 +43,6 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
   String topicTime;
   OrderMenu menu = OrderMenu();
   OrderDetail _orderDetail = OrderDetail();
-  // bool check;
 
   @override
   void initState() {
@@ -55,38 +53,11 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
       widget.order['documentId'],
       widget.typeOrder,
     );
-    // checkStatus();
     topicTime = widget.order['typeOrder'] == 'delivery'
         ? 'ระยะเวลาการจัดส่ง'
         : 'เวลานัดหมาย';
     super.initState();
   }
-
-  // bool checkStatus() {
-  //   if (orderStatus == 'ยืนยันคำสั่งซื้อ') {
-  //     setState(() {
-  //       check = true;
-  //     });
-  //   } else {
-  //     setState(() {
-  //       check = false;
-  //     });
-  //   }
-  //   return check;
-  // }
-
-  // bool checkStatusPick() {
-  //   if (orderStatus == 'ยืนยันคำสั่งซื้อ') {
-  //     setState(() {
-  //       check = true;
-  //     });
-  //   } else {
-  //     setState(() {
-  //       check = false;
-  //     });
-  //   }
-  //   return check;
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -95,7 +66,6 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
 
     return (widget.isDelivery)
         ? Scaffold(
-            // extendBodyBehindAppBar: true,
             backgroundColor: CollectionsColors.grey,
             appBar: RoundedAppBar(
               appBarTittle: 'ข้อมูลการสั่งซื้ออาหาร',
@@ -113,7 +83,6 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                           widget.order['address'],
                           () async {
                             String number = widget.order['phone'];
-                            // launch('tel://$number');
                             await FlutterPhoneDirectCaller.callNumber(number);
                           },
                           () {
@@ -161,7 +130,6 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                         ),
                       ),
                     ),
-                    // itemBuilder(menuNotifier),
                     BuildCard(
                       headerText: 'รายการอาหารทั้งหมด',
                       canEdit: false,
@@ -375,8 +343,6 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                               ),
                             ),
                           ),
-
-                    ///End Column
                   ],
                 ),
               ),
@@ -439,7 +405,6 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                           widget.order['phone'],
                           () async {
                             String number = widget.order['phone'];
-                            // launch('tel://$number');
                             await FlutterPhoneDirectCaller.callNumber(number);
                           },
                         )
@@ -463,28 +428,10 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                                 text: widget.order['timeOrdered'] + ' น.',
                               ),
                             ),
-                            // Divider(
-                            //   color: Colors.white,
-                            // ),
-                            // Row(
-                            //   children: [
-                            //     BuildIconText(
-                            //       icon: Icons.schedule,
-                            //       text: '${widget.order['startWaitingTime']}',
-                            //     ),
-                            //     widget.order['endWaitingTime'] != null
-                            //         ? BuildIconText(
-                            //             text:
-                            //                 ' จนถึง   ${widget.order['endWaitingTime']} น.',
-                            //           )
-                            //         : SizedBox(),
-                            //   ],
-                            // ),
                           ],
                         ),
                       ),
                     ),
-                    // itemBuilder(menuNotifier),
                     BuildCard(
                       headerText: 'รายการอาหารทั้งหมด',
                       canEdit: false,
@@ -707,8 +654,6 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                               ),
                             ),
                           ),
-
-                    ///End Column
                   ],
                 ),
               ),
@@ -789,64 +734,6 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                   ),
           );
   }
-
-  // Widget listOrder(OrderMenu menu) => Container(
-  //       child: Column(
-  //         children: [
-  //           Row(
-  //             children: [
-  //               Expanded(
-  //                 flex: 2,
-  //                 child: Container(
-  //                   alignment: Alignment.center,
-  //                   child: Text(
-  //                     menu.amount.toString(),
-  //                     style: FontCollection.bodyTextStyle,
-  //                   ),
-  //                 ),
-  //               ),
-  //               Expanded(
-  //                 flex: 6,
-  //                 child: Text(
-  //                   menu.menuName,
-  //                   style: FontCollection.bodyTextStyle,
-  //                 ),
-  //               ),
-  //               Expanded(
-  //                 flex: 2,
-  //                 child: Container(
-  //                   alignment: Alignment.centerRight,
-  //                   child: Text(
-  //                     menu.totalPrice,
-  //                     style: FontCollection.bodyTextStyle,
-  //                   ),
-  //                 ),
-  //               ),
-  //               Expanded(
-  //                 flex: 2,
-  //                 child: Container(
-  //                   alignment: Alignment.centerRight,
-  //                   child: Text(
-  //                     'บาท',
-  //                     style: FontCollection.bodyTextStyle,
-  //                   ),
-  //                 ),
-  //               ),
-  //             ],
-  //           ),
-  //           Row(
-  //             children: [
-  //               Expanded(
-  //                 child: Text(
-  //                   menu.topping.join(', '),
-  //                   style: FontCollection.bodyTextStyle,
-  //                 ),
-  //               ),
-  //             ],
-  //           )
-  //         ],
-  //       ),
-  //     );
 
   final height = 80.0;
   final width = 80.0;

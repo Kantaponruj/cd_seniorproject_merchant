@@ -14,7 +14,3 @@ FirebaseMessaging fcm = FirebaseMessaging.instance;
 
 bool isConfirmed = true;
 bool isDelivery = false;
-
-// List allPoints = [];
-// List nextStartPoint = [];
-

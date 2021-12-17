@@ -58,13 +58,6 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                     }
                   },
                 ),
-                // Container(
-                //   padding: EdgeInsets.only(top: 30,bottom: 10),
-                //   child: Text(
-                //     'กดยืนยันเพื่อตั้งรหัสผ่านใหม่',
-                //     style: FontCollection.bodyTextStyle,
-                //   ),
-                // ),
                 Container(
                   padding: EdgeInsets.only(top: 20),
                   width: MediaQuery.of(context).size.width,
@@ -72,7 +65,8 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                     text: 'ยืนยัน',
                     onClicked: () async {
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                          content: Text("โปรดตรวจสอบกล่องจดหมายในอีเมลของท่าน")));
+                          content:
+                              Text("โปรดตรวจสอบกล่องจดหมายในอีเมลของท่าน")));
                       storeNotifier.resetPassword();
                       storeNotifier.clearController();
                       Navigator.pushAndRemoveUntil(

@@ -81,22 +81,7 @@ updateImageStore(String storeId, File localFile) async {
     await storeRef.doc(storeId).update({'image': url});
     print("download url: $url");
   }
-  // else {
-  //   await storeRef.doc(store.storeId).update(value);
-  //   print("...skipping image upload");
-  // }
 }
-
-// _updateStoreProfile(Store store, Map<String, dynamic> value,
-//     {String imageUrl}) async {
-//   CollectionReference storeRef = firebaseFirestore.collection('stores');
-
-//   if (imageUrl != null) {
-//     store.image = imageUrl;
-//   }
-
-//   await storeRef.doc(store.storeId).update(value);
-// }
 
 addDateAndTime(
   DateTimeModel dateTime,

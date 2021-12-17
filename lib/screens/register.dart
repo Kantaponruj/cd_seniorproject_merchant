@@ -76,7 +76,7 @@ class _RegisterPageState extends State<RegisterPage> {
     return Scaffold(
       appBar: AppBar(
         iconTheme: IconThemeData(
-          color: Colors.black, //change your color here
+          color: Colors.black,
         ),
         centerTitle: true,
         title: Text(
@@ -91,7 +91,6 @@ class _RegisterPageState extends State<RegisterPage> {
       body: storeNotifier.status == Status.Authenticating
           ? LoadingWidget()
           : Container(
-              // padding: EdgeInsets.only(top: 20),
               child: Theme(
                 data: Theme.of(context).copyWith(
                   colorScheme: ColorScheme.light(
@@ -220,7 +219,6 @@ class _RegisterPageState extends State<RegisterPage> {
       labelText: 'รหัสผ่าน',
       textEditingController: storeNotifier.password,
       hintText: 'กรุณากรอกรหัสผ่าน',
-      // textInputType: TextInputType.emailAddress,
       validator: (value) {
         if (value.length < 8) {
           return 'รหัสผ่านห้ามมีความยาวน้อยกว่า 8 ';
@@ -596,28 +594,6 @@ class _RegisterPageState extends State<RegisterPage> {
             ],
           ),
         ),
-        // ListView.builder(
-        //   shrinkWrap: true,
-        //   itemCount: kindOfFood.length,
-        //   physics: NeverScrollableScrollPhysics(),
-        //   itemBuilder: (context, index) {
-        //     return BuildCheckBox(
-        //       title: kindOfFood[index],
-        //       value: isSelectedKindOfFood[index],
-        //       onChanged: (value) {
-        //         setState(() {
-        //           isSelectedKindOfFood[index] = value;
-        //         });
-        //
-        //         if (value) {
-        //           storeNotifier.kindOfFood.add(kindOfFood[index]);
-        //         } else {
-        //           storeNotifier.kindOfFood.remove(kindOfFood[index]);
-        //         }
-        //       },
-        //     );
-        //   },
-        // ),
       ],
     );
   }
@@ -648,11 +624,6 @@ class _RegisterPageState extends State<RegisterPage> {
           } else {
             storeNotifier.kindOfFood.remove(kindOfFood[i]);
           }
-          // setState(() {
-          //   isSelectedKindOfFood[i] = selected;
-          //   _productType.add(i);
-          //   setState(() {});
-          // });
         },
       );
       chips.add(Padding(

@@ -173,7 +173,6 @@ class _LoginPageState extends State<LoginPage> {
     return ButtonWidget(
       text: 'เข้าสู่ระบบ',
       onClicked: () async {
-        // final isValid = formKey.currentState.validate();
         if (!await storeNotifier.signIn()) {
           ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text("อีเมลหรือรหัสผ่านไม่ถูกถ้อง")));

@@ -29,7 +29,6 @@ class AddMenuPage extends StatefulWidget {
 
 class _AddMenuPageState extends State<AddMenuPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  // bool status;
   bool onClickAddOptionalButton = false;
   bool isUpdatingTopping = false;
   int toppingIndex;
@@ -122,7 +121,6 @@ class _AddMenuPageState extends State<AddMenuPage> {
     _formKey.currentState.save();
 
     _currentMenu.categoryFood = _selectedCategory;
-    // _currentMenu.haveMenu = status;
 
     updateMenuAndImage(
       _currentMenu,
@@ -734,7 +732,6 @@ class _AddMenuPageState extends State<AddMenuPage> {
                   });
                   subtoppingName.clear();
                   subtoppingPrice.clear();
-                  // print(_subtoppingList);
                 },
               ),
             ),
@@ -1011,7 +1008,6 @@ class _AddMenuPageState extends State<AddMenuPage> {
   Widget showOption(String header, String limitNumber, String detail,
       Topping topping, String toppingType, VoidCallback onPressed) {
     return Container(
-      // margin: EdgeInsets.only(top: 20),
       child: Card(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
