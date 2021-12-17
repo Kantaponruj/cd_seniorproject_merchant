@@ -3,27 +3,6 @@ import 'package:cs_senior_project_merchant/asset/constant.dart';
 import 'package:cs_senior_project_merchant/models/order.dart';
 import 'package:cs_senior_project_merchant/notifiers/order_notifier.dart';
 
-// Future<void> getOrderDelivery(
-//   OrderNotifier orderNotifier,
-//   String storeId,
-// ) async {
-//   QuerySnapshot snapshot = await firebaseFirestore
-//       .collection('stores')
-//       .doc(storeId)
-//       .collection('delivery-orders')
-//       .orderBy('timeOrdered')
-//       .get();
-
-//   List<OrderDetail> _orderList = [];
-
-//   snapshot.docs.forEach((document) {
-//     OrderDetail order = OrderDetail.fromMap(document.data());
-//     _orderList.add(order);
-//   });
-
-//   orderNotifier.orderList = _orderList;
-// }
-
 Stream<QuerySnapshot> getOrders(String storeId, String typeOrder) {
   return firebaseFirestore
       .collection('stores')

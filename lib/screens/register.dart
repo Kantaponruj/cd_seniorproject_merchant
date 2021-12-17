@@ -14,7 +14,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
-import 'package:syncfusion_flutter_sliders/sliders.dart';
 
 import 'login.dart';
 
@@ -38,6 +37,8 @@ class _RegisterPageState extends State<RegisterPage> {
 
   String _imageUrl;
   File _imageFile;
+  double _price = 0.0;
+  double _distance = 0.0;
 
   @override
   void initState() {
@@ -665,8 +666,6 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
-  double _price = 20.0;
-
   Widget priceSelected(StoreNotifier storeNotifier) {
     return BuildSlider(
       min: 0.0,
@@ -683,8 +682,6 @@ class _RegisterPageState extends State<RegisterPage> {
       },
     );
   }
-
-  double _distance = 5.0;
 
   Widget distanceSelected(StoreNotifier storeNotifier) {
     return BuildSlider(

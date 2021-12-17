@@ -7,11 +7,9 @@ class Store {
   String image;
   String typeOfStore;
   bool isDelivery;
-  // bool isPickUp;
   String email;
   String phone;
   List kindOfFood;
-  // bool deliveryStatus;
   bool storeStatus;
   String selectedAddressName;
   String selectedAddress;
@@ -29,11 +27,9 @@ class Store {
     image = snapshot.data()['image'];
     typeOfStore = snapshot.data()['typeOfStore'];
     isDelivery = snapshot.data()['isDelivery'];
-    // isPickUp = snapshot.data()['isPickUp'];
     email = snapshot.data()['email'];
     phone = snapshot.data()['phone'];
     kindOfFood = snapshot.data()['kindOfFood'];
-    // deliveryStatus = snapshot.data()['deliveryStatus'];
     storeStatus = snapshot.data()['storeStatus'];
     selectedAddressName = snapshot.data()['selectedAddressName'];
     selectedAddress = snapshot.data()['selectedAddress'];

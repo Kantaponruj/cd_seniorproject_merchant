@@ -34,6 +34,7 @@ class _StoreProfilePageState extends State<StoreProfilePage> {
 
   TextEditingController storeName = TextEditingController();
   TextEditingController phone = TextEditingController();
+  double _price;
 
   @override
   void initState() {
@@ -49,6 +50,7 @@ class _StoreProfilePageState extends State<StoreProfilePage> {
     phone.text = store.store.phone;
     selectedTypeOfStore = store.store.typeOfStore;
     _imageUrl = store.store.image;
+    _price = double.parse(store.store.shippingfee);
     super.initState();
   }
 
@@ -101,7 +103,8 @@ class _StoreProfilePageState extends State<StoreProfilePage> {
                     'storeName': storeName.text.trim(),
                     'phone': phone.text.trim(),
                     'kindOfFood': selectedKindOfFood,
-                    'typeOfStore': selectedTypeOfStore
+                    'typeOfStore': selectedTypeOfStore,
+                    'shippingfee': _price.toString(),
                   });
 
                   updateImageStore(storeNotifier.store.storeId, _imageFile);
@@ -163,7 +166,6 @@ class _StoreProfilePageState extends State<StoreProfilePage> {
               ),
             ),
             Container(
-              // padding: EdgeInsets.only(top: 20),
               width: 200,
               height: 200,
               color: CollectionsColors.grey,
@@ -255,7 +257,6 @@ class _StoreProfilePageState extends State<StoreProfilePage> {
           ),
         ),
         BuildPlainTextField(
-          // initialValue: initialValue,
           keyboardType: keyboardType,
           textEditingController: controller,
           validator: validator,
@@ -279,23 +280,6 @@ class _StoreProfilePageState extends State<StoreProfilePage> {
         Container(
           child: buildKindOfFood(storeNotifier),
         ),
-        // ListView.builder(
-        //   shrinkWrap: true,
-        //   itemCount: kindOfFood.length,
-        //   physics: NeverScrollableScrollPhysics(),
-        //   itemBuilder: (context, index) {
-        //     return BuildCheckBox(
-        //       title: kindOfFood[index],
-        //       value: isSelectedKindOfFood[index],
-        //       onChanged: (value) {
-        //         setState(() {
-        //           isSelectedKindOfFood[index] = value;
-        //         });
-        //         // print(isSelectedKindOfFood);
-        //       },
-        //     );
-        //   },
-        // ),
       ],
     );
   }
@@ -358,11 +342,6 @@ class _StoreProfilePageState extends State<StoreProfilePage> {
           } else {
             storeNotifier.kindOfFood.remove(kindOfFood[i]);
           }
-          // setState(() {
-          //   isSelectedKindOfFood[i] = selected;
-          //   _productType.add(i);
-          //   setState(() {});
-          // });
         },
       );
       chips.add(Padding(
@@ -376,8 +355,6 @@ class _StoreProfilePageState extends State<StoreProfilePage> {
     );
   }
 
-  double _price = 20.0;
-
   Widget priceSelected(StoreNotifier storeNotifier) {
     return BuildSlider(
       min: 0.0,
@@ -389,7 +366,6 @@ class _StoreProfilePageState extends State<StoreProfilePage> {
       onChanged: (dynamic newValue) {
         setState(() {
           _price = newValue;
-          storeNotifier.shippingfee = newValue.toString();
         });
       },
     );
