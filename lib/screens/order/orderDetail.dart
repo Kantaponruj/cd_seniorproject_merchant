@@ -39,7 +39,7 @@ class OrderDetailPage extends StatefulWidget {
 }
 
 class _OrderDetailPageState extends State<OrderDetailPage> {
-  String orderStatus = 'ยืนยันคำสั่งซื้อ';
+  String orderStatus;
   String topicTime;
   OrderMenu menu = OrderMenu();
   OrderDetail _orderDetail = OrderDetail();
@@ -53,6 +53,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
       widget.order['documentId'],
       widget.typeOrder,
     );
+    orderStatus = widget.order['orderStatus'];
     topicTime = widget.order['typeOrder'] == 'delivery'
         ? 'ระยะเวลาการจัดส่ง'
         : 'เวลานัดหมาย';
@@ -348,7 +349,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
               ),
             ),
             bottomNavigationBar:
-                widget.order['orderStatus'] == 'ยืนยันคำสั่งซื้อ'
+                orderStatus == 'ยืนยันคำสั่งซื้อ'
                     ? BottomOrder(
                         text: 'ยืนยันการจัดส่ง',
                         onPressed: () {
@@ -384,6 +385,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                               'ยืนยันคำสั่งซื้อ',
                               'delivery-orders',
                             );
+                            orderStatus = 'ยืนยันคำสั่งซื้อ';
                           });
                         },
                       ),
@@ -658,7 +660,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                 ),
               ),
             ),
-            bottomNavigationBar: widget.order['orderStatus'] ==
+            bottomNavigationBar: orderStatus ==
                     'ยืนยันคำสั่งซื้อ'
                 ? BottomOrder(
                     text: 'ปรุงอาหารเสร็จเรียบร้อย',
@@ -729,6 +731,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                           'ยืนยันคำสั่งซื้อ',
                           'pickup-orders',
                         );
+                        orderStatus = 'ยืนยันคำสั่งซื้อ';
                       });
                     },
                   ),
