@@ -97,7 +97,7 @@ saveOrderMenuToHistory(String storeId, OrderMenu orderMenu) async {
   await documentRef.set(orderMenu.toMap(), SetOptions(merge: true));
 }
 
-deletedOrder(String storeId, String documentId, String typeOrder) {
+void deletedOrder(String storeId, String documentId, String typeOrder) {
   firebaseFirestore
       .collection('stores')
       .doc(storeId)

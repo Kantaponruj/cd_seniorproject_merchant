@@ -43,6 +43,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
   String topicTime;
   OrderMenu menu = OrderMenu();
   OrderDetail _orderDetail = OrderDetail();
+  int count;
 
   @override
   void initState() {
@@ -300,7 +301,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                                       borderRadius: BorderRadius.circular(30),
                                       child: AlertDialog(
                                         title: Text(
-                                          'ยืนยันที่จะลบข้อมูลที่อยู่นี้หรือไม่',
+                                          'ยืนยันที่จะปฏิเสธคำสั่งซื้อนี้หรือไม่',
                                           style: FontCollection.bodyTextStyle,
                                         ),
                                         actions: [
@@ -327,7 +328,30 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                                               Container(
                                                 child: ButtonWidget(
                                                   text: 'ยืนยัน',
-                                                  onClicked: () {},
+                                                  onClicked: () {
+                                                    count = 0;
+                                                    updateStatusOrder(
+                                                      widget
+                                                          .order['customerId'],
+                                                      widget.order['storeId'],
+                                                      widget.order['orderId'],
+                                                      widget
+                                                          .order['documentId'],
+                                                      'ร้านค้าปฏิเสธคำสั่งซื้อ',
+                                                      'delivery-orders',
+                                                    );
+                                                    deletedOrder(
+                                                      widget.storeId,
+                                                      widget
+                                                          .order['documentId'],
+                                                      widget.typeOrder,
+                                                    );
+
+                                                    Navigator.popUntil(context,
+                                                        (route) {
+                                                      return count++ == 2;
+                                                    });
+                                                  },
                                                 ),
                                               ),
                                             ],
@@ -348,47 +372,46 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                 ),
               ),
             ),
-            bottomNavigationBar:
-                orderStatus == 'ยืนยันคำสั่งซื้อ'
-                    ? BottomOrder(
-                        text: 'ยืนยันการจัดส่ง',
-                        onPressed: () {
-                          setState(() {
-                            updateStatusOrder(
-                              widget.order['customerId'],
-                              widget.order['storeId'],
-                              widget.order['orderId'],
-                              widget.order['documentId'],
-                              'ยืนยันการจัดส่ง',
-                              'delivery-orders',
-                            );
-                            Navigator.of(context).pushReplacement(
-                              MaterialPageRoute(
-                                builder: (context) => CustomerMapPage(
-                                  order: widget.order,
-                                  orderMenu: menu,
-                                ),
-                              ),
-                            );
-                          });
-                        },
-                      )
-                    : BottomOrder(
-                        text: 'ยืนยันคำสั่งซื้อ',
-                        onPressed: () {
-                          setState(() {
-                            updateStatusOrder(
-                              widget.order['customerId'],
-                              widget.order['storeId'],
-                              widget.order['orderId'],
-                              widget.order['documentId'],
-                              'ยืนยันคำสั่งซื้อ',
-                              'delivery-orders',
-                            );
-                            orderStatus = 'ยืนยันคำสั่งซื้อ';
-                          });
-                        },
-                      ),
+            bottomNavigationBar: orderStatus == 'ยืนยันคำสั่งซื้อ'
+                ? BottomOrder(
+                    text: 'ยืนยันการจัดส่ง',
+                    onPressed: () {
+                      setState(() {
+                        updateStatusOrder(
+                          widget.order['customerId'],
+                          widget.order['storeId'],
+                          widget.order['orderId'],
+                          widget.order['documentId'],
+                          'ยืนยันการจัดส่ง',
+                          'delivery-orders',
+                        );
+                        Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(
+                            builder: (context) => CustomerMapPage(
+                              order: widget.order,
+                              orderMenu: menu,
+                            ),
+                          ),
+                        );
+                      });
+                    },
+                  )
+                : BottomOrder(
+                    text: 'ยืนยันคำสั่งซื้อ',
+                    onPressed: () {
+                      setState(() {
+                        updateStatusOrder(
+                          widget.order['customerId'],
+                          widget.order['storeId'],
+                          widget.order['orderId'],
+                          widget.order['documentId'],
+                          'ยืนยันคำสั่งซื้อ',
+                          'delivery-orders',
+                        );
+                        orderStatus = 'ยืนยันคำสั่งซื้อ';
+                      });
+                    },
+                  ),
           )
         : Scaffold(
             backgroundColor: CollectionsColors.grey,
@@ -605,7 +628,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                                       borderRadius: BorderRadius.circular(30),
                                       child: AlertDialog(
                                         title: Text(
-                                          'ยืนยันที่จะลบข้อมูลที่อยู่นี้หรือไม่',
+                                          'ยืนยันที่จะปฏิเสธคำสั่งซื้อนี้หรือไม่',
                                           style: FontCollection.bodyTextStyle,
                                         ),
                                         actions: [
@@ -633,12 +656,28 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                                                 child: ButtonWidget(
                                                   text: 'ยืนยัน',
                                                   onClicked: () {
-                                                    // int count = 0;
-                                                    //
-                                                    // Navigator.popUntil(context,
-                                                    //     (route) {
-                                                    //   return count++ == 2;
-                                                    // });
+                                                    count = 0;
+                                                    updateStatusOrder(
+                                                      widget
+                                                          .order['customerId'],
+                                                      widget.order['storeId'],
+                                                      widget.order['orderId'],
+                                                      widget
+                                                          .order['documentId'],
+                                                      'ร้านค้าปฏิเสธคำสั่งซื้อ',
+                                                      'pickup-orders',
+                                                    );
+                                                    deletedOrder(
+                                                      widget.storeId,
+                                                      widget
+                                                          .order['documentId'],
+                                                      'pickup-orders',
+                                                    );
+
+                                                    Navigator.popUntil(context,
+                                                        (route) {
+                                                      return count++ == 2;
+                                                    });
                                                   },
                                                 ),
                                               ),
@@ -660,8 +699,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                 ),
               ),
             ),
-            bottomNavigationBar: orderStatus ==
-                    'ยืนยันคำสั่งซื้อ'
+            bottomNavigationBar: orderStatus == 'ยืนยันคำสั่งซื้อ'
                 ? BottomOrder(
                     text: 'ปรุงอาหารเสร็จเรียบร้อย',
                     onPressed: () {
