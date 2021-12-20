@@ -38,7 +38,7 @@ class _MenuPageState extends State<MenuPage> {
       child: Scaffold(
         extendBodyBehindAppBar: true,
         appBar: RoundedAppBar(
-          appBarTittle: 'เพิ่มรายการอาหารของคุณ',
+          appBarTittle: 'รายละเอียดรายการอาหาร',
         ),
         body: Container(
           margin: EdgeInsets.only(top: 80),

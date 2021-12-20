@@ -39,6 +39,7 @@ class Topping {
   String topic;
   String detail;
   List<dynamic> subTopping;
+  bool require;
 
   Topping({
     this.toppingId,
@@ -47,11 +48,12 @@ class Topping {
     this.topic,
     this.detail,
     this.subTopping,
+    this.require,
   });
 
   @override
   String toString() {
-    return '{ ${this.toppingId}, ${this.type}, ${this.selectedNumberTopping}, ${this.topic}, ${this.detail}, ${this.subTopping} }';
+    return '{ ${this.toppingId}, ${this.type}, ${this.selectedNumberTopping}, ${this.topic}, ${this.detail}, ${this.subTopping}, ${this.require} }';
   }
 
   Map<String, dynamic> toMap() {
@@ -61,7 +63,8 @@ class Topping {
       'selectedNumberTopping': selectedNumberTopping,
       'topic': topic,
       'detail': detail,
-      'subTopping': subTopping
+      'subTopping': subTopping,
+      'require': require,
     };
   }
 
@@ -72,5 +75,6 @@ class Topping {
     topic = data['topic'];
     detail = data['detail'];
     subTopping = data['subTopping'];
+    require = data['require'];
   }
 }

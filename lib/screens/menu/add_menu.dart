@@ -150,7 +150,7 @@ class _AddMenuPageState extends State<AddMenuPage> {
 
     return Scaffold(
       appBar: RoundedAppBar(
-        appBarTittle: 'รายละเอียดรายการอาหาร',
+        appBarTittle: widget.isUpdating ? 'รายละเอียดรายการอาหาร' : 'เพิ่มรายการอาหาร',
         action: [
           BuildPopUpMenu(
             children: [
@@ -218,6 +218,7 @@ class _AddMenuPageState extends State<AddMenuPage> {
                               isUpdatingTopping = true;
                               onClickAddOptionalButton = true;
                             },
+                            topping.require,
                           ),
                         ],
                       );
@@ -560,38 +561,50 @@ class _AddMenuPageState extends State<AddMenuPage> {
         child: Column(
           children: [
             Container(
-                alignment: Alignment.topRight,
-                child: BuildPopUpMenu(
-                  children: [
-                    PopupMenuItem(
-                      child: BuildIconText(
-                        icon: Icons.delete,
-                        text: 'ลบตัวเลือกเพิ่มเติม',
-                      ),
-                      value: 'delete',
-                    ),
-                  ],
-                  onSelected: (value) {
-                    String message;
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    child: buildRequired(index),
+                  ),
+                  Container(
+                      width: 60,
+                      // alignment: Alignment.topRight,
+                      child: BuildPopUpMenu(
+                        children: [
+                          PopupMenuItem(
+                            child: BuildIconText(
+                              icon: Icons.delete,
+                              text: 'ลบตัวเลือกเพิ่มเติม',
+                            ),
+                            value: 'delete',
+                          ),
+                        ],
+                        onSelected: (value) {
+                          String message;
 
-                    if (value == 'delete') {
-                      setState(() {
-                        deleteTopping(
-                          storeNotifier.store.storeId,
-                          menuNotfier.currentMenu.menuId,
-                          menuNotfier.toppingList[index].toppingId,
-                        );
-                        menuNotfier.toppingList.removeAt(index);
-                        onClickAddOptionalButton = false;
-                      });
-                      print('deleted');
-                    } else {
-                      message = 'Not implemented';
-                      print(message);
-                    }
-                  },
-                )),
+                          if (value == 'delete') {
+                            setState(() {
+                              deleteTopping(
+                                storeNotifier.store.storeId,
+                                menuNotfier.currentMenu.menuId,
+                                menuNotfier.toppingList[index].toppingId,
+                              );
+                              menuNotfier.toppingList.removeAt(index);
+                              onClickAddOptionalButton = false;
+                            });
+                            print('deleted');
+                          } else {
+                            message = 'Not implemented';
+                            print(message);
+                          }
+                        },
+                      )),
+                ],
+              ),
+            ),
             Container(
+              margin: EdgeInsets.only(top: 20),
               child: Row(
                 children: [
                   Container(
@@ -1005,8 +1018,15 @@ class _AddMenuPageState extends State<AddMenuPage> {
     );
   }
 
-  Widget showOption(String header, String limitNumber, String detail,
-      Topping topping, String toppingType, VoidCallback onPressed) {
+  Widget showOption(
+    String header,
+    String limitNumber,
+    String detail,
+    Topping topping,
+    String toppingType,
+    VoidCallback onPressed,
+    bool isRequired,
+  ) {
     return Container(
       child: Card(
         shape: RoundedRectangleBorder(
@@ -1016,6 +1036,19 @@ class _AddMenuPageState extends State<AddMenuPage> {
           padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
           child: Column(
             children: [
+              isRequired
+                  ? Container(
+                      alignment: Alignment.topLeft,
+                      child: Text(
+                        '* จำเป็นต้องกรอก',
+                        style: TextStyle(
+                          color: CollectionsColors.orange,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    )
+                  : SizedBox.shrink(),
               Container(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -1047,7 +1080,7 @@ class _AddMenuPageState extends State<AddMenuPage> {
                   ],
                 ),
               ),
-              Container(
+              detail.isNotEmpty ? Container(
                 padding: EdgeInsets.symmetric(vertical: 10),
                 child: Row(
                   children: [
@@ -1060,7 +1093,7 @@ class _AddMenuPageState extends State<AddMenuPage> {
                     ),
                   ],
                 ),
-              ),
+              ) : SizedBox.shrink(),
               Divider(
                 thickness: 2,
               ),
@@ -1169,6 +1202,42 @@ class _AddMenuPageState extends State<AddMenuPage> {
           ),
         ],
       ),
+    );
+  }
+
+  bool requiredValue = false;
+
+  Widget buildRequired(int index) {
+    MenuNotfier menuNotfier = Provider.of<MenuNotfier>(context);
+
+    return Row(
+      children: [
+        BuildSwitch(
+          width: 100,
+          activeText: 'จำเป็น',
+          inactiveText: 'ไม่จำเป็น',
+          value: requiredValue,
+          onToggle: (val) {
+            // widget.isUpdating && topping.toppingId != null
+            //     ? setState(() {
+            //   ///for edit topping
+            // })
+            //     : setState(() {
+            //   topping.require = val;
+            // });
+            setState(() {
+              requiredValue = val;
+            });
+          },
+        ),
+        // Container(
+        //   padding: EdgeInsets.only(left: 10),
+        //   child: Text(
+        //     'จำเป็น',
+        //     style: FontCollection.bodyTextStyle,
+        //   ),
+        // ),
+      ],
     );
   }
 }
