@@ -38,6 +38,7 @@ class Topping {
   String selectedNumberTopping;
   String topic;
   String detail;
+  bool require = false;
   List<dynamic> subTopping;
   bool require = false;
 
