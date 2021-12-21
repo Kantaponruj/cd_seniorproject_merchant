@@ -39,7 +39,7 @@ class Topping {
   String topic;
   String detail;
   List<dynamic> subTopping;
-  bool require;
+  bool require = false;
 
   Topping({
     this.toppingId,

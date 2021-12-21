@@ -188,8 +188,8 @@ updateMenu(String storeId, String menuId, Map<String, dynamic> value) {
       .update(value);
 }
 
-updateSubToppingStatus(
-    String storeId, String menuId, String toppingId, List<dynamic> value) {
+updateTopping(String storeId, String menuId, String toppingId,
+    Map<String, dynamic> value) {
   firebaseFirestore
       .collection('stores')
       .doc(storeId)
@@ -197,5 +197,5 @@ updateSubToppingStatus(
       .doc(menuId)
       .collection('topping')
       .doc(toppingId)
-      .update({'subTopping': value});
+      .update(value);
 }

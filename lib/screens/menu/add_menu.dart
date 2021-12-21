@@ -34,12 +34,14 @@ class _AddMenuPageState extends State<AddMenuPage> {
   int toppingIndex;
 
   Menu _currentMenu;
+  Topping _t = Topping();
   String _imageUrl;
   File _imageFile;
 
   String _selectedCategory;
   String _selectedType;
   String _selectedNumberTopping;
+  bool _require = false;
 
   TextEditingController toppingName = new TextEditingController();
   TextEditingController toppingDetail = new TextEditingController();
@@ -150,7 +152,8 @@ class _AddMenuPageState extends State<AddMenuPage> {
 
     return Scaffold(
       appBar: RoundedAppBar(
-        appBarTittle: widget.isUpdating ? 'รายละเอียดรายการอาหาร' : 'เพิ่มรายการอาหาร',
+        appBarTittle:
+            widget.isUpdating ? 'รายละเอียดรายการอาหาร' : 'เพิ่มรายการอาหาร',
         action: [
           BuildPopUpMenu(
             children: [
@@ -188,24 +191,24 @@ class _AddMenuPageState extends State<AddMenuPage> {
                     padding: EdgeInsets.zero,
                     itemCount: menuNotfier.toppingList.length,
                     itemBuilder: (context, index) {
-                      Topping topping = menuNotfier.toppingList[index];
+                      Topping _topping = menuNotfier.toppingList[index];
                       return Column(
                         children: [
                           showOption(
-                            topping.topic,
-                            topping.selectedNumberTopping,
-                            topping.detail,
-                            topping,
-                            topping.type,
+                            _topping.topic,
+                            _topping.selectedNumberTopping,
+                            _topping.detail,
+                            _topping,
+                            _topping.type,
                             () {
                               setState(() {
                                 _subtoppingList.clear();
-                                _selectedType = topping.type;
+                                _selectedType = _topping.type;
                                 _selectedNumberTopping =
-                                    topping.selectedNumberTopping;
-                                toppingName.text = topping.topic;
-                                toppingDetail.text = topping.detail;
-                                topping.subTopping.forEach((subtopping) {
+                                    _topping.selectedNumberTopping;
+                                toppingName.text = _topping.topic;
+                                toppingDetail.text = _topping.detail;
+                                _topping.subTopping.forEach((subtopping) {
                                   _subtoppingList.add({
                                     'name': subtopping['name'],
                                     'price': subtopping['price'],
@@ -214,11 +217,12 @@ class _AddMenuPageState extends State<AddMenuPage> {
                                   });
                                 });
                               });
+                              _t = menuNotfier.toppingList[index];
                               toppingIndex = index;
                               isUpdatingTopping = true;
                               onClickAddOptionalButton = true;
                             },
-                            topping.require,
+                            _topping.require,
                           ),
                         ],
                       );
@@ -253,6 +257,11 @@ class _AddMenuPageState extends State<AddMenuPage> {
                       setState(() {
                         onClickAddOptionalButton = !onClickAddOptionalButton;
                         isUpdatingTopping = false;
+                        _selectedType = type.first;
+                        _selectedNumberTopping = number.first;
+                        toppingName.clear();
+                        toppingDetail.clear();
+                        _subtoppingList.clear();
                       });
                     },
                   ),
@@ -565,7 +574,12 @@ class _AddMenuPageState extends State<AddMenuPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Container(
-                    child: buildRequired(index),
+                    child: buildRequired(
+                      _t,
+                      index,
+                      storeNotifier.store.storeId,
+                      menuNotfier.currentMenu.menuId,
+                    ),
                   ),
                   Container(
                       width: 60,
@@ -770,6 +784,7 @@ class _AddMenuPageState extends State<AddMenuPage> {
                         topic: toppingName.text.trim(),
                         detail: toppingDetail.text.trim(),
                         subTopping: _temporaryList,
+                        require: _t.require,
                       );
                     } else {
                       menuNotfier.toppingList.add(Topping(
@@ -778,6 +793,7 @@ class _AddMenuPageState extends State<AddMenuPage> {
                         topic: toppingName.text.trim(),
                         detail: toppingDetail.text.trim(),
                         subTopping: _temporaryList,
+                        require: _require,
                       ));
                     }
                   });
@@ -1080,20 +1096,22 @@ class _AddMenuPageState extends State<AddMenuPage> {
                   ],
                 ),
               ),
-              detail.isNotEmpty ? Container(
-                padding: EdgeInsets.symmetric(vertical: 10),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: AutoSizeText(
-                        detail,
-                        style: FontCollection.smallBodyTextStyle,
-                        maxLines: 3,
+              detail.isNotEmpty
+                  ? Container(
+                      padding: EdgeInsets.symmetric(vertical: 10),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: AutoSizeText(
+                              detail,
+                              style: FontCollection.smallBodyTextStyle,
+                              maxLines: 3,
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                  ],
-                ),
-              ) : SizedBox.shrink(),
+                    )
+                  : SizedBox.shrink(),
               Divider(
                 thickness: 2,
               ),
@@ -1187,11 +1205,11 @@ class _AddMenuPageState extends State<AddMenuPage> {
                 widget.isUpdating && topping.toppingId != null
                     ? setState(() {
                         topping.subTopping[i]['haveSubTopping'] = val;
-                        updateSubToppingStatus(
+                        updateTopping(
                           store.store.storeId,
                           menu.currentMenu.menuId,
                           topping.toppingId,
-                          topping.subTopping,
+                          {'subTopping': topping.subTopping},
                         );
                       })
                     : setState(() {
@@ -1205,38 +1223,30 @@ class _AddMenuPageState extends State<AddMenuPage> {
     );
   }
 
-  bool requiredValue = false;
-
-  Widget buildRequired(int index) {
-    MenuNotfier menuNotfier = Provider.of<MenuNotfier>(context);
-
+  Widget buildRequired(Topping topping, int i, String storeId, String menuId) {
     return Row(
       children: [
         BuildSwitch(
           width: 100,
           activeText: 'จำเป็น',
           inactiveText: 'ไม่จำเป็น',
-          value: requiredValue,
+          value: topping.require ?? _require,
           onToggle: (val) {
-            // widget.isUpdating && topping.toppingId != null
-            //     ? setState(() {
-            //   ///for edit topping
-            // })
-            //     : setState(() {
-            //   topping.require = val;
-            // });
-            setState(() {
-              requiredValue = val;
-            });
+            widget.isUpdating && topping.toppingId != null
+                ? setState(() {
+                    topping.require = val;
+                    updateTopping(
+                      storeId,
+                      menuId,
+                      topping.toppingId,
+                      {'require': val},
+                    );
+                  })
+                : setState(() {
+                    _require = val;
+                  });
           },
         ),
-        // Container(
-        //   padding: EdgeInsets.only(left: 10),
-        //   child: Text(
-        //     'จำเป็น',
-        //     style: FontCollection.bodyTextStyle,
-        //   ),
-        // ),
       ],
     );
   }
