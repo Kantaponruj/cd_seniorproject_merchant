@@ -37,85 +37,87 @@ class _AddressPageState extends State<AddressPage> {
       appBar: RoundedAppBar(
         appBarTittle: 'ที่อยู่ของคุณ',
       ),
-      body: Container(
-        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-        alignment: Alignment.center,
-        child: Column(
-          children: [
-            GestureDetector(
-              onTap: () {},
-              child: Card(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                  child: ListView.separated(
-                    shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    itemCount: addressNotifier.addressList.length,
-                    itemBuilder: (BuildContext context, index) {
-                      final address = addressNotifier.addressList[index];
-                      return ListTile(
-                        title: Text(
-                          address.addressName,
-                          style: FontCollection.bodyTextStyle,
-                        ),
-                        subtitle: AutoSizeText(
-                          address.address,
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        trailing: GestureDetector(
+      body: SingleChildScrollView(
+        child: Container(
+          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+          alignment: Alignment.center,
+          child: Column(
+            children: [
+              GestureDetector(
+                onTap: () {},
+                child: Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                    child: ListView.separated(
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount: addressNotifier.addressList.length,
+                      itemBuilder: (BuildContext context, index) {
+                        final address = addressNotifier.addressList[index];
+                        return ListTile(
+                          title: Text(
+                            address.addressName,
+                            style: FontCollection.bodyTextStyle,
+                          ),
+                          subtitle: AutoSizeText(
+                            address.address,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          trailing: GestureDetector(
+                            onTap: () {
+                              addressNotifier.currentAddress = address;
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => EditAddress(),
+                                ),
+                              );
+                            },
+                            child: Icon(Icons.edit),
+                          ),
                           onTap: () {
-                            addressNotifier.currentAddress = address;
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => EditAddress(),
-                              ),
-                            );
+                            storeNotifier.updateUserData({
+                              'selectedAddress': address.address,
+                              'selectedAddressName': address.addressName,
+                              'selectedLocation': address.geoPoint,
+                            });
+                            // Navigator.of(context).pop();
+                            Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      MainBottombar(),
+                                ),
+                                (route) => false);
                           },
-                          child: Icon(Icons.edit),
-                        ),
-                        onTap: () {
-                          storeNotifier.updateUserData({
-                            'selectedAddress': address.address,
-                            'selectedAddressName': address.addressName,
-                            'selectedLocation': address.geoPoint,
-                          });
-                          // Navigator.of(context).pop();
-                          Navigator.pushAndRemoveUntil(
-                              context,
-                              MaterialPageRoute(
-                                builder: (BuildContext context) =>
-                                    MainBottombar(),
-                              ),
-                              (route) => false);
-                        },
-                      );
-                    },
-                    separatorBuilder: (BuildContext context, int index) {
-                      return Divider();
-                    },
+                        );
+                      },
+                      separatorBuilder: (BuildContext context, int index) {
+                        return Divider();
+                      },
+                    ),
                   ),
                 ),
               ),
-            ),
-            Container(
-              margin: EdgeInsets.fromLTRB(0, 20, 0, 20),
-              width: MediaQuery.of(context).size.width,
-              child: StadiumButtonWidget(
-                text: 'เพิ่มที่อยู่ใหม่',
-                onClicked: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => AddAddress(),
-                    ),
-                  );
-                },
+              Container(
+                margin: EdgeInsets.fromLTRB(0, 20, 0, 20),
+                width: MediaQuery.of(context).size.width,
+                child: StadiumButtonWidget(
+                  text: 'เพิ่มที่อยู่ใหม่',
+                  onClicked: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => AddAddress(),
+                      ),
+                    );
+                  },
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

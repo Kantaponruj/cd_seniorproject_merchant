@@ -132,11 +132,11 @@ class _MenuPageState extends State<MenuPage> {
         physics: NeverScrollableScrollPhysics(),
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
-          childAspectRatio: 0.7,
-          mainAxisSpacing: 15,
-          crossAxisSpacing: 20,
+          childAspectRatio: 0.6,
+          mainAxisSpacing: 5,
+          crossAxisSpacing: 15,
         ),
-        padding: EdgeInsets.fromLTRB(20, 20, 20, 0),
+        padding: EdgeInsets.fromLTRB(10, 20, 10, 0),
         controller: controller,
         itemCount: menuCategory.length,
         itemBuilder: (context, index) {
@@ -165,8 +165,8 @@ class _MenuPageState extends State<MenuPage> {
             child: Column(
               children: [
                 Container(
-                  height: 150,
-                  width: 150,
+                  height: 120,
+                  width: 120,
                   child: SizedBox(
                     child: menu.image != null
                         ? Image.network(

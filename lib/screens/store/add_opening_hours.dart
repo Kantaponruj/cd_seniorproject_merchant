@@ -121,111 +121,113 @@ class _AddOpeningHoursState extends State<AddOpeningHours> {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(30),
       ),
-      content: Container(
-        width: MediaQuery.of(context).size.width,
-        // height: 200,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            widget.isEdit
-                ? GestureDetector(
-                    child: Container(
-                      margin: EdgeInsets.fromLTRB(0, 20, 0, 20),
-                      alignment: Alignment.topRight,
-                      child: Text(
-                        'ลบรายการนี้',
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.grey,
-                          decoration: TextDecoration.underline,
+      content: SingleChildScrollView(
+        child: Container(
+          width: MediaQuery.of(context).size.width,
+          // height: 200,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              widget.isEdit
+                  ? GestureDetector(
+                      child: Container(
+                        margin: EdgeInsets.fromLTRB(0, 20, 0, 20),
+                        alignment: Alignment.topRight,
+                        child: Text(
+                          'ลบรายการนี้',
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.grey,
+                            decoration: TextDecoration.underline,
+                          ),
                         ),
                       ),
+                      onTap: () {
+                        deleteDateAndTime(
+                            _selectedDateTime, widget.storeId, _onDeleteDateTime);
+                      },
+                    )
+                  : SizedBox.shrink(),
+              Container(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  'เลือกวัน',
+                  style: FontCollection.smallBodyTextStyle,
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.symmetric(vertical: 10),
+                child: Wrap(
+                  spacing: 10.0,
+                  runSpacing: 5.0,
+                  children: [
+                    daySelect(),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                child: Divider(
+                  thickness: 2,
+                ),
+              ),
+              Container(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  'เลือกเวลา',
+                  style: FontCollection.smallBodyTextStyle,
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
+                child: timeSelect(
+                  'เวลาเปิด',
+                  getText('openTime'),
+                  () async {
+                    await pickTime(context, 'openTime');
+                    setState(() {
+                      _openTime = getText('openTime');
+                    });
+                  },
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.fromLTRB(0, 15, 0, 20),
+                child: timeSelect(
+                  'เวลาปิด',
+                  getText('closeTime'),
+                  () async {
+                    await pickTime(context, 'closedTime');
+                    setState(() {
+                      _closeTime = getText('closeTime');
+                    });
+                  },
+                ),
+              ),
+              Container(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      alignment: Alignment.bottomLeft,
+                      child: EditButton(
+                        editText: 'ยกเลิก',
+                        onClicked: () {
+                          Navigator.of(context).pop();
+                        },
+                      ),
                     ),
-                    onTap: () {
-                      deleteDateAndTime(
-                          _selectedDateTime, widget.storeId, _onDeleteDateTime);
-                    },
-                  )
-                : SizedBox.shrink(),
-            Container(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                'เลือกวัน',
-                style: FontCollection.smallBodyTextStyle,
-              ),
-            ),
-            Container(
-              margin: EdgeInsets.symmetric(vertical: 10),
-              child: Wrap(
-                spacing: 10.0,
-                runSpacing: 5.0,
-                children: [
-                  daySelect(),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-              child: Divider(
-                thickness: 2,
-              ),
-            ),
-            Container(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                'เลือกเวลา',
-                style: FontCollection.smallBodyTextStyle,
-              ),
-            ),
-            Container(
-              margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
-              child: timeSelect(
-                'เวลาเปิด',
-                getText('openTime'),
-                () async {
-                  await pickTime(context, 'openTime');
-                  setState(() {
-                    _openTime = getText('openTime');
-                  });
-                },
-              ),
-            ),
-            Container(
-              margin: EdgeInsets.fromLTRB(0, 15, 0, 20),
-              child: timeSelect(
-                'เวลาปิด',
-                getText('closeTime'),
-                () async {
-                  await pickTime(context, 'closedTime');
-                  setState(() {
-                    _closeTime = getText('closeTime');
-                  });
-                },
-              ),
-            ),
-            Container(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    alignment: Alignment.bottomLeft,
-                    child: EditButton(
-                      editText: 'ยกเลิก',
+                    SmallStadiumButtonWidget(
+                      text: 'บันทึก',
                       onClicked: () {
-                        Navigator.of(context).pop();
+                        _handleSaveDateTime(widget.storeId);
                       },
                     ),
-                  ),
-                  SmallStadiumButtonWidget(
-                    text: 'บันทึก',
-                    onClicked: () {
-                      _handleSaveDateTime(widget.storeId);
-                    },
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
