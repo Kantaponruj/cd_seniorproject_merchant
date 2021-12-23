@@ -578,7 +578,7 @@ class _AddMenuPageState extends State<AddMenuPage> {
                       _t,
                       index,
                       storeNotifier.store.storeId,
-                      menuNotfier.currentMenu.menuId,
+                      menuNotfier.currentMenu,
                     ),
                   ),
                   Container(
@@ -1223,7 +1223,8 @@ class _AddMenuPageState extends State<AddMenuPage> {
     );
   }
 
-  Widget buildRequired(Topping topping, int i, String storeId, String menuId) {
+  Widget buildRequired(
+      Topping topping, int i, String storeId, Menu curerntMenu) {
     return Row(
       children: [
         BuildSwitch(
@@ -1237,7 +1238,7 @@ class _AddMenuPageState extends State<AddMenuPage> {
                     topping.require = val;
                     updateTopping(
                       storeId,
-                      menuId,
+                      curerntMenu.menuId,
                       topping.toppingId,
                       {'require': val},
                     );
